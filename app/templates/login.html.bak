@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+  </head>
+  <body>
+    <h1> http method :{{ method }} </h1>
+    <form method="post">
+      <div>
+        <input type="text"> pleace input username</input>
+      </div>
+      <div>
+        <input type="password">please input passwd</input>
+      </div>
+      <input type="submit">
+    </form>
+  </body>
+</html>

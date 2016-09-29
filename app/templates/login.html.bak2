@@ -1,0 +1,17 @@
+
+{% extends 'base.html' %}
+{% block content %}
+  <div class="container">
+    <h2> {{ title }} </h2>
+  </div>
+  <div class="container">
+  /* 渲染form */
+    <form method="post">
+      {{ form.username.label }}
+      {{ form.username() }}
+      {{ form.password.label }}
+      {{ form.password() }}
+      {{ form.submit() }}
+    </form>
+  </div>
+{% endblock %}
