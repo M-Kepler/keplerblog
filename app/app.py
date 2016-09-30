@@ -1,4 +1,14 @@
 #_*_coding:utf-8_*_
+'''
+/***********************************************************
+* Author       : M_Kepler
+* EMail        : hellohuangjinjie@gmail.com
+* Last modified: 2016-09-30 09:13:48
+* Filename     : app.py
+* Description  :
+**********************************************************/
+'''
+
 
 from flask import Flask,flash, session, request, render_template, url_for, redirect, abort, current_app
 from werkzeug.routing import BaseConverter
@@ -37,16 +47,17 @@ bootstrap = Bootstrap(app)
 moment=Moment(app)
 
 #  应用这个导航栏插件就不需要自己写导航栏了,
-#  可以用操作对象的形式来设置导航栏
-#  注册到导航栏对象top
+#  可以用操作对象的形式来设置导航栏 #  注册到导航栏对象top
 nav = Nav()
 nav.register_element('top', Navbar('M_Kepler',
     View('Home', 'home'),
-    View('Signin', 'signin'),
-    View('Login', 'login'),
     View('Qsbk', 'qsbk'),
     View('Upload', 'upload'),
-    View('Project', 'projects'),
+    View('Projects', 'projects'),
+    View('Archive', 'archive'),
+    View('Login', 'login'),
+    View('Signin', 'signin'),
+    View('Signout', 'signout'),
     View('About', 'about'),
     ))
 nav.init_app(app)
@@ -118,14 +129,29 @@ def upload():
     return render_template('upload.html')
 
 
+@app.route('/signout')
+def signout():
+    return 'signout'
+
+
+@app.route('/archive')
+def archive():
+    return render_template('archive.html')
+
+
 @app.route('/projects/')
 def projects():
-    return 'This is the project page'
+    return render_template('projects.html')
 
 
 @app.route('/about')
 def about():
     return render_template('about.html')
+
+
+
+
+
 
 #  定义自己的jinja2过滤器
 @app.template_filter('md')
@@ -166,6 +192,7 @@ def internal_server_error(e):
     return render_template('500.html'), 500
 
 
+#  也可以写带参数的脚本
 @manager.command
 def dev():
     from livereload import Server
@@ -173,19 +200,13 @@ def dev():
     live_server.watch('**/*.*')
     live_server.serve(open_url=True)
 
-
 @manager.command
 def test():
     pass
 
-
 @manager.command
 def deplay():
     pass
-
-
-
-
 
 
 if __name__ == '__main__':
@@ -195,4 +216,8 @@ if __name__ == '__main__':
     print('current_app name :%s' % current_app.name)
     #  manager.run()
     app.run(debug=True)
+
+
+
+
 
