@@ -51,8 +51,11 @@ moment=Moment(app)
 nav = Nav()
 nav.register_element('top', Navbar('M_Kepler',
     View('Home', 'home'),
-    View('Qsbk', 'qsbk'),
-    View('Upload', 'upload'),
+    Subgroup(
+        'Products',
+        View('Qsbk', 'qsbk'),
+        View('Upload', 'upload'),
+        ),
     View('Projects', 'projects'),
     View('Archive', 'archive'),
     View('Login', 'login'),
