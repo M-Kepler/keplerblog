@@ -11,6 +11,7 @@ Jinja2==2.8
 livereload==2.3.2
 Markdown==2.3.1
 MarkupSafe==0.23
+mysql-connector-python-rf==2.2.1
 pkg-resources==0.0.0
 requests==2.10.0
 SQLAlchemy==1.0.15
