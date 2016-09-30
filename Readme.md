@@ -25,3 +25,12 @@
 避免来自其他地方的post请求,需要标记post请求的来源,以免视图函数也去处理这些请求
 所以，需要识别这些请求是当前服务器输出的ui页面的post请求,进行wsgi配置就行了
 
+10. manage.py
+外部脚本，通过shell来运行,用来测试吧
+
+11. 选用mysql数据库
+ORM框架:SQLAlchemy
+pip install mysql-connector-python-rf
+mysql://username:password@server/db
+
+11
