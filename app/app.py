@@ -3,12 +3,11 @@
 /***********************************************************
 * Author       : M_Kepler
 * EMail        : hellohuangjinjie@gmail.com
-* Last modified: 2016-09-30 09:13:48
+* Last modified: 2016-10-01 10:09:58
 * Filename     : app.py
 * Description  :
 **********************************************************/
 '''
-
 
 from flask import Flask,flash, session, request, render_template, url_for, redirect, abort, current_app
 from werkzeug.routing import BaseConverter
@@ -16,9 +15,10 @@ from werkzeug.utils import secure_filename
 
 from flask.ext.script import Manager
 from flask.ext.bootstrap import Bootstrap
+from flask.ext.moment import Moment
+from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.nav import Nav
 from flask_nav.elements import *
-from flask.ext.moment import Moment
 
 from os import path
 from datetime import datetime
@@ -41,7 +41,9 @@ app.url_map.converters['regex'] = RegexConverter
 #  防止跨站点攻击,所以需要识别该post请求是我自己的form返回的请求
 app.config.from_pyfile('config')
 #  app.config['SECRET_KEY']='this is a secret key'
+#  app.config['SQLALCHEMY_DATABASE_URL'] = "mysql://root:159357@loccalhost:3306/micblog"
 
+db = SQLAlchemy(app)
 manager = Manager(app)
 bootstrap = Bootstrap(app)
 moment=Moment(app)
@@ -90,10 +92,14 @@ def login():
     form = LoginForm()
     #  获取表单数据并进行验证
     if form.validate_on_submit():
-        session['username'] = form.username.data
-        session['password'] = form.password.data
-        if session['username']=='admin' and session['password']=='passwd':
-            flash('welcome login') #  显示flash信息
+        #  session['username'] = form.username.data
+        #  session['password'] = form.password.data
+        #  if session['username']=='admin' and session['password']=='passwd':
+            #  flash('welcome login') #  显示flash信息
+        username = form.username.data
+        password = form.password.data
+        if username =='admin' and password =='passwd':
+            return redirect(url_for('user',name = session['username']))
     return render_template('login.html', title='登录', form=form)
     #  name = session['username']
     #  return redirect(url_for('user'),name=name)
@@ -153,9 +159,6 @@ def about():
 
 
 
-
-
-
 #  定义自己的jinja2过滤器
 @app.template_filter('md')
 def markdown_to_html(txt):
@@ -210,6 +213,31 @@ def test():
 @manager.command
 def deplay():
     pass
+
+
+
+#  定义模型
+class Role(db.Model):
+    __tablename__='roles' # 指定表名
+    id = db.Column(db.Integer, primary_key = True)
+    name = db.Column(db.String, nullable = False)
+    users = db.relationship('User', backref = 'roles') # 表映射关系,backref
+
+    #  进行测试时方便查看
+    def __repr__(self):
+        return '<Role %r>' % self.name
+
+class User(db.Model):
+    __tablename__='users'
+    id = db.Column(db.Integer, primary_key = True) # 主键
+    user_name = db.Column(db.String, nullable = False)
+    user_passwd = db.Column(db.String, nullable = False)
+    role_id = db.Column(db.Integer, db.ForeignKey('roules.id')) # 外键
+
+    def __repr__(self):
+        return '<User %r>' % self.name
+
+
 
 
 if __name__ == '__main__':

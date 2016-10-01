@@ -1,1 +1,2 @@
 SECRET_KEY = 'hard to guess string'
+SQLALCHEMY_DATABASE_URL = "mysql://root:159357@loccalhost:3600/micblog"

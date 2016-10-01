@@ -14,9 +14,7 @@
     {% for message in get_flashed_messages() %}
     <div class="alert-info">{{ message }}</div>
     {% endfor %}
-
-    <!-- wtf快捷的表单显示 - 不需要在这里写布局 -->
+    <!-- wtf快捷的使用bootstrap渲染表单 - 不需要在这里写布局 -->
     {{ wtf.quick_form(form) }}
-
   </div>
 {% endblock %}
