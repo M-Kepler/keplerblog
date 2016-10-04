@@ -1,2 +1,5 @@
 SECRET_KEY = 'hard to guess string'
-SQLALCHEMY_DATABASE_URL = "mysql://root:159357@loccalhost:3600/micblog"
+SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://root:159357@localhost:3306/micblog"
+SQLAlCHEMY_COMMIT_ON_TEARDOWN = True
+SQLALCHEMY_TRACK_MODIFICATIONS = True
+

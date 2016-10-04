@@ -8,8 +8,8 @@
   <!-- jinja2是默认转义的,加上safe过滤器表示不转移 -->
   <!-- {{ title }} -->
   {{ artical|safe }}
-  {# {{ body|md|safe }} #}
-  {{ read_md('vim_end.md') |md|safe }}
+  <!-- 优化结构之后读取文件就一直出错了，晕死 -->
+  <!-- (( read_md('vim_end.md')|md|safe }} -->
 </div>
 {% endblock %}
 
