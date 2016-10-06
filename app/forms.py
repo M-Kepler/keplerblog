@@ -14,7 +14,7 @@ class LoginForm(Form):
     password = PasswordField(label='password', validators = [DataRequired()])
     submit = SubmitField('Submit')
 
-
+'''
 class RegForm(Form):
     username = StringField(label='用户名:', validators = [Required(), length(6,18),
         Regexp('^[A-Za-z][A-Za-z0-9_.]$', 0,
@@ -25,7 +25,6 @@ class RegForm(Form):
     real_name = StringField("昵称", validators = [DataRequired()])
     submit = SubmitField("submit")
 
-
 class PostArticleForm(Form):
     title = StringField("标题", validators = [Required(), length(6, 64)])
     body = TextAreaField("内容")
@@ -33,7 +32,7 @@ class PostArticleForm(Form):
             get_pk = lambda a:str(a.id), get_label = lambda a:a.name)
     submit = StringField("发布")
 
-'''
+
 class PostForm(Form):
     title = StringField(label='标题', validators=[DataRequired()])
     body = PageDownField(label=u'正文', validators=[DataRequired()])
