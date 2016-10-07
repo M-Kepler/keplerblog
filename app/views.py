@@ -3,7 +3,6 @@
 from flask import flash, session, request, render_template, url_for, redirect, abort, current_app
 from os import path
 
-
 basepath = path.abspath(path.dirname(__file__))
 #  basepath = path.abspath('.')
 filename = path.join(basepath,'vim_end.md')
@@ -29,28 +28,21 @@ def init_views(app):
     @app.route('/login', methods=['GET', 'POST'])
     def login():
         from .forms import LoginForm
+        from .models import User
         #  这里将form写在了form.py,将form对象实例化传递到模板login.html
         form = LoginForm()
         #  获取表单数据并进行验证
         if form.validate_on_submit():
-            #  session['username'] = form.username.data
-            #  session['password'] = form.password.data
-            #  if session['username']=='admin' and session['password']=='passwd':
-                #  flash('welcome login') #  显示flash信息
-                    #  return redirect(url_for('user',name = session['username']))
-            username = form.username.data
-            password = form.password.data
-            if username =='admin' and password =='passwd':
-                return redirect(url_for('user',name = username))
+            #  session['username'] = form.username.data 将username放入到会话中，jinja2就可以调用了
+            user = User.query.filter_by(user_name=form.username.data, user_passwd=form.password.data)
+            session['username'] = form.username.data
+            if user is not None:
+                return redirect(url_for('user',name = session['username']))
+            #  username = form.username.data
+            #  password = form.password.data
+            #  if username =='admin' and password =='passwd':
+                #  return redirect(url_for('user',name = username))
         return render_template('login.html', title='登录', form=form)
-        #  name = session['username']
-        #  return redirect(url_for('user'),name=name)
-
-
-    #  @app.route('/qsbk')
-    #  def qsbk():
-        #  lines = f.readlines()
-        #  return render_template('qsbk.html',lines=lines)
 
 
     @app.route('/signin', methods=['GET','POST'])
@@ -114,6 +106,7 @@ def init_views(app):
         from markdown import markdown
         return markdown(txt)
 
+#  -------------
     #  通过上下文处理器把方法注册进去,这样所有模板都可以使用这个方法/变量
     #  所以就可以将文件读取到变量然后传递到jinja供模板使用,
     #  读取md文件并显示到模板中
@@ -134,4 +127,7 @@ def init_views(app):
         return link[0] is request.url
 
 
-
+    #  @app.route('/qsbk')
+    #  def qsbk():
+        #  lines = f.readlines()
+        #  return render_template('qsbk.html',lines=lines)

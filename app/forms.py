@@ -9,7 +9,6 @@ from wtforms.ext.sqlalchemy.fields import QuerySelectField
 
 class LoginForm(Form):
     #  DataRequired()为校验器,这样就不需要自己写代码进行校验了,也可以自己定义
-    #  email = StringField(label='e-mail', validators = [DataRequired(), Email()])
     username = StringField(label='username', validators = [DataRequired()])
     password = PasswordField(label='password', validators = [DataRequired()])
     submit = SubmitField('Submit')
