@@ -19,8 +19,8 @@ def init_views(app):
                 #  )
 
     #  @app.route('/user/<int: user_id>')
-    #  @app.route('/user/<name>')
-    @app.route('/user/<regex("[a-z]+"):name>')
+    #  @app.route('/user/<regex("[a-z]+"):name>')
+    @app.route('/user/<name>')
     def user(name):
         return render_template('user.html', name=name)
 
@@ -34,14 +34,12 @@ def init_views(app):
         #  获取表单数据并进行验证
         if form.validate_on_submit():
             #  session['username'] = form.username.data 将username放入到会话中，jinja2就可以调用了
-            user = User.query.filter_by(user_name=form.username.data, user_passwd=form.password.data)
+            user = User.query.filter_by(user_name=form.username.data, user_passwd=form.password.data).all()
             session['username'] = form.username.data
-            if user is not None:
+            if user:
                 return redirect(url_for('user',name = session['username']))
-            #  username = form.username.data
-            #  password = form.password.data
-            #  if username =='admin' and password =='passwd':
-                #  return redirect(url_for('user',name = username))
+            else:
+                flash("wrong username or userpassword")
         return render_template('login.html', title='登录', form=form)
 
 

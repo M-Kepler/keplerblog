@@ -65,7 +65,6 @@ def create_app():
     bootstrap.init_app(app)
     db.init_app(app)
     #  manager = Manager(app)
-    #  moment.init_app(app)
     init_views(app)
     return app
 
