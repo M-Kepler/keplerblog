@@ -12,16 +12,17 @@
 from flask import Flask
 #  from flask import Flask, flash, session, request, render_template, url_for, redirect, abort, current_app
 from werkzeug.routing import BaseConverter
-
+from flask.ext.mail import Mail
 from flask.ext.bootstrap import Bootstrap
 from flask.ext.moment import Moment
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.nav import Nav
 from flask_nav.elements import *
 
+
 from os import path
 from datetime import datetime
-
+from .config import config
 from .views import init_views
 
 
@@ -40,6 +41,7 @@ bootstrap = Bootstrap()
 db = SQLAlchemy()
 #  manager = Manager()
 moment=Moment()
+mail=Mail()
 basedir = path.abspath(path.dirname(__file__))
 
 
@@ -60,11 +62,13 @@ def create_app():
         View('Signout', 'signout'),
         View('About', 'about'),
     ))
-    app.config.from_pyfile('config')
+    #  app.config.from_pyfile('config.py')
+    app.config.from_object(config['default'])
+
     nav.init_app(app)
     bootstrap.init_app(app)
     db.init_app(app)
-    #  manager = Manager(app)
+    mail.init_app(app)
     init_views(app)
     return app
 

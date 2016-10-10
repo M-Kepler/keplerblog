@@ -34,8 +34,5 @@ class User(db.Model):
         return 'user_id:{}\tuser_name:{}\tuser_passwd:{}'.format(self.user_id, self.user_name, self.user_passwd)
 
 #  数据库on_created事件监听 #  每插入新对象就初始化用户的Role_id为guests
-
-db.event.listen(User.name, 'set', User.on_created)
-
-
+db.event.listen(User.user_name, 'set', User.on_created)
 
