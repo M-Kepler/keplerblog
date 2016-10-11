@@ -23,7 +23,7 @@ from flask_nav.elements import *
 from os import path
 from datetime import datetime
 from .config import config
-from .views import init_views
+#  from .views import init_views 以前是通过文件导入，现在选择注册蓝图
 
 
 #  为路由规则增加正则转换器
@@ -50,17 +50,16 @@ def create_app():
     app.url_map.converters['regex'] = RegexConverter
     #  初始化
     nav.register_element('top', Navbar('M_Kepler',
-        View('Home', 'home'),
+        View('Home', 'main.index'),
         Subgroup(
             'Products',
-            View('Upload', 'upload'),
+            View('Projects', 'main.projects'),
+            View('Archive', 'main.archive'),
             ),
-        View('Projects', 'projects'),
-        View('Archive', 'archive'),
-        View('Login', 'login'),
-        View('Signin', 'signin'),
-        View('Signout', 'signout'),
-        View('About', 'about'),
+        View('Signup', 'auth.signup'),
+        View('Signin', 'auth.signin'),
+        View('Signout', 'auth.signout'),
+        View('About', 'main.about')
     ))
     #  app.config.from_pyfile('config.py')
     app.config.from_object(config['default'])
@@ -69,6 +68,14 @@ def create_app():
     bootstrap.init_app(app)
     db.init_app(app)
     mail.init_app(app)
-    init_views(app)
+    #  init_views(app)
+    # 注册蓝图
+    from .auth import auth as auth_blueprint
+    from .main import main as main_blueprint
+    #  url_prefix(url前缀)加上后就把auth目录下的view注册到蓝图中，不加的话就使用app下的view
+    app.register_blueprint(auth_blueprint, url_prefix='/auth')
+    #  static_fold  指定蓝图的静态文件所在文件夹
+    app.register_blueprint(main_blueprint, url_prefix='/main', static_fold='static')
+    #  app.register_blueprint(main_blueprint, url_prefix='/main')
     return app
 

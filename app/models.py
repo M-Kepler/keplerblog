@@ -23,6 +23,7 @@ class User(db.Model):
     __tablename__='users'
     user_id = db.Column(db.Integer, primary_key = True)
     user_name = db.Column(db.String(20), nullable = False)
+    #  user_email=db.Column(db.String(20), nullable = False)
     user_passwd = db.Column(db.String(20), nullable = False)
     role_id = db.Column(db.Integer, db.ForeignKey('roles.role_id'))# 表示该列的值是role表的id
 

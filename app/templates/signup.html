@@ -1,4 +1,3 @@
-
 <!-- 用上bootstrap样式的wtf-->
 {% extends 'base.html' %}
 {% import 'bootstrap/wtf.html' as wtf %}
@@ -14,7 +13,7 @@
     {% for message in get_flashed_messages() %}
     <div class="alert-info">{{ message }}</div>
     {% endfor %}
-    <!-- wtf快捷的使用bootstrap渲染表单 - 不需要在这里写布局 -->
+    <!-- 用wtf的宏quick_form来渲染表单 -->
     {{ wtf.quick_form(form) }}
   </div>
 {% endblock %}

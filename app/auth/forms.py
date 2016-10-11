@@ -4,7 +4,6 @@ from flask.ext.wtf import Form
 from wtforms import StringField, PasswordField, TextAreaField, SubmitField
 from wtforms.validators import DataRequired, length, Regexp, EqualTo, Email
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
-#  from flask.ext.pagedown.fields import PageDownField
 
 
 class LoginForm(Form):
@@ -13,17 +12,17 @@ class LoginForm(Form):
     password = PasswordField(label='password', validators = [DataRequired()])
     submit = SubmitField('Submit')
 
-'''
 class RegForm(Form):
-    username = StringField(label='用户名:', validators = [Required(), length(6,18),
-        Regexp('^[A-Za-z][A-Za-z0-9_.]$', 0,
-            "用户名只允许字母", "用户名不允许特殊符号")])
-    email = StringField(label='E-Mail', validators = [DataRequired(), Email()])
+    username = StringField(label='用户名:', validators = [
+        DataRequired('用户名不能为空'), length(6,18),
+        Regexp('^[A-Za-z][A-Za-z0-9_.]$', 0, "用户名只允许字母数字下划线")
+        ])
+    email = StringField(label='电子邮箱:', validators = [DataRequired(), Email()])
     password = PasswordField(label='密码:', validators = [DataRequired()])
-    password1 = PasswordField(label='重复密码:', validators = [DataRequired(), EqualTo('password','密码不一致')])
-    real_name = StringField("昵称", validators = [DataRequired()])
+    password1 = PasswordField(label='再次输入密码:', validators = [DataRequired(), EqualTo('password','密码不一致')])
     submit = SubmitField("submit")
 
+'''
 class PostArticleForm(Form):
     title = StringField("标题", validators = [Required(), length(6, 64)])
     body = TextAreaField("内容")
