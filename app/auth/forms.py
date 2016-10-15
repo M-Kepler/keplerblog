@@ -1,26 +1,63 @@
 # coding:utf-8
+from ..models import User
 from flask.ext.wtf import Form
-
-from wtforms import StringField, PasswordField, TextAreaField, SubmitField
+from wtforms import StringField, BooleanField, PasswordField, TextAreaField, SubmitField
 from wtforms.validators import DataRequired, length, Regexp, EqualTo, Email
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 
-
 class LoginForm(Form):
-    #  DataRequired()为校验器,这样就不需要自己写代码进行校验了,也可以自己定义
-    username = StringField(label='username', validators = [DataRequired()])
-    password = PasswordField(label='password', validators = [DataRequired()])
-    submit = SubmitField('Submit')
+    email = StringField(label='电子邮箱:', validators = [
+        DataRequired('此字段不能为空'),
+        length(6,64,'长度必须在6-64之间'),
+        Email('邮箱格式有误')
+        ])
+    password = PasswordField(label='密码:', validators = [
+        DataRequired(),
+        length(6,128,'长度必须在6-18之间'),
+        Regexp(r'^[a-zA-Z0-9_][a-zA-Z0-9]*$', 0, '密码只包含字母数字下划线')
+        ])
+    remeber_me = BooleanField('是否记住密码?', default=True)
+    submit = SubmitField('登录')
+
+    def validate_email(self, field):
+        user = User.query.filter_by(email=field.data).first()
+        if not user:
+            raise alidationError('邮箱地址未注册')
+
 
 class RegForm(Form):
     username = StringField(label='用户名:', validators = [
-        DataRequired('用户名不能为空'), length(6,18),
-        Regexp('^[A-Za-z][A-Za-z0-9_.]$', 0, "用户名只允许字母数字下划线")
+        DataRequired('用户名不能为空'), length(6,18,'长度必须在6-18之间')
+        #  Regexp('^[A-Za-z][A-Za-z0-9_.]$', 0, "用户名只允许字母数字下划线")
         ])
-    email = StringField(label='电子邮箱:', validators = [DataRequired(), Email()])
-    password = PasswordField(label='密码:', validators = [DataRequired()])
-    password1 = PasswordField(label='再次输入密码:', validators = [DataRequired(), EqualTo('password','密码不一致')])
-    submit = SubmitField("submit")
+    email = StringField(label='电子邮箱:', validators = [
+        DataRequired('此字段不能为空'),
+        length(6,64,'长度必须在6-64之间'),
+        Email('邮箱格式有误')
+        ])
+    password = PasswordField(label='密码:', validators = [
+        DataRequired('此字段不能为空'),
+        length(6,128,'长度必须在6-18之间'),
+        Regexp(r'^[a-zA-Z0-9_][a-zA-Z0-9]*$', 0, '密码只包含字母数字下划线')
+        ])
+    password_again = PasswordField(label='再次输入密码:', validators = [
+        DataRequired('此字段不能为空'),
+        length(6,128,'长度必须在6-18之间'),
+        Regexp(r'^[a-zA-Z0-9_][a-zA-Z0-9]*$', 0, '密码只包含字母数字下划线'),
+        EqualTo('password', message='密码不一致')
+        ])
+    submit = SubmitField("注册")
+
+    def validate_email(self, field):
+        if User.query.filter_by(email=field.data).first():
+            raise alidationError('邮箱地址已注册')
+
+    def validate_username(self, field):
+        if User.query.filter_by(name=field.data).first():
+            raise alidationError('用户名已被注册')
+
+
+
 
 '''
 class PostArticleForm(Form):
@@ -29,16 +66,5 @@ class PostArticleForm(Form):
     category_id = QuerySelectField("分类", query_factory = lambda:Category.query.all(),
             get_pk = lambda a:str(a.id), get_label = lambda a:a.name)
     submit = StringField("发布")
-
-
-class PostForm(Form):
-    title = StringField(label='标题', validators=[DataRequired()])
-    body = PageDownField(label=u'正文', validators=[DataRequired()])
-    summit = SubmitField(u'发表')
-
-
-class CommentForm(Form):
-    body = PageDownField(label=u'评论', validators=[DataRequired()])
-    summit = SubmitField(u'发表')
-'''
+    '''
 

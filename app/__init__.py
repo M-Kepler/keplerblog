@@ -16,6 +16,7 @@ from flask.ext.mail import Mail
 from flask.ext.bootstrap import Bootstrap
 from flask.ext.moment import Moment
 from flask.ext.sqlalchemy import SQLAlchemy
+from flask.ext.login import LoginManager
 from flask.ext.nav import Nav
 from flask_nav.elements import *
 
@@ -42,6 +43,11 @@ db = SQLAlchemy()
 #  manager = Manager()
 moment=Moment()
 mail=Mail()
+
+login_manager = LoginManager()
+login_manager.session_protection='strong'
+login_manager.login_view = 'auth.signin'
+
 basedir = path.abspath(path.dirname(__file__))
 
 
@@ -54,12 +60,13 @@ def create_app():
         Subgroup(
             'Products',
             View('Projects', 'main.projects'),
+            Separator(),
             View('Archive', 'main.archive'),
             ),
         View('Signup', 'auth.signup'),
         View('Signin', 'auth.signin'),
         View('Signout', 'auth.signout'),
-        View('About', 'main.about')
+        View('About', 'main.about'),
     ))
     #  app.config.from_pyfile('config.py')
     app.config.from_object(config['default'])
@@ -68,6 +75,8 @@ def create_app():
     bootstrap.init_app(app)
     db.init_app(app)
     mail.init_app(app)
+    login_manager.init_app(app)
+
     #  init_views(app)
     # 注册蓝图
     from .auth import auth as auth_blueprint

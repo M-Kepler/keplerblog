@@ -44,9 +44,21 @@ wtf
     触发器:操作表的时候触发一些事件
     事件:可以这样啊,每次插入用户都默认初始化他的role_id为guests
 
-## 5.3 数据库迁移
+## 5.3 Flask-migrate
+    需要注意：也要放入版本控制中
+    正常操作步骤跟着狗书走就对了
     其实就是一个版本控制的作用,比如需要更新表结构,或者需要迁移到新机器上,
     migrate会自动创建数据迁移脚本
+    定义好模型，应该是就可以进行数据库迁移的了，但是我在迁移的过程中，遇到
+    几个错误:
+    > 1. python manager.py db migrate -m "update"
+        python manager.py upgrade 提示我的数据库没有up to date
+    > 2. 提示我某张数据表已经存在? why？
+    最后我删掉了数据库里的表和migration文件夹，按照狗书重新来了一遍就好了
+
+## 5.4 sqlalchemy增删查改
+## 5.5 SUMMERY
+    主要还是要建好表的映射，当然还有数据库事件触发器、seed、staticmethod这些也要懂
 
 # 6  蓝图
     蓝图就像app里的模块，将不同的功能划分到不同的蓝图里,所以，
@@ -71,9 +83,5 @@ wtf
        弄了好久，一直提示说找不到endpoint，原来是因为我用了nav插件做导航栏，
        但是没将链接改为auth.index
 
-
-# 7  登录登出
-
-
-
-
+# 7 [Flask-Login](http://www.cnblogs.com/agmcs/p/4445428.html)
+    还是看官方文档好啊，至少说的明白清楚

@@ -3,11 +3,13 @@ from werkzeug.utils import secure_filename
 from flask.ext.script import Manager, Shell
 from flask.ext.migrate import Migrate, MigrateCommand, upgrade
 from app import create_app, db
-from app.models import User, Role
+from app.models import User, Role, Category
 
 app = create_app()
 manager = Manager(app)
 migrate = Migrate(app, db)
+manager.add_command('db', MigrateCommand)
+#  数据库更新迁移,就好像git一样做版本控制的
 
 #  也可以写带参数的脚本
 @manager.command
@@ -25,8 +27,6 @@ def make_shell_context():
 manager.add_command("shell", Shell(make_context=make_shell_context))
 
 
-#  数据库更新迁移,就好像git一样做版本控制的
-manager.add_command('db', MigrateCommand)
 
 
 @manager.command
@@ -34,10 +34,12 @@ def test():
     pass
 
 
+#  部署,Role.seed自动插入默认值
 @manager.command
 def deploy():
     upgrade()
     Role.seed() # 初始化Role默认值即内置角色
+    Category.seed()
 
 
 @manager.command

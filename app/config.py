@@ -6,13 +6,13 @@
 * Last modified: 2016-10-10 08:43:19
 * Filename     : config.py
 * Description  :
+    *  从系统环境变量中获取敏感信息
 **********************************************************/
 '''
 import os
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 class Config:
-    #  从系统环境变量中获取敏感信息
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'hard to guess string'
     SQLAlCHEMY_COMMIT_ON_TEARDOWN = True
     SQLALCHEMY_TRACK_MODIFICATIONS = True
@@ -42,3 +42,4 @@ config = {
         'production' : ProductionConfig,
         'default' : DevelopmentConfig
         }
+

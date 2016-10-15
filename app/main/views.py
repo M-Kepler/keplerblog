@@ -2,6 +2,10 @@
 from flask import flash, session, request, render_template, url_for, redirect, abort, current_app
 from os import path
 from . import main
+from .. import db
+from ..models import Post, Comment
+from flask.ext.login import login_required, current_user
+from .forms import CommentForm, PostForm
 
 basepath = path.abspath(path.dirname(__file__))
 filename = path.join(basepath,'vim_end.md')
@@ -17,6 +21,72 @@ def index():
 @main.route('/user/<name>')
 def user(name):
     return render_template('user.html', name=name)
+
+
+@main.route('/posts/<int:id>', methods = ['GET','POST'])
+def post(id):
+    #  detail详情页
+    post = Post.query.get_or_404(id)
+    form = CommentForm()
+    #  保存评论
+    if form.validate_on_submit():
+        comment = Comment( body = form.body.data, post = post)
+        db.session.add(comment)
+        db.session.commit()
+    return render_template('posts/detail.html', title=post.title,
+            form = form, post =post)
+
+
+@main.route('/edit')
+@main.route('/edit/<int:id>', methods = ['GET','POST'])
+@login_required
+def edit(id=0):
+    form = PostForm
+    if id == 0: # 新增, current_user当前登录用户
+        post = Post(author=current_user)
+    else:
+        post = Post.query.get_or_404(id)
+
+    if form.validate_on_submit():
+        post.body = form.body.data
+        post.title = form.title.data
+        db.session.add(post)
+        db.session.commit()
+    mode='添加' if id>0 else '编辑'
+    return render_template('posts/edit.html',
+            title ='%s - %s' % (mode, post.title),
+            form = form,
+            post = post)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -53,11 +123,17 @@ def page_not_found(e):
 
 
 '''
+
 #  定义自己的jinja2过滤器
-@main.template_filter('md')
+@app.template_filter('reverse')
+def reverse_filter(s):
+    return s[::-1]
+
+@app.template_filter('md')
 def markdown_to_html(txt):
     from markdown import markdown
     return markdown(txt)
+
 #  -------------
 #  通过上下文处理器把方法注册进去,这样所有模板都可以使用这个方法/变量
 #  所以就可以将文件读取到变量然后传递到jinja供模板使用,
@@ -66,13 +142,15 @@ def read_md(filename):
     with open(filename) as md_file:
         content = reduce(lambda x, y: x + y, md_file.readlines()) #  读取文件,注意reduce要从functools导入
     return content
+
+
 #  注册方法到程序上下文
-@main.context_processor
+@app.context_processor
 def inject_methods():
     return dict(read_md=read_md)
 
 
-@main.template_test('current_link')
+@app.template_test('current_link')
 def is_current_link(link):
     return link[0] is request.url
 
@@ -81,9 +159,11 @@ def is_current_link(link):
 
 
 
-
 #  @app.route('/qsbk')
 #  def qsbk():
     #  lines = f.readlines()
     #  return render_template('qsbk.html',lines=lines)
+
+
+
 
