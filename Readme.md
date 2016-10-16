@@ -56,8 +56,16 @@ wtf
     > 2. 提示我某张数据表已经存在? why？
     最后我删掉了数据库里的表和migration文件夹，按照狗书重新来了一遍就好了
 
-## 5.4 sqlalchemy增删查改
-## 5.5 SUMMERY
+## 5.4 sqlalchemy增删查改语句
+
+## 5.5 密码散列
+    werkzeug库的security可以进行散列密码的计算，
+    generate_password_hash(passwd, method...)方法计算原始密码的散列值
+    check_password_hash(hash,passed)方法检查给出的hash密码与明文密码是否相符
+    由于密码是只写的，所以注册的时候怎么写入密码呢?user.passwd=form.passwd.data
+    验证登录的时候看一下form.email.data对应的check_password_hash是不是True就可以了
+
+## 5.6 SUMMERY
     主要还是要建好表的映射，当然还有数据库事件触发器、seed、staticmethod这些也要懂
 
 # 6  蓝图
@@ -85,3 +93,4 @@ wtf
 
 # 7 [Flask-Login](http://www.cnblogs.com/agmcs/p/4445428.html)
     还是看官方文档好啊，至少说的明白清楚
+

@@ -84,7 +84,8 @@ def create_app():
     #  url_prefix(url前缀)加上后就把auth目录下的view注册到蓝图中，不加的话就使用app下的view
     app.register_blueprint(auth_blueprint, url_prefix='/auth')
     #  static_fold  指定蓝图的静态文件所在文件夹
-    app.register_blueprint(main_blueprint, url_prefix='/main', static_fold='static')
+    #  app.register_blueprint(main_blueprint, url_prefix='/main', static_fold='static')
+    app.register_blueprint(main_blueprint, static_fold='static')
     #  app.register_blueprint(main_blueprint, url_prefix='/main')
     return app
 

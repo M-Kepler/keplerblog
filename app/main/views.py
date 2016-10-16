@@ -14,7 +14,7 @@ filename = path.join(basepath,'vim_end.md')
 @main.route('/', methods=['GET', 'POST'])
 @main.route('/index', methods=['GET', 'POST'])
 def index():
-    return render_template('index.html', title='M_Kepler',artical='<h1>Hello \t\n world')
+    return render_template('index.html', title='M_Kepler', artical='<h1>Hello \t\n world')
 
 #  @app.route('/user/<int: user_id>')
 #  @app.route('/user/<regex("[a-z]+"):name>')

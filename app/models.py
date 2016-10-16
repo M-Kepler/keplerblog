@@ -63,7 +63,7 @@ class Role(db.Model):
 
     @staticmethod
     def seed(): #  调用这个方法就可以设置Role的默认值了
-        db.session.add_all(map(lambda r:Role(name=r), ['administrators','guests', 'moderators']))
+        db.session.add_all(map(lambda r:Role(name=r), ['administrators', 'moderators', 'guests']))
         db.session.commit()
 
 
@@ -72,7 +72,6 @@ class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key = True)
     name = db.Column(db.String(20), nullable = False)
     email=db.Column(db.String(60), nullable = False)
-    passwd = db.Column(db.String(20), nullable = False)
     passwd_hash = db.Column(db.String(128))
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id')) # 表示该列的值是role表的id
     posts = db.relationship('Post', backref='author')
@@ -81,25 +80,25 @@ class User(db.Model, UserMixin):
     def __str__(self):
         return 'id:{}\tname:{}\temail:{}\tpasswd:{}'.format(self.id, self.name, self.email, self.passwd)
 
-    @property
-    def password(self):
-        raise AttributeError('password is not a readable attribute')
-
-    @password.setter
-    def password(self, passwd):
-        self.passwd_hash = generate_password_hash(passwd)
-
-    def varify_password(self, passwd):
-        return check_password_hash(self.passwd_hash, passwd)
-
     @staticmethod
     def on_created(target, value, oldvalue, initiator):
         target.role= Role.query.filter_by(name='guests').first()
 
+    @property
+    def password(self):
+        raise AttributeError('password is not a readable attribute')
+    # user.password=''设置存入生成的散列密码 # user.varify_password(passwd)来校验密码
+    @password.setter
+    def password(self, passwd):
+        self.passwd_hash = generate_password_hash(passwd)
+
+    def verify_password(self, passwd):
+        return check_password_hash(self.passwd_hash, passwd)
+
 
 #用户的回调函数
 #  把已经登录的用户id放到session里,告诉flask-login怎么看哪些用户已经登录,
-#  然后其他地方需要的时候可以通过current_user来获取当前登录用户的信息
+#  然后其他地方需要的时候可以直接通过current_user来获取当前登录用户的信息,如:current_user.name
 #  login_manager验证用户登录成功后会派发cookie到浏览器，用户访问另一个页面的时候
 #  会读取这个cookie，实际上这个cookie存的就是这个id
 @login_manager.user_loader

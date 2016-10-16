@@ -27,6 +27,8 @@ class DevelopmentConfig(Config):
     MAIL_PASSWORD=os.environ.get('MAIL_PASSWORD')
     MAIL_PORT=25
     MAIL_USE_TLS=True
+    MAIL_USE_SSL=True
+
     SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://root:159357@localhost:3306/micblog"
 
 class TestingConfig(Config):
