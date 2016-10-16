@@ -1,7 +1,7 @@
 # coding:utf-8
 from ..models import User
 from flask.ext.wtf import Form
-from wtforms import StringField, BooleanField, PasswordField, TextAreaField, SubmitField
+from wtforms import StringField, BooleanField, PasswordField, TextAreaField, SubmitField, validators
 from wtforms.validators import DataRequired, length, Regexp, EqualTo, Email
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 
@@ -16,7 +16,7 @@ class LoginForm(Form):
         length(6,128,'长度必须在6-18之间'),
         Regexp(r'^[a-zA-Z0-9_][a-zA-Z0-9]*$', 0, '密码只包含字母数字下划线')
         ])
-    remeber_me = BooleanField('是否记住密码?', default=True)
+    remeber_me = BooleanField('是否记住密码?', default = False)
     submit = SubmitField('登录')
 
     def validate_email(self, field):

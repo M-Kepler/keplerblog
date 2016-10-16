@@ -30,6 +30,8 @@
     session: 用来保存存储请求之间需要记住的值的字典
     current_app: 当前程序的实例
 
+    钩子?
+
 # 4  WTF
 wtf
 
@@ -91,6 +93,19 @@ wtf
        弄了好久，一直提示说找不到endpoint，原来是因为我用了nav插件做导航栏，
        但是没将链接改为auth.index
 
-# 7 [Flask-Login](http://www.cnblogs.com/agmcs/p/4445428.html)
+# 7 电子邮件?
+## 7.1 app/email.py
+       怎么使用falsk-email来发邮件?配置email.py的时候, 要注意导入上下文?顺便导入配置文件里的变量?
+## 7.2 视图中发确认邮件
+       template那里的参数,我直接在里面写'/auth/email/'就会自动选取app/template/auth/...下的HTML了
+## 7.3 什么？令牌
+    itsdangerous
+    注册或找回密码的时候需要发一个确认连接，这个链接肯定是加密的是唯一的，就叫做令牌吧token
+    如果点了我发过去的确认邮件，我就讲你的confirmed值设置为True
+    token的过程是怎么样的？
+    看models里的注释吧，写得挺清楚的
+
+
+# 8 [Flask-Login](http://www.cnblogs.com/agmcs/p/4445428.html)
     还是看官方文档好啊，至少说的明白清楚
 

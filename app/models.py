@@ -5,6 +5,8 @@ from flask.ext.login import UserMixin
 from markdown import markdown
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+from flask import current_app
 
 
 class Post(db.Model):
@@ -73,6 +75,9 @@ class User(db.Model, UserMixin):
     name = db.Column(db.String(20), nullable = False)
     email=db.Column(db.String(60), nullable = False)
     passwd_hash = db.Column(db.String(128))
+    register_time = db.Column(db.DateTime, index=True, default = datetime.utcnow)
+    confirmed = db.Column(db.Boolean, default = False) # 是否确认了邮箱验证
+
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id')) # 表示该列的值是role表的id
     posts = db.relationship('Post', backref='author')
     comments = db.relationship('Comment', backref='author')
@@ -94,6 +99,25 @@ class User(db.Model, UserMixin):
 
     def verify_password(self, passwd):
         return check_password_hash(self.passwd_hash, passwd)
+
+#  -根据用户id吧生成一个token然后包装发给用户邮箱，如果有人点击了就可以确认了-
+    #  生成一个有效期为1小时的token（令牌）
+    def generate_confirmation_token(self, expiration = 3600):
+        s = Serializer(current_app.config['SECRET_KEY'], expiration)
+        return s.dumps({'confirm':self.id}) # 看过序列化和反序列化都知道
+
+    #  校验这个token
+    def confirm(self, token):
+        s = Serializer(current_app.config['SECRET_KEY'])
+        try:
+            data = s.loads(token)
+        except:
+            return False
+        if data.get('confirm') != self.id:
+            return False
+        self.confirmed = True
+        db.sesion.add(self) # 将confirmed加到User对象中
+        return True
 
 
 #用户的回调函数

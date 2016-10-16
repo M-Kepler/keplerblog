@@ -1,14 +1,4 @@
 #cofing:utf-8
-'''
-/***********************************************************
-* Author       : M_Kepler
-* EMail        : hellohuangjinjie@gmail.com
-* Last modified: 2016-10-10 08:43:19
-* Filename     : config.py
-* Description  :
-    *  从系统环境变量中获取敏感信息
-**********************************************************/
-'''
 import os
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -22,12 +12,18 @@ class Config:
 
 class DevelopmentConfig(Config):
     DEBUG = True
-    MAIL_SERVER=os.environ.get('MAIL_SERVER')
-    MAIL_USERNAME=os.environ.get('MAIL_USERNAME')
-    MAIL_PASSWORD=os.environ.get('MAIL_PASSWORD')
+    #  MAIL_SERVER = os.environ.get('MAIL_SERVER')
+    #  MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
+    #  MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
+    MAIL_SERVER = 'smtp.qq.com'
+    MAIL_USERNAME = 'm_kepler@foxmail.com'
+    MAIL_PASSWORD = 'xvildlkqqkklbbbj'
+    FLASK_MAIL_SUBJECT_PREFIX='M_KEPLER'
+    FLASK_MAIL_SENDER=MAIL_USERNAME
     MAIL_PORT=25
     MAIL_USE_TLS=True
-    MAIL_USE_SSL=True
+    MAIL_DEBUG = True
+    ENABLE_THREADS=True
 
     SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://root:159357@localhost:3306/micblog"
 
