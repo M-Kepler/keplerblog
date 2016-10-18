@@ -103,7 +103,7 @@ class User(db.Model, UserMixin):
 #  -根据用户id吧生成一个token然后包装发给用户邮箱，如果有人点击了就可以确认了-
     #  生成一个有效期为1小时的token（令牌）
     def generate_confirmation_token(self, expiration = 3600):
-        s = Serializer(current_app.config['SECRET_KEY'], expiration)
+        s = Serializer(current_app.config['SECRET_KEY'], expiration) # 根据秘钥SECRET_KEY,生成一个会过期的JSON
         return s.dumps({'confirm':self.id}) # 看过序列化和反序列化都知道
 
     #  校验这个token
@@ -116,7 +116,9 @@ class User(db.Model, UserMixin):
         if data.get('confirm') != self.id:
             return False
         self.confirmed = True
-        db.sesion.add(self) # 将confirmed加到User对象中
+        # 将confirmed加到User对象中,这里我感觉是需要commit的,但是记得吗?commit_on_tearndown
+        db.session.add(self)
+        #  db.session.commit()
         return True
 
 

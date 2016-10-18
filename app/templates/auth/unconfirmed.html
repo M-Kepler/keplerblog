@@ -1,13 +1,16 @@
 {% extends "base.html" %}
-{% block title %}UNCOMFIRMED{% endblock %}
+{% block title %} Confirm your account {% endblock %}
 {% block page_content %}
 <div class="page-header">
   <h1> Hello, {{current_user.name}} </h1>
-  <h2> You have not confirmed your account yet.</h2>
-  <h3> Before you access this site you need to comfirm your account, Check your inbox. you shold have received an
+  <h3> You have not confirmed your account yet.</h3>
+  <p>
+       Before you access this site you need to comfirm your account, Check your inbox. you should have received an
     email with a confirmation link.
-  </h3>
-  </br>
-  <h3><a> Another confirmation email #</a>{{urlfor('auth.resend_email')}}</h3>
+  </p>
+  <p>
+      Another confirmation email
+      <a href="{{url_for('auth.resend_confirmation')}}">CLICK HERE</a>
+    </p>
 </div>
 {% endblock %}

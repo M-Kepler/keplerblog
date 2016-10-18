@@ -1,7 +1,13 @@
-Dear {{ user.username }}, Thanks for signup M_Kepler's personal blog!
+<p>
+  Dear {{ current_user.name }}, Thanks for signup M_Kepler's personal blog!
+</p>
+<p>
 To Confirm your account please click on the following link:{{
     url_for('auth.confirm', token = token, _external=True) }}
+</p>
+<p>
 Sincerely,
     M_Kepler
-
+</p>
+<br>
 NOTE: replies to this email address are not monitored.

@@ -34,11 +34,11 @@ def test():
     pass
 
 
-#  部署,Role.seed自动插入默认值
+#  部署
 @manager.command
 def deploy():
     upgrade()
-    Role.seed() # 初始化Role默认值即内置角色
+    Role.seed()
     Category.seed()
 
 

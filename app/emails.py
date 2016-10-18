@@ -7,8 +7,6 @@ from .config import DevelopmentConfig as config
 
 app = create_app()
 
-
-
 def send_async_email(app, msg):
     with app.app_context():
         mail.send(msg)
@@ -21,4 +19,5 @@ def send_email(towho, subject, template, **kwargs):
     thread = Thread(target=send_async_email, args=[app, msg])
     thread.start()
     return thread
+
 
