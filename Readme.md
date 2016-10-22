@@ -39,10 +39,12 @@
     request: 请求对象，封装在客户端发出的HTTP请求中的内容
     session: 用来保存存储请求之间需要记住的值的字典
     current_app: 当前程序的实例
+    g:
     请求钩子?
 
+
 # 4  WTF
-    wtf
+    validate_* 可以自己定义Field 的校验,并且这个会自动被调用来进行校验
 
 
 # 5  数据库
@@ -130,4 +132,21 @@
 
 # 8 [Flask-Login](http://www.cnblogs.com/agmcs/p/4445428.html)
     还是看官方文档好啊，至少说的明白清楚,搞清楚 继承UserMixin, login_request @login_manager.user_loader回调函数
+
+## 8.1 我的时间?
+    moment插件? 注册时间? 怎么实现上次登录时间? 就是登录就显示时间而已。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

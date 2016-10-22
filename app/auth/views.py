@@ -11,11 +11,11 @@ from flask.ext.login import login_required, login_user, logout_user, current_use
 @auth.route('/signin', methods=['GET', 'POST'])
 def signin():
     form = LoginForm()
-
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first_or_404()
         if user is not None and user.verify_password(form.password.data):
-            login_user(user, form.remeber_me.data)
+            login_user(user, remember = form.remember_me.data) # 记住我, 一个cookie会存储在计算机中
+            #  login_user(user) # 记住我, 一个cookie会存储在计算机中
             return redirect(url_for('main.user', name = current_user.name))
         else:
             flash("wrong username or userpassword")
@@ -27,6 +27,8 @@ def signin():
 def signup():
     form = RegForm()
     if form.validate_on_submit():
+        #  form.validate_username()
+        #  form.validate_email()
         user=User(
                 name = form.username.data,
                 email = form.email.data,
@@ -64,11 +66,12 @@ def confirm(token):
 #  请求钩子,如果已经登录但是还没有确认,或请求auth蓝图以外的视图,都会跳到unconfirmed
 @auth.before_app_request
 def before_request():
-    if current_user.is_authenticated \
-            and not current_user.confirmed \
+    if current_user.is_authenticated:
+        current_user.ping()
+        if not current_user.confirmed \
             and request.endpoint[:5] != 'auth.' \
             and request.endpoint != 'static':
-        return redirect(url_for('auth.unconfirmed'))
+            return redirect(url_for('auth.unconfirmed'))
 
 @auth.route('/unconfirmed')
 def unconfirmed():

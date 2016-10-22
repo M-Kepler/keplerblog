@@ -76,14 +76,19 @@ class User(db.Model, UserMixin):
     email=db.Column(db.String(60), nullable = False)
     passwd_hash = db.Column(db.String(128))
     register_time = db.Column(db.DateTime, index=True, default = datetime.utcnow)
+    last_seen = db.Column(db.DateTime, default = datetime.utcnow)
     confirmed = db.Column(db.Boolean, default = False) # 是否确认了邮箱验证
-
+    about_me = db.Column(db.Text())
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id')) # 表示该列的值是role表的id
     posts = db.relationship('Post', backref='author')
     comments = db.relationship('Comment', backref='author')
 
     def __str__(self):
         return 'id:{}\tname:{}\temail:{}\tpasswd:{}'.format(self.id, self.name, self.email, self.passwd)
+
+    def ping(self):
+        self.last_seen = datetime.utcnow()
+        db.session.add(self)
 
     @staticmethod
     def on_created(target, value, oldvalue, initiator):

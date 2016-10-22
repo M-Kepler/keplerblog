@@ -1,13 +1,13 @@
 """init
 
-Revision ID: 72d17f8afed5
+Revision ID: 3990159c6835
 Revises: None
-Create Date: 2016-10-16 14:27:18.236152
+Create Date: 2016-10-21 22:12:38.142601
 
 """
 
 # revision identifiers, used by Alembic.
-revision = '72d17f8afed5'
+revision = '3990159c6835'
 down_revision = None
 
 from alembic import op
@@ -32,10 +32,15 @@ def upgrade():
     sa.Column('name', sa.String(length=20), nullable=False),
     sa.Column('email', sa.String(length=60), nullable=False),
     sa.Column('passwd_hash', sa.String(length=128), nullable=True),
+    sa.Column('register_time', sa.DateTime(), nullable=True),
+    sa.Column('last_seen', sa.DateTime(), nullable=True),
+    sa.Column('confirmed', sa.Boolean(), nullable=True),
+    sa.Column('about_me', sa.Text(), nullable=True),
     sa.Column('role_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['role_id'], ['roles.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
+    op.create_index(op.f('ix_users_register_time'), 'users', ['register_time'], unique=False)
     op.create_table('posts',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('title', sa.String(length=64), nullable=True),
@@ -69,6 +74,7 @@ def downgrade():
     op.drop_table('comments')
     op.drop_index(op.f('ix_posts_create_time'), table_name='posts')
     op.drop_table('posts')
+    op.drop_index(op.f('ix_users_register_time'), table_name='users')
     op.drop_table('users')
     op.drop_table('roles')
     op.drop_table('categorys')

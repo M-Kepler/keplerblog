@@ -3,7 +3,7 @@ from flask import flash, session, request, render_template, url_for, redirect, a
 from os import path
 from . import main
 from .. import db
-from ..models import Post, Comment
+from ..models import User, Role, Post, Comment
 from flask.ext.login import login_required, current_user
 from .forms import CommentForm, PostForm
 
@@ -20,6 +20,9 @@ def index():
 #  @app.route('/user/<regex("[a-z]+"):name>')
 @main.route('/user/<name>')
 def user(name):
+    user = User.query.filter_by(name=name).first()
+    if user is None:
+        abort(404)
     return render_template('user.html', name=name)
 
 

@@ -1,12 +1,22 @@
 {% extends "base.html" %}
 {% block title %}M_Kepler{% endblock %}
-
 {% block page_content %}
 <div class="page-header">
-  {% if name %}
-    <h1>Hello,{{name}}</h1>
-  {% else %}
-    <h1>Hello, Stranger!</h1>
+  <h1>{{ current_user.name }}</h1>
+  {% if current_user.is_authenticated %}
+  <p>
+    <a href="mail to:{{current_user.email}}">{{ current_user.email }}</a>
+  </p>
   {% endif %}
+  {% if current_user.about_me %}
+  <p>{{ current_user.about_me }}</p>
+  {% endif %}
+  <p>
+    Member since {{ current_user.register_time }}.
+    <br>
+    Last seen {{ current_user.last_seen }}.
+    <!-- Member since { moment(current_user.register_time).format('L') }}. -->
+    <!-- Last seen { moment(current_user.last_seen).fromNow() }}. -->
+  </p>
 </div>
 {% endblock %}

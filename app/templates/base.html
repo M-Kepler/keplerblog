@@ -17,7 +17,10 @@
 {% endblock %}
 
 <!-- 导航栏 -->
-{% block navbar %} {{ nav.top.render() }} {% endblock %}
+{%block navbar %}
+<!-- { { nav.top.render() }} -->
+{% include 'includes/_navbar.html' %}
+{% endblock %}
 
 {% block content %}
   <div class="container">
