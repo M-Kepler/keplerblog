@@ -53,6 +53,7 @@
 ## 5.1 mysql数据库
     pip install mysql-connector-python-rf
     RUI:mysql+mysqlconnector://username:password@server/db
+    不支持中文?
 
 ## 5.2 数据库事件
     触发器:操作表的时候触发一些事件
@@ -70,7 +71,8 @@
     > 2. 提示我某张数据表已经存在? why？
     最后我删掉了数据库里的表和migration文件夹，按照狗书重新来了一遍就好了
 
-## 5.4 sqlalchemy增删查改
+## 5.4 sqlalchemy增删查改,错误
+* sqlalchemy.exc.invalidRequestError这什么鬼错误，到处搜不到[答案](https://segmentfault.com/q/1010000005080603)
 
 ## 5.5 密码散列
     werkzeug库的security可以进行散列密码的计算，
@@ -136,17 +138,13 @@
 ## 8.1 我的时间?
     moment插件? 注册时间? 怎么实现上次登录时间? 就是登录就显示时间而已。
 
+# 9 帖子和评论
+## 9.1 how?
+    很简单啦其实，一样，只是数据库操作啊，前面也定义好了表了;
+    一个posts和一个edit, template/posts页面
 
+## 9.2 markdown? 左右
+    就是那种啊，一边编辑，一般预览啊; 装了markdown插件，我还是不会写页面啊，尴尬，甚至连那些标签都不懂，，，，
+    [那怎么做个编辑框啊?](https://segmentfault.com/q/1010000004406545)
 
-
-
-
-
-
-
-
-
-
-
-
-
+## 9.3 怎么在页面显示文章摘要啊？

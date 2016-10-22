@@ -1,13 +1,13 @@
 """init
 
-Revision ID: 3990159c6835
+Revision ID: 79f9fb48a7e5
 Revises: None
-Create Date: 2016-10-21 22:12:38.142601
+Create Date: 2016-10-22 22:59:06.711146
 
 """
 
 # revision identifiers, used by Alembic.
-revision = '3990159c6835'
+revision = '79f9fb48a7e5'
 down_revision = None
 
 from alembic import op
@@ -44,8 +44,8 @@ def upgrade():
     op.create_table('posts',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('title', sa.String(length=64), nullable=True),
-    sa.Column('body', sa.String(length=64), nullable=True),
-    sa.Column('body_html', sa.String(length=64), nullable=True),
+    sa.Column('body', sa.Text(), nullable=True),
+    sa.Column('body_html', sa.Text(), nullable=True),
     sa.Column('create_time', sa.DateTime(), nullable=True),
     sa.Column('author_id', sa.Integer(), nullable=True),
     sa.Column('category_id', sa.Integer(), nullable=True),
@@ -56,7 +56,7 @@ def upgrade():
     op.create_index(op.f('ix_posts_create_time'), 'posts', ['create_time'], unique=False)
     op.create_table('comments',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('body', sa.String(length=64), nullable=True),
+    sa.Column('body', sa.Text(), nullable=True),
     sa.Column('create_time', sa.DateTime(), nullable=True),
     sa.Column('author_id', sa.Integer(), nullable=True),
     sa.Column('post_id', sa.Integer(), nullable=True),

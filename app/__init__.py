@@ -11,11 +11,12 @@
 
 from flask import Flask, request
 from werkzeug.routing import BaseConverter
-from flask.ext.mail import Mail
-from flask.ext.bootstrap import Bootstrap
-from flask.ext.moment import Moment
-from flask.ext.sqlalchemy import SQLAlchemy
-from flask.ext.login import LoginManager
+from flask_mail import Mail
+from flask_bootstrap import Bootstrap
+from flask_moment import Moment
+from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager
+from flask_pagedown import PageDown
 
 #  from flask.ext.nav import Nav
 #  from flask_nav.elements import *
@@ -45,7 +46,7 @@ db = SQLAlchemy()
 #  manager = Manager()
 moment=Moment()
 mail=Mail()
-
+pagedown = PageDown()
 login_manager = LoginManager()
 login_manager.session_protection='strong'
 #  login_manager.session_protection='basic'
@@ -82,6 +83,7 @@ def create_app():
     db.init_app(app)
     mail.init_app(app)
     login_manager.init_app(app)
+    pagedown.init_app(app)
 
     #  init_views(app)
     # 注册蓝图

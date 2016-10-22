@@ -19,6 +19,9 @@
                 <li {% if url_for('main.index') is current_link %}class="active"{% endif %}>
                     <a href="{{ url_for('main.index') }}" title="{{ ("主页") }}">{{ ("主页") }}</a>
                 </li>
+                <li {% if url_for('main.post', id=1) is current_link %}class="active"{% endif %}>
+                    <a href="{{ url_for('main.post', id=1) }}" title="{{ ("文章") }}">{{ ("文章") }}</a>
+                </li>
                 <li {% if url_for('main.about') is current_link %}class="active"{% endif %}>
                     <a href="{{ url_for('main.about') }}" title="{{ ("关于") }}">{{ ("关于") }}</a>
                 </li>

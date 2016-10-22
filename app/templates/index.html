@@ -11,12 +11,29 @@
   {% endif %}
 
   <!-- jinja2是默认转义的,加上safe过滤器表示不转移 -->
-  <!-- {{ title }} -->
   {{ artical|safe }}
   <!-- 优化结构之后读取文件就一直出错了，晕死 -->
   <!-- (( read_md('vim_end.md')|md|safe }} -->
 </div>
+
+<div class="container">
+  <a href="{{ url_for('main.edit') }}" class ="btn btn-primary">Add article</a>
+</div>
+
+<div class="container">
+  {% for post in posts %}
+  <h2><a href="{{ url_for('main.post', id=post.id) }}"> {{post.title}}</a></h2>
+  <div>
+    {{ post.body_html|safe }}
+  </div>
+  {% endfor %}
+  {% if pagination %}
+  {{ render_pagination(pagination) }}
+  {% endif %}
+</div>
+
 {% endblock %}
+
 
 {% block footer %}
   {{super()}}

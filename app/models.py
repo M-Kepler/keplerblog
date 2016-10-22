@@ -1,7 +1,7 @@
 # coding:utf-8
 # import mysql.connector
 from . import db, login_manager
-from flask.ext.login import UserMixin
+from flask_login import UserMixin
 from markdown import markdown
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -13,9 +13,10 @@ class Post(db.Model):
     __tablename__ = 'posts'
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(64))
-    body = db.Column(db.String(64))
-    body_html = db.Column(db.String(64)) #  把markdown原文格式成html存到数据库，而不是访问时在格式
+    body = db.Column(db.Text)
+    body_html = db.Column(db.Text) #  把markdown原文格式成html存到数据库，而不是访问时在格式
     create_time = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+
     comments = db.relationship('Comment', backref='post')
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     category_id = db.Column(db.Integer, db.ForeignKey('categorys.id'))
@@ -46,7 +47,7 @@ class Category(db.Model):
 class Comment(db.Model):
     __tablename__='comments'
     id = db.Column(db.Integer, primary_key=True)
-    body = db.Column(db.String(64))
+    body = db.Column(db.Text)
     create_time= db.Column(db.DateTime, index=True, default=datetime.utcnow)
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     post_id = db.Column(db.Integer, db.ForeignKey('posts.id'))# 表示该列的值是posts表的id

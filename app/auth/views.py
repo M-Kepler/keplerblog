@@ -5,7 +5,7 @@ from ..models import User
 from .. import db
 from ..emails import send_email
 from . import auth
-from flask.ext.login import login_required, login_user, logout_user, current_user
+from flask_login import login_required, login_user, logout_user, current_user
 
 
 @auth.route('/signin', methods=['GET', 'POST'])
@@ -27,8 +27,6 @@ def signin():
 def signup():
     form = RegForm()
     if form.validate_on_submit():
-        #  form.validate_username()
-        #  form.validate_email()
         user=User(
                 name = form.username.data,
                 email = form.email.data,

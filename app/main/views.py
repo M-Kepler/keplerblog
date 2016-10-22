@@ -4,7 +4,7 @@ from os import path
 from . import main
 from .. import db
 from ..models import User, Role, Post, Comment
-from flask.ext.login import login_required, current_user
+from flask_login import login_required, current_user
 from .forms import CommentForm, PostForm
 
 basepath = path.abspath(path.dirname(__file__))
@@ -26,6 +26,9 @@ def user(name):
     return render_template('user.html', name=name)
 
 
+
+
+# ------- 帖子 -------
 @main.route('/posts/<int:id>', methods = ['GET','POST'])
 def post(id):
     #  detail详情页
@@ -36,62 +39,32 @@ def post(id):
         comment = Comment( body = form.body.data, post = post)
         db.session.add(comment)
         db.session.commit()
-    return render_template('posts/detail.html', title=post.title,
-            form = form, post =post)
+        form.body.data=''
+    return render_template('posts/detail.html', title=post.title, form=form, post=post)
 
 
-@main.route('/edit')
+@main.route('/edit', methods = ['GET', 'POST'])
 @main.route('/edit/<int:id>', methods = ['GET','POST'])
 @login_required
 def edit(id=0):
-    form = PostForm
-    if id == 0: # 新增, current_user当前登录用户
-        post = Post(author=current_user)
+    form = PostForm()
+    # 新增, current_user当前登录用户
+    if id == 0:
+        post = Post(author_id = current_user.id)
     else:
         post = Post.query.get_or_404(id)
-
     if form.validate_on_submit():
         post.body = form.body.data
         post.title = form.title.data
         db.session.add(post)
         db.session.commit()
+        return redirect(url_for('.post', id=post.id))
+    form.title.data = post.title
+    form.body.data = post.body
+    post.title = ('添加新文章')
     mode='添加' if id>0 else '编辑'
     return render_template('posts/edit.html',
-            title ='%s - %s' % (mode, post.title),
-            form = form,
-            post = post)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            title ='%s - %s' % (mode, post.title), form=form, post=post)
 
 
 #  上传文件

@@ -1,7 +1,7 @@
 # coding:utf-8
 from werkzeug.utils import secure_filename
-from flask.ext.script import Manager, Shell
-from flask.ext.migrate import Migrate, MigrateCommand, upgrade
+from flask_script import Manager, Shell
+from flask_migrate import Migrate, MigrateCommand, upgrade
 from app import create_app, db
 from app.models import User, Role, Category
 

@@ -25,7 +25,7 @@ class DevelopmentConfig(Config):
     MAIL_DEBUG = True
     ENABLE_THREADS=True
 
-    SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://root:159357@localhost:3306/micblog"
+    SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://root:159357@localhost:3306/keplerblog"
 
 class TestingConfig(Config):
     TESTING = True
