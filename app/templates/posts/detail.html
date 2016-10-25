@@ -6,10 +6,7 @@
     <div>
       <h1>{{ post.title | safe }}</h1>
     </div>
-    <br>
-    作者:<h4>{{post.author.name}}</h4>
-    发表日期:<h4>{{post.create_time}}</h4>
-    <hr>
+    作者:<h4>{{post.author.name}}</h4> 发表日期:<h4>{{post.create_time}}</h4>
     <!-- 正文 -->
     <div>
       {{ post.body_html | safe }}
@@ -25,7 +22,9 @@
     {% for comment in post.comments | sort(attribute='create_time', reverse=True) %}
       <div class = "media">
         <div class="media-body">
-          {{ comment.body | safe }} {{ comment.create_time | safe}}
+          <h3>{{ comment.author.name}}</h3>
+          {{ comment.body|safe }}
+          {{ comment.create_time|safe}}
         </div>
     </div>
     {% endfor %}

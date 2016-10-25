@@ -154,9 +154,13 @@
     就是那种啊，一边编辑，一般预览啊; 装了markdown插件，我还是不会写页面啊，尴尬，甚至连那些标签都不懂，，，，
     [那怎么做个编辑框啊?](https://segmentfault.com/q/1010000004406545)
 
-## 9.3 怎么在页面显示文章摘要啊？
+## 9.3 页面显示文章摘要啊,readmore？
+    https://segmentfault.com/q/1010000003496839
+    用jinja2的truncate过滤器过滤后在后面合适的位置添加'了解更多',其实只要添加这篇posts的链接就可以了
 
-## 分页
+## 9.4 分页
+    /main/views.py pagination
+    bootstrap支持分页,导入就可以 {% from "bootstrap/pagination.html" import render_pagination %}
 
 # 导航栏
     本来用的是flask-nav的，但是好像用的不太好，所以就copy了别人的导航栏_navbar.html，然后在base.html中引入

@@ -100,11 +100,9 @@ class User(db.Model, UserMixin):
     confirmed = db.Column(db.Boolean, default = False) # 是否确认了邮箱验证
     about_me = db.Column(db.Text())
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id')) # 表示该列的值是role表的id
+
     posts = db.relationship('Post', backref='author')
     comments = db.relationship('Comment', backref='author')
-
-    def __str__(self):
-        return 'id:{}\tname:{}\temail:{}\tpasswd:{}'.format(self.id, self.name, self.email, self.passwd)
 
     def ping(self):
         self.last_seen = datetime.utcnow()

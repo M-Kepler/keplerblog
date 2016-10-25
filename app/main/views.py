@@ -3,9 +3,10 @@ from flask import flash, session, request, render_template, url_for, redirect, a
 from os import path
 from . import main
 from .. import db
-from ..models import User, Role, Post, Comment
+from ..models import User, Role, Post, Comment, Category
 from flask_login import login_required, current_user
 from .forms import CommentForm, PostForm
+
 
 basepath = path.abspath(path.dirname(__file__))
 filename = path.join(basepath,'vim_end.md')
@@ -15,14 +16,14 @@ filename = path.join(basepath,'vim_end.md')
 @main.route('/index', methods=['GET', 'POST'])
 def index():
     posts = Post.query.all()
-#  做分页
-    #  从request（/index?page=1)里获取页数1
+    PER_POSTS_PER_PAGE=10
+    #  做分页 #  从request（/index?page=1)里获取页数1
     page_index = request.args.get('page', 1, type=int)
     #  sqlalchemy的paginate(分页)方法,page_index被初始化为1了
     #  per_page标识每页显示的数量, error_out=False超出页数范围不报错,显示控列表
     pagination = Post.query.order_by(
             Post.create_time.desc()).paginate(
-            page_index, per_page=8,
+            page_index, per_page=PER_POSTS_PER_PAGE,
             error_out=False
             )
     posts=pagination.items
@@ -42,6 +43,7 @@ def user(name):
 
 
 # ------- 帖子 -------
+
 @main.route('/posts/<int:id>', methods = ['GET','POST'])
 @login_required
 def post(id):
@@ -50,7 +52,7 @@ def post(id):
     form = CommentForm()
     #  保存评论
     if form.validate_on_submit():
-        comment = Comment( body = form.body.data, post = post)
+        comment = Comment( author_id = current_user.id, body = form.body.data, post = post)
         db.session.add(comment)
         db.session.commit()
         form.body.data=''
@@ -79,6 +81,13 @@ def edit(id=0):
     mode='添加' if id>0 else '编辑'
     return render_template('posts/edit.html',
             title ='%s - %s' % (mode, post.title), form=form, post=post)
+
+
+@main.route('/category/<tag>', methods=['GET'])
+def category(tag):
+    category = Category.query.filter_by(name=name).first()
+    posts = category.posts
+    return render_template("category_search.html", posts=posts)
 
 
 '''
@@ -127,7 +136,6 @@ def about():
 def page_not_found(e):
     return render_template('404.html'), 404
 
-
 '''
 
 #  定义自己的jinja2过滤器
@@ -162,14 +170,8 @@ def is_current_link(link):
 
 '''
 
-
-
-
 #  @app.route('/qsbk')
 #  def qsbk():
     #  lines = f.readlines()
     #  return render_template('qsbk.html',lines=lines)
-
-
-
 
