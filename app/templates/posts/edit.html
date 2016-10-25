@@ -3,13 +3,16 @@
 
 {% block scripts %}
 {{ super() }}
+<!-- 预览markdown -->
 {{ pagedown.include_pagedown() }}
 {% endblock %}
 
 {% block page_content %}
 <div class="container">
   <form action ="" method="POST" class="form" role="form">
+    <!-- form.csrf_token()也行,否则validation_on_submit会验证失败 -->
     {{ form.hidden_tag() }}
+
     <div class="form-group" required>
       {{ form.title(class="form-control", placeholder=("请输入文章标题")  ) }}
     </div>

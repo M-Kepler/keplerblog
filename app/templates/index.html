@@ -1,40 +1,58 @@
 {% extends "base.html" %}
+{% from "bootstrap/pagination.html" import render_pagination %}
 
 {% block title %}{{title}}{% endblock %}
 
-{% block page_content%}
+{% block page_content %}
 <div class="page-header">
   {% if current_user.name %}
-    <h1>WELLCOME {{ current_user.name}}</h1>
+    <h1>WELLCOME {{ current_user.name|safe|upper}}</h1>
   {% else %}
-      <h1>WELLCOME stranger</h1>
+      <h1>WELLCOME STRANGER</h1>
   {% endif %}
 
   <!-- jinja2是默认转义的,加上safe过滤器表示不转移 -->
-  {{ artical|safe }}
+  <!-- { { artical|safe }} -->
   <!-- 优化结构之后读取文件就一直出错了，晕死 -->
   <!-- (( read_md('vim_end.md')|md|safe }} -->
 </div>
 
 <div class="container">
-  <a href="{{ url_for('main.edit') }}" class ="btn btn-primary">Add article</a>
+  <a href="{{ url_for('main.edit') }}" class ="btn btn-primary">添加新文章</a>
 </div>
 
+<!-- 显示文章 -->
 <div class="container">
   {% for post in posts %}
-  <h2><a href="{{ url_for('main.post', id=post.id) }}"> {{post.title}}</a></h2>
-  <div>
-    {{ post.body_html|safe }}
-  </div>
+  <h2><a href="{{ url_for('main.post', id=post.id) }}">{{post.title}}</a></h2>
+  <li class = "post">
+    <div class="profile-thumbnail">
+      <a href = "{{url_for('.user', name=post.author.name) }}"></a>
+        <!-- <img class="img-rounded rofile-thumbnail" -->
+          <!-- <src=" { {post.author.gravatar(size=40) }}"> -->
+        <!-- </a> -->
+      </div>
+      <!-- <div class="post-date"> { { moment(post.timestamp).fromNow() }}</div> -->
+      <div class="post-date">{{post.create_time}}</div>
+      <br>
+      <div class = "post-author">
+        <a href="{{url_for('.user', name=post.author.username) }}">
+          {{ post.author.username }}
+        </a>
+      </div>
+      <div class="post-body">
+        {{post.body_html|safe}}
+      </div>
+    </li>
   {% endfor %}
-  {% if pagination %}
+</div>
+
+<!-- 分页 -->
+<div class="container-fluid">
+{% if pagination %}
   {{ render_pagination(pagination) }}
-  {% endif %}
+{% endif %}
 </div>
 
 {% endblock %}
 
-
-{% block footer %}
-  {{super()}}
-{% endblock %}

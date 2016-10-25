@@ -5,7 +5,9 @@
 ## 1.1 run.py
     用于启动一个服务器，它从包获得应用副本并运行，不会在生产环境中用到。
 
-## 1.2 requestments.txt
+## 1.2 requestments
+    你想啊，可能有的插件只在测试的时候才需要啊，所以不必要都加入到requestments中
+    可以新建dev.txt文档，加上-r requestments.txt就可以继承这个里面的插件了
     用于列出应用所以来的所有python包，分为生产依赖、开发依赖
 
 ## 1.3 config.py
@@ -37,6 +39,8 @@
 
 # 3  请求上下文
     request: 请求对象，封装在客户端发出的HTTP请求中的内容
+    https://my.oschina.net/lionets/blog/410973
+
     session: 用来保存存储请求之间需要记住的值的字典
     current_app: 当前程序的实例
     g:
@@ -54,6 +58,7 @@
     pip install mysql-connector-python-rf
     RUI:mysql+mysqlconnector://username:password@server/db
     不支持中文?
+
 
 ## 5.2 数据库事件
     触发器:操作表的时候触发一些事件
@@ -133,6 +138,8 @@
 
 
 # 8 [Flask-Login](http://www.cnblogs.com/agmcs/p/4445428.html)
+[flask-qq-weibo登录](http://www.cnblogs.com/GresonFrank/archive/2013/11/13/python.html)
+
     还是看官方文档好啊，至少说的明白清楚,搞清楚 继承UserMixin, login_request @login_manager.user_loader回调函数
 
 ## 8.1 我的时间?
@@ -148,3 +155,16 @@
     [那怎么做个编辑框啊?](https://segmentfault.com/q/1010000004406545)
 
 ## 9.3 怎么在页面显示文章摘要啊？
+
+## 分页
+
+# 导航栏
+    本来用的是flask-nav的，但是好像用的不太好，所以就copy了别人的导航栏_navbar.html，然后在base.html中引入
+## 固定导航栏
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <!-- 在base.html的block head中加入padding就可以避免用fiexed-top的时候内容和导航栏重叠 -->
+      <style>
+        body{
+          padding-top:70px;
+        }
+      </style>

@@ -46,6 +46,8 @@ class RegForm(Form):
         Regexp(r'^[a-zA-Z0-9_][a-zA-Z0-9]*$', 0, '密码只包含字母数字下划线'),
         EqualTo('password', message='密码不一致')
         ])
+    about_me= TextAreaField(label='关于我:', validators = [
+        length(6,128,'长度必须在6-18之间')])
     submit = SubmitField("注册")
 
     #  自己定义校验,validatate_email 会自动被调用的

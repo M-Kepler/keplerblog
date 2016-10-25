@@ -29,6 +29,25 @@ class Post(db.Model):
         else:
             target.body_html= markdown(value)
 
+#  生成测试数据
+    @staticmethod
+    def generate_fake(count=100):
+        from random import seed, randint
+        import forgery_py
+        seed()
+        user_count = User.query.count()
+        for i in range(count):
+            #  offset查询过滤器会跳过阐述中指定的查询数量,通过设定一个随机的偏移值
+            #  调用first()来使得每次获取到一个不同的随机用户
+            u = User.query.offset(randint(0, user_count-1)).first()
+            p = Post(
+                    title = forgery_py.lorem_ipsum.title(randint(1,3)),
+                    body = forgery_py.lorem_ipsum.sentences(randint(1,3)),
+                    create_time=forgery_py.date.date(True),
+                    author = u
+                    )
+
+
 db.event.listen(Post.body, 'set', Post.on_body_changed)# 当body被修改时触发
 
 
@@ -126,6 +145,30 @@ class User(db.Model, UserMixin):
         db.session.add(self)
         #  db.session.commit()
         return True
+
+
+#  用foregy 生成测试数据
+    @staticmethod
+    def generate_fake(count=20):
+        from sqlalchemy.exc import IntegrityError
+        from random import seed
+        import forgery_py
+        seed()
+        for i in range(count):
+            u = User(name=forgery_py.internet.user_name(True),
+                    email=forgery_py.internet.email_address(),
+                    passwd_hash=forgery_py.lorem_ipsum.word(),
+                    confirmed = True,
+                    about_me=forgery_py.lorem_ipsum.sentence(),
+                    register_time=forgery_py.date.date(True)
+                    )
+            db.session.add(u)
+            #  随机生成的这些信息可能会重复导致session.commit跑出异常
+            #  所以回滚回话撤销之前的操作，重新生成就可以了
+            try:
+                db.session.commit()
+            except IntegrityError:
+                db.session.rollback()
 
 
 #用户的回调函数

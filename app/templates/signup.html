@@ -10,7 +10,7 @@
 
   <div class="container">
     {% for message in get_flashed_messages() %}
-    <div class="alert-info">{{ message }}</div>
+    <div class="alert alert-info">{{ message }}</div>
     {% endfor %}
     <!-- 用wtf的宏quick_form来渲染表单 -->
     {{ wtf.quick_form(form) }}

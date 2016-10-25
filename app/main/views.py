@@ -14,7 +14,20 @@ filename = path.join(basepath,'vim_end.md')
 @main.route('/', methods=['GET', 'POST'])
 @main.route('/index', methods=['GET', 'POST'])
 def index():
-    return render_template('index.html', title='M_Kepler', artical='<h1>Hello \t\n world')
+    posts = Post.query.all()
+#  做分页
+    #  从request（/index?page=1)里获取页数1
+    page_index = request.args.get('page', 1, type=int)
+    #  sqlalchemy的paginate(分页)方法,page_index被初始化为1了
+    #  per_page标识每页显示的数量, error_out=False超出页数范围不报错,显示控列表
+    pagination = Post.query.order_by(
+            Post.create_time.desc()).paginate(
+            page_index, per_page=8,
+            error_out=False
+            )
+    posts=pagination.items
+    return render_template('index.html', title='Kepler',
+            posts=posts, pagination=pagination)
 
 #  @app.route('/user/<int: user_id>')
 #  @app.route('/user/<regex("[a-z]+"):name>')
@@ -30,6 +43,7 @@ def user(name):
 
 # ------- 帖子 -------
 @main.route('/posts/<int:id>', methods = ['GET','POST'])
+@login_required
 def post(id):
     #  detail详情页
     post = Post.query.get_or_404(id)
@@ -66,6 +80,22 @@ def edit(id=0):
     return render_template('posts/edit.html',
             title ='%s - %s' % (mode, post.title), form=form, post=post)
 
+
+'''
+@main.route('/edit-profile', methods=['GET','POST'])
+@login_required
+def edit_profile():
+    form = EditProfileForm()
+    if form.validate_on_submit():
+        current_user.name = form.name.data
+        current_user.about_me = form.about_me.data
+        db.session.add(current_user)
+        flash('You Profile has been updated.')
+        return redirect(url_for('.user', username=current_user.username))
+    form.name.date = current_user.name
+    form.about_me.data = current_user.about_me
+    return render_template('edit_profile.html', form = form)
+'''
 
 #  上传文件
 @main.route('/upload', methods = ['GET', 'POST'])

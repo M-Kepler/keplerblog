@@ -30,12 +30,13 @@ def signup():
         user=User(
                 name = form.username.data,
                 email = form.email.data,
+                about_me = form.about_me.data
                 )
-        user.password=form.password.data
+        # 传入密码到models里,然后计算passwd_hash
+        user.password = form.password.data
         db.session.add(user)
         db.session.commit()
-        #  生成验证token
-        token = user.generate_confirmation_token()
+        token = user.generate_confirmation_token() #  生成验证token
         #  发送确认邮件, 邮件模板放在/templates/auth/email
         send_email(
                 user.email, 'ConfirmYouAccount',
