@@ -23,7 +23,7 @@ def dev():
 #  进入shell调试的时候每次都要导入db,models太麻烦了,
 #  所以配置一下shell命令的上下文,就可以在shell里用了,不用每次都导入
 def make_shell_context():
-    return dict(app=app, db=db, User=User, Role=Role, Post=Post)
+    return dict(app=app, db=db, User=User, Role=Role, Post=Post, Category=Category)
 
 manager.add_command("shell", Shell(make_context=make_shell_context))
 

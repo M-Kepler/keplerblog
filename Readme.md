@@ -79,6 +79,32 @@
 ## 5.4 sqlalchemy增删查改,错误
 * sqlalchemy.exc.invalidRequestError这什么鬼错误，到处搜不到[答案](https://segmentfault.com/q/1010000005080603)
 
+### 点击标签显示该标签对应的文章   
+    正文的话只要显示post.category.name就可以了，然后做个连接url_for到视图
+    接下来点击标签就是访问那个视图，然后就。。
+TODO   
+    很简单啊，在index.html里显示了当前post的标签了，所以点击的话就连接到category/<name>就可以了;
+    然后这个category视图把查到的posts返回去显示出来就可以了,这里我又写了个html，我感觉是不是可以复用一下index↓
+
+    ```select category.id, category.name, posts.title from posts, categorys where(posts.category_id = category.id);```   
+    以上的多表查询有问题 应该在最后加上````and category.id=2````
+    这样的多表查询语句用sqlalchemy怎么写?
+    > posts = db.session.query(Post).join(Category)
+
+    我是想用上面这种多表查询的方法来查询某tagname下的文章的,sql语句会写, 但是sqlalchemy怎么写就不懂   
+
+    后来看人家的源码知道, 在写模型的时候, 表A的外键所链接的表B, 模型里backref参数的,我当时以为只是给外键所在的表A一个参数以便它
+    来访问这个表B, 谁知道B也可以用参数去访问A，这样太方便了好吗，我不需要给B表新添字段让他去参照A，或者写个多表查询的语句了
+
+    但是，，，不用查询的话我怎么做分页？
+
+
+    还有，难道真的要添加个count字段？我想在视图里query出来，然后传过去
+
+
+
+
+
 ## 5.5 密码散列
     werkzeug库的security可以进行散列密码的计算，
     generate_password_hash(passwd, method...)方法计算原始密码的散列值
@@ -172,3 +198,10 @@
           padding-top:70px;
         }
       </style>
+
+
+
+# [样式Bootstrap](http://www.runoob.com/bootstrap/bootstrap-glyphicons.html)
+  左侧9列正文，右侧3列显示个人信息和标签
+
+  这阶段是套用了别人的，不过bootstrap始终方便，有空我找找自己喜欢的样式,我现在的导航栏太丑了

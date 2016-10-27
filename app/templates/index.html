@@ -5,14 +5,14 @@
 {% block title %}{{title}}{% endblock %}
 
 {% block page_content %}
-<div class="page-header">
-  {% if current_user.name %}
-  <h2>WELLCOME {{ current_user.name|safe|upper}}</h2>
-  {% else %}
-  <h1>WELLCOME STRANGER</h1>
-  {% endif %}
-</div>
 
+<!-- <div class="page-header"> -->
+  <!-- { % if current_user.name %} -->
+  <!-- <h2>WELCOME { { current_user.name|safe|upper}}</h2> -->
+  <!-- { % else %} -->
+  <!-- <h1>WELCOME STRANGER</h1> -->
+  <!-- { % endif %} -->
+<!-- </div> -->
   <!-- jinja2是默认转义的,加上safe过滤器表示不转移 -->
   <!-- { { artical|safe }} -->
   <!-- 优化结构之后读取文件就一直出错了，晕死 -->
@@ -41,23 +41,57 @@
           </div>
         </div>
 
-          <div class="post-date">{{post.create_time}}</div>
+				<p><small><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span><span style="color:#8C8C8C;">{{ post.create_time }}</span></small></p>
+        <!-- <div class="post-date">{ {post.create_time}}</div> -->
 
+        <!-- 添加了解更多按钮 -->
+        <!-- <div class="post-body" style="border-top:1px solid #EBEBEB;padding:10px 5px;margin-top:20px;"> -->
+        <div style="border-top:1px solid #EBEBEB;padding:10px 5px;margin-top:20px;">
+          <p>{{post.body_html|safe|truncate(700,True)}}</p>
 
-            <!-- 添加了解更多按钮 -->
-          <div class="post-body" style="border-top:1px solid #EBEBEB;padding:10px 5px;margin-top:20px;">
-            <p>{{post.body_html|safe|truncate(700,True)}}</p>
-
-            <p><a href="{{url_for('.post', id=post.id) }}" style="float:right">
-                <button class="btn  btn-primary btn-wide text-right">
-                  <span class="glyphicon glyphicon-fire
-                    glyphicon " aria-hidden="true">
-            </span>  了解更多</button> </a> </p>
-          </div>
+          <!-- 显示标签,点击标签显示该标签下的文章 -->
+          <p><a href="{{ url_for('main.category', name = post.category.name) }}"> <span class="label label-default text-left"><span class="glyphicon glyphicon-tag" aria-hidden="true">
+              </span> {{ post.category.name}}</span>
+             <a href="{{ url_for('main.post', id=post.id) }}" style="float:right"> <button class="btn  btn-primary btn-text-right"> <span class="glyphicon glyphicon-share-alt" aria-hidden="true">
+           </span> read more</button></a>
+         </p>
+        </div>
 
       </li>
       {% endfor %}
     </div>
+
+
+    <!-- 右侧标签栏 -->
+    <div class="col-md-3">
+      <div class="share mrl the-font" style="background-color:#FFF;box-shadow:5px 5px 20px #CCC;width:260px;">
+        <div style="padding:10px;">
+          <div style="border-bottom:1px solid #DAD4D4;;padding:10px 10px;">
+            <h5><span class="glyphicon glyphicon-search" aria-hidden="true"></span>  CATEGORY</h5>
+          </div>
+          <ul>
+
+            {% for category in categorys %}
+
+            <li class="presentation" style="padding-top:0px;">
+              <a href="{{ url_for('main.category', name= category.name ) }}" >
+                <p><span style="font-size:15px;" class="glyphicon glyphicon-tags" aria-hidden="true"> {{ category.name }}</span>
+                  <span class="badge text-right" style="float:right">{{ count}}</span>
+                </p>
+            </a>
+          </li>
+
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+
+    <div class="tile" style="margin-top:40px;box-shadow:5px 5px 20px #CCC;background-color:#FFF">
+      <div style="border:5px solid #FFF;border-radius:300px;width:128px;height:128px;margin:0px auto;position:relative;bakeground:#88ACDB none repeat scroll 0% 0%;overflow:hidden">
+        <img src="{{ url_for('static',filename='pic/11.jpg') }}" style="width:100%;height:100%">
+      </div>
+    </div>
+
   </div>
 </div>
 <!-- 分页 -->
@@ -66,4 +100,6 @@
   {{ render_pagination(pagination) }}
   {% endif %}
 </div>
+
 {% endblock %}
+

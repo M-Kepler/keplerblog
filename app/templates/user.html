@@ -1,13 +1,11 @@
 {% extends "base.html" %}
-{% block title %}M_Kepler{% endblock %}
+{% block title %}Profile{% endblock %}
 {% block page_content %}
 <div class="page-header">
   <h1>{{ current_user.name }}</h1>
-  {% if current_user.is_authenticated %}
   <p>
     <a href="mail to:{{current_user.email}}">{{ current_user.email }}</a>
   </p>
-  {% endif %}
   {% if current_user.about_me %}
   <p>{{ current_user.about_me }}</p>
   {% endif %}

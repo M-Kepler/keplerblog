@@ -55,6 +55,7 @@ class Category(db.Model):
     __tablename__ = 'categorys'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(20), nullable=False)
+    #  count = db.Column(db.Integer)
     posts = db.relationship('Post', backref = 'category')
 
     @staticmethod

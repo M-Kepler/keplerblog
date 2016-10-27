@@ -23,12 +23,14 @@ def index():
     #  per_page标识每页显示的数量, error_out=False超出页数范围不报错,显示控列表
     pagination = Post.query.order_by(
             Post.create_time.desc()).paginate(
-            page_index, per_page=PER_POSTS_PER_PAGE,
+            page_index, per_page = PER_POSTS_PER_PAGE,
             error_out=False
             )
     posts=pagination.items
-    return render_template('index.html', title='Kepler',
-            posts=posts, pagination=pagination)
+    categorys = Category.query.order_by(Category.id)[::-1]
+
+    return render_template('index.html', title = 'Kepler',
+            posts = posts, categorys = categorys, pagination = pagination)
 
 #  @app.route('/user/<int: user_id>')
 #  @app.route('/user/<regex("[a-z]+"):name>')
@@ -83,11 +85,22 @@ def edit(id=0):
             title ='%s - %s' % (mode, post.title), form=form, post=post)
 
 
-@main.route('/category/<tag>', methods=['GET'])
-def category(tag):
-    category = Category.query.filter_by(name=name).first()
+@main.route('/category/<name>', methods=['GET', 'POST'])
+def category(name):
+    #  点击index的标签后跳到这里,顺便把标签名传了过来,
+    #  index视图那里也不需要进行查询,因为做了外键,直接可以有posts知道category
+
+    #  有问题,虽然是查询出来了这个标签下的文章,但是数量不对啊
+    #  posts = db.session.query(Post).join(Category, Post.category_id == Category.id)
+    #  我还想写个多表查询....↑
+#  select categorys.id, categorys.name, posts.id from posts, categorys where(posts.category_id = categorys.id and categorys.id = 2);
+
+    category = Category.query.filter_by(name = name).first()
     posts = category.posts
-    return render_template("category_search.html", posts=posts)
+
+    # TODO 标签显示出来的文章怎么分页？？？
+    #  return render_template("category.html", pagination=pagination, posts=posts)
+    return render_template("category.html", name=name, posts=posts)
 
 
 '''
@@ -105,6 +118,7 @@ def edit_profile():
     form.about_me.data = current_user.about_me
     return render_template('edit_profile.html', form = form)
 '''
+
 
 #  上传文件
 @main.route('/upload', methods = ['GET', 'POST'])
