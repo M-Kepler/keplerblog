@@ -7,6 +7,7 @@ from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from flask import current_app
+from sqlalchemy import func
 
 
 class Post(db.Model):
@@ -36,9 +37,11 @@ class Post(db.Model):
         import forgery_py
         seed()
         user_count = User.query.count()
+        category_count = Category.query.count()
         for i in range(count):
             #  offset查询过滤器会跳过阐述中指定的查询数量,通过设定一个随机的偏移值
             #  调用first()来使得每次获取到一个不同的随机用户
+            category = Category.query.offset(randint(0, category_count-1)).first()
             u = User.query.offset(randint(0, user_count-1)).first()
             p = Post(
                     title = forgery_py.lorem_ipsum.title(randint(1,3)),
@@ -55,13 +58,17 @@ class Category(db.Model):
     __tablename__ = 'categorys'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(20), nullable=False)
-    #  count = db.Column(db.Integer)
     posts = db.relationship('Post', backref = 'category')
 
     @staticmethod
     def seed():
-        db.session.add_all(map(lambda r:Category(name=r), ['others']))
+        db.session.add_all(map(lambda r:Category(name=r), ['others', 'python','linux']))
         db.session.commit()
+
+    #  @property
+    #  def count(self):
+        #  count = db.session.query(Post).filter(Post.category_id == Category.id).count()
+        #  return count
 
 
 class Comment(db.Model):
@@ -72,6 +79,22 @@ class Comment(db.Model):
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     post_id = db.Column(db.Integer, db.ForeignKey('posts.id'))# 表示该列的值是posts表的id
 
+    @staticmethod
+    def generate_fake(count=100):
+        from random import seed, randint
+        import forgery_py
+        seed()
+        user_count = User.query.count()
+        post_count = Post.query.count()
+        for i in range(count):
+            p = Post.query.offset(randint(0, post_count-1)).first()
+            u = User.query.offset(randint(0, user_count-1)).first()
+            c = Comment(
+                    body = forgery_py.lorem_ipsum.sentences(randint(1,3)),
+                    create_time=forgery_py.date.date(True),
+                    author = u,
+                    post = p
+                    )
 
 class Role(db.Model):
     __tablename__='roles' # 指定表名

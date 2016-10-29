@@ -1,45 +1,20 @@
 {% extends "base.html" %}
 {% from "bootstrap/pagination.html" import render_pagination %}
+{% from "./includes/_macros.html" import show_posts %}
+{% from "./includes/_macros.html" import show_sidebar %}
 
 {% block title %}Category - {{ name }}{% endblock %}
 
 {% block page_content %}
-
-<div class="page-header">
-  <!-- 做点标识说明这是个标签页啊 -->
-  <h1>Category - {{ name }}</h1>
-</div>
 <!-- 显示标签下的文章 -->
-<div class="container">
-  <div class="row">
-    <div class="col-md-9">
-      {% for post in posts | sort(attribute='create_time', reverse=True) %}
-      <h2><a href="{{ url_for('main.post', id=post.id) }}">{{post.title}}</a></h2>
-      <li class = "post">
-        <div class="profile-thumbnail">
-          <div class = "post-author">
-            <a href="{{url_for('.user', name=post.author.name) }}"> {{ post.author.name }} </a>
-          </div>
-        </div>
-        <div style="border-top:1px solid #EBEBEB;padding:10px 5px;margin-top:20px;">
-          <p>{{ post.body_html|safe|truncate(700,True) }}</p> <!-- 显示标签,点击标签显示该标签下的文章 -->
-          <p><a href="{{ url_for('main.category', name = post.category.name) }}"> <span class="label label-default text-left"><span class="glyphicon glyphicon-leaf" aria-hidden="true">
-              </span>{{ post.category.name}}</span>
-              <a href="{{ url_for('main.post', id=post.id) }}" style="float:right"> <button class="btn  btn-primary btn-wide text-right"> <span class="glyphicon glyphicon-fire glyphicon " aria-hidden="true">
-              </span>  了解更多</button></a> </p>
-        </div>
-      </li>
-      {% endfor %}
-    </div>
-  </div>
-</div>
-
-<!-- 分页 -->
-<div class="container-fluid">
-  {% if pagination %}
-  {{ render_pagination(pagination) }}
-  {% endif %}
-</div>
+{{ show_posts (posts, categorys, pagination ) }}
+{{ show_sidebar(posts, categorys) }}
+  <!-- 分页 -->
+  <!-- <div class="container-fluid"> -->
+    <!-- { % if pagination %} -->
+    <!-- { { render_pagination(pagination) }} -->
+    <!-- { % endif %} -->
+  <!-- </div> -->
 
 {% endblock %}
 

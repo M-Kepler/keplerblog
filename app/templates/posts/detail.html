@@ -1,31 +1,78 @@
 {% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
-{% block page_content%}
-  <div class="container">
-    <!-- Meta信息 -->
-    <div>
-      <h1>{{ post.title | safe }}</h1>
-    </div>
-    作者:<h4>{{post.author.name}}</h4> 发表日期:<h4>{{post.create_time}}</h4>
-    <!-- 正文 -->
-    <div>
-      {{ post.body_html | safe }}
-    </div>
 
-    <h3>评论</h3>
-    <!-- 操作链接 -->
-    <!-- 发表评论 -->
-      <div>
-        {{ wtf.quick_form(form) }}
-      </div>
-    <!-- 评论列表 -->
-    {% for comment in post.comments | sort(attribute='create_time', reverse=True) %}
-      <div class = "media">
-        <div class="media-body">
-          <h3>{{ comment.author.name}}</h3>
-          {{ comment.body|safe }}
-          {{ comment.create_time|safe}}
+{% block page_content%}
+<!-- 显示文章 -->
+
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-9">
+      <div class="share mrl the-font">
+        <div style="padding:10px;">
+          <div style="border-bottom:2px solid #DAD4D4;padding:10px 10px;background-color:#FFF;box-shadow:5px 5px 20px #CCC;width:800px;">
+            <h2><a href="{{ url_for('main.post', id=post.id) }}">{{post.title}}</a></h2>
+            <!-- author.name & post.create_time -->
+            <div class="profile-thumbnail">
+              <div class = "post-author">
+                <small><span class="glyphicon glyphicon-user" aria-hedden="true"></span>
+                  <a href="{{url_for('.user', name=post.author.name) }}"> {{ post.author.name }}</a>
+                </small>
+                &nbsp &nbsp
+                <small><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                  {{ post.create_time}}
+                </small>
+              </div>
+            </div>
+            <!-- tag & readmore -->
+            <p>{{post.body_html|safe}}</p>
+          </div>
         </div>
+      </div>
     </div>
-    {% endfor %}
-{% endblock %}
+  </div>
+</div>
+
+
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="share mrl the-font">
+        <div style="padding:10px;">
+          <div style="border-bottom:2px solid #DAD4D4;padding:10px 10px;background-color:#FFF;box-shadow:5px 5px 20px #CCC;width:800px;">
+            {{ wtf.quick_form(form)}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-9">
+      {% for comment in post.comments | sort(attribute='create_time', reverse=True) %}
+      <div class="share mrl the-font">
+        <div style="padding:10px;">
+          <div style="border-bottom:2px solid #DAD4D4;padding:10px 10px;background-color:#FFF;box-shadow:5px 5px 20px #CCC;width:800px;">
+            <div class="profile-thumbnail">
+              <div class = "post-author">
+                <small><span class="glyphicon glyphicon-user" aria-hedden="true"></span>
+                  <a href="{{url_for('.user', name=comment.author.name) }}"> {{ comment.author.name }}</a>
+                </small>
+                &nbsp &nbsp
+                <small><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span> {{ comment.create_time }} </small>
+              </div>
+            </div>
+            <br>
+            <div style="padding:20px;">
+              <p>{{ comment.body|safe}}</p>
+            </div>
+          </div>
+        </div>
+
+{% endfor %}
+{% endblock	 %}

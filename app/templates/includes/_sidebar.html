@@ -1,0 +1,31 @@
+      <!-- sidebar右侧栏 -->
+      <div class="col-md-3">
+        <div class="share mrl the-font" style="background-color:#FFF;box-shadow:5px 5px 20px #CCC;width:260px;">
+          <div style="padding:10px;">
+            <div style="border-bottom:1px solid #DAD4D4;;padding:10px 10px;">
+              <h5><span class="glyphicon glyphicon-search" aria-hidden="true">&nbsp</span>ATEGORY</h5>
+            </div>
+            <ul>
+              {% for category in categorys %}
+              <li class="presentation" style="padding-top:0px;">
+                <a href="{{ url_for('main.category', name= category.name ) }}" >
+                  <p><span style="font-size:15px;background-color:#FFF" class="glyphicon glyphicon-tags" aria-hidden="true"> {{ category.name|upper }}</span>
+                    <span class="badge text-right" style="float:right">{{category_count}}</span>
+                  </p>
+                </a>
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+        <!-- picture -->
+        <div class="tile" style="margin-top:40px;box-shadow:5px 5px 20px #CCC;background-color:#FFF">
+          <div style="border:5px solid #FFF;border-radius:300px;width:128px;height:128px;margin:0px auto;position:relative;bakeground:#88ACDB none repeat scroll 0% 0%;overflow:hidden">
+            <img src="{{ url_for('static',filename='pic/11.jpg') }}" style="width:100%;height:100%">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endmacro%}

@@ -1,0 +1,74 @@
+{% macro show_posts(posts, categorys, pagination) %}
+{% from "bootstrap/pagination.html" import render_pagination %}
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-9">
+      {% for post in posts | sort(attribute='create_time', reverse=True) %}
+      <!-- <div class="share mrl the-font" style="background-color:#FFF;box-shadow:5px 5px 20px #CCC;width:800px;"> -->
+        <div class="share mrl the-font">
+          <div style="padding:10px;">
+            <div style="border-bottom:2px solid #DAD4D4;padding:10px 10px;background-color:#FFF;box-shadow:5px 5px 20px #CCC;width:800px;">
+              <h2><a href="{{ url_for('main.post', id=post.id) }}">{{post.title}}</a></h2>
+              <!-- author.name & post.create_time -->
+              <div class="profile-thumbnail">
+                <div class = "post-author">
+                  <small><span class="glyphicon glyphicon-user" aria-hedden="true"></span>
+                    <a href="{{url_for('.user', name=post.author.name) }}"> {{ post.author.name }}</a>
+                  </small>
+                  &nbsp &nbsp
+                  <small><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                    {{ post.create_time }}
+                  </small>
+                </div>
+              </div>
+              <!-- tag & readmore -->
+              <p>{{post.body_html|safe|truncate(700,True)}}</p>
+              <!-- 显示标签,点击标签显示该标签下的文章 -->
+              <p> <a href="{{ url_for('main.category', name = post.category.name) }}">
+                  <span class="label label-info text-left"> <span class="glyphicon glyphicon-tag" aria-hidden="true">
+                </span> {{ post.category.name}}</span></a>
+                <a href="{{ url_for('main.post', id=post.id) }}" style="float:right">
+                  <button class="btn  btn-sm btn-default btn-text-right"> <span class="glyphicon glyphicon-share-alt" aria-hidden="true">
+                </span> read more</button></a>
+              </p>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+        <div class="container-fluid">
+          {% if pagination %}
+          {{ render_pagination(pagination) }}
+          {% endif %}
+      </div>
+      </div>
+      {% endmacro%}
+      {% macro show_sidebar(posts, categorys) %}
+      <!-- sidebar右侧栏 -->
+      <div class="col-md-3">
+        <div class="share mrl the-font" style="background-color:#FFF;box-shadow:5px 5px 20px #CCC;width:260px;">
+          <div style="padding:10px;">
+            <div style="border-bottom:1px solid #DAD4D4;;padding:10px 10px;">
+              <h5><span class="glyphicon glyphicon-search" aria-hidden="true">&nbsp</span>CATEGORY</h5>
+            </div>
+            <ul>
+              {% for category in categorys %}
+              <li class="presentation" style="padding-top:0px;">
+                <a href="{{ url_for('main.category', name=category.name ) }}" >
+                  <p><span style="font-size:15px;background-color:#FFF" class="glyphicon glyphicon-tags" aria-hidden="true"> {{ category.name | upper }}</span>
+                    <span class="badge text-right" style="float:right"> {{ category.posts |count}}</span>
+                  </p>
+                </a>
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+        <!-- picture -->
+        <div class="tile" style="margin-top:40px;box-shadow:5px 5px 20px #CCC;background-color:#FFF">
+          <div style="border:5px solid #FFF;border-radius:300px;width:128px;height:128px;margin:0px auto;position:relative;bakeground:#88ACDB none repeat scroll 0% 0%;overflow:hidden">
+            <img src="{{ url_for('static',filename='pic/11.jpg') }}" style="width:100%;height:100%">
+          </div>
+        </div>
+        <!-- </div> -->
+      {% endmacro%}

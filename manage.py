@@ -3,7 +3,8 @@ from werkzeug.utils import secure_filename
 from flask_script import Manager, Shell
 from flask_migrate import Migrate, MigrateCommand, upgrade
 from app import create_app, db
-from app.models import User, Role, Category, Post
+from app.models import User, Role, Category, Post, Comment
+
 
 app = create_app()
 manager = Manager(app)
@@ -61,9 +62,19 @@ def query_all():
 
 #  生成测试数据
 @manager.command
-def generate():
+def allfake():
     User.generate_fake()
     Post.generate_fake()
+    Comment.generate_fake()
+@manager.command
+def userfake():
+    User.generate_fake()
+@manager.command
+def postfake():
+    Post.generate_fake()
+@manager.command
+def commentfake():
+    Comment.generate_fake()
 
 
 if __name__ == '__main__':

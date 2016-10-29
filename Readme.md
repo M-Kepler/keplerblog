@@ -79,7 +79,7 @@
 ## 5.4 sqlalchemy增删查改,错误
 * sqlalchemy.exc.invalidRequestError这什么鬼错误，到处搜不到[答案](https://segmentfault.com/q/1010000005080603)
 
-### 点击标签显示该标签对应的文章   
+## 5.5 点击标签显示该标签对应的文章   
     正文的话只要显示post.category.name就可以了，然后做个连接url_for到视图
     接下来点击标签就是访问那个视图，然后就。。
 TODO   
@@ -187,6 +187,31 @@ TODO
 ## 9.4 分页
     /main/views.py pagination
     bootstrap支持分页,导入就可以 {% from "bootstrap/pagination.html" import render_pagination %}
+
+## 9.5 由于展示帖子部分很多是一样的
+    我不可能每个页面都复制一大堆div啊什么的吧，所以我写了个宏，就是把原来index里展示帖子、右侧栏的部分剪切过去，传入posts、categorys参数就可以了
+    {% macro show_posts(posts, categorys) %}
+    然后在index.html 或category.html引入就可以了
+    {% from "./includes/_macros.html" import show_posts as onshow %}
+    {{ onshow(posts, categorys) }}
+
+## 9.6 右侧显示该标签下的文章数量, category/name页面也显示侧栏
+    我现在需要知道这个标签下有多少篇文章怎么办?难道在模型加上count字段？然后呢？
+    终于解决了!!
+    <!-- FIXME -->
+    我试过很多方法:
+    1. 可以在models里加个count字段, 然后做个触发器，只要一引用就更新,但是这样可以吗？
+        这种似乎是最好的了,将count字段存放在表里，需要的时候就取出来, 这样比下面的方法好,不需要每次都执行查询
+    2. 在views里写sqlalchemy的查询语句,然后将count传到template里,然后显示出来
+        这里花了好多时间...我一直在看是不是我的sqlalchemy语句写错了?
+        我在models添加@property方法返回count,然后在视图就可以category.count计算出来了,但是我理解错了
+        比如:db.session.query(Post).filter(Post.category_id == Category_id).count()
+        但是上面这个语句是错的,要知道Post.category_id 是一个反引用，所以↑返回的肯定是所有数据的count,
+        我以为像那样,传入category对象然后判断category.id和post.category_id是否相等是可以的
+    ,,,我肯定是没有理解sqlalchemy的语句, 需要的参数是什么?返回的是对象?可迭代对象?这些,所以自己一直在那里搞
+
+    解决方法:jinja2的count过滤器就可以了.......,记得吧,做点击分类名然后只显示该分类下的文章,,,
+    我那时候也以为需要做多表查询（看5.5）
 
 # 导航栏
     本来用的是flask-nav的，但是好像用的不太好，所以就copy了别人的导航栏_navbar.html，然后在base.html中引入

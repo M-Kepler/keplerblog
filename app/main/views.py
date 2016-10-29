@@ -18,21 +18,27 @@ def index():
     posts = Post.query.all()
     PER_POSTS_PER_PAGE=10
     #  做分页 #  从request（/index?page=1)里获取页数1
-    page_index = request.args.get('page', 1, type=int)
     #  sqlalchemy的paginate(分页)方法,page_index被初始化为1了
     #  per_page标识每页显示的数量, error_out=False超出页数范围不报错,显示控列表
+    page_index = request.args.get('page', 1, type=int)
     pagination = Post.query.order_by(
             Post.create_time.desc()).paginate(
-            page_index, per_page = PER_POSTS_PER_PAGE,
-            error_out=False
-            )
+                    page_index, per_page = PER_POSTS_PER_PAGE,
+                    error_out=False
+                    )
     posts=pagination.items
-    categorys = Category.query.order_by(Category.id)[::-1]
 
+    #  category = Category.query.filter_by(name = 'others').first() # name对应的标签对象
+    #  count = db.session.query(Post).filter(Post.category_id == category.id).count()
+
+    categorys = Category.query.order_by(Category.id)[::-1] # 所有标签
+
+    #  category = Category.query.filter_by(name = name).first() # name对应的标签对象
+    #  posts = category.posts
     return render_template('index.html', title = 'Kepler',
             posts = posts, categorys = categorys, pagination = pagination)
 
-#  @app.route('/user/<int: user_id>')
+    #  @app.route('/user/<int: user_id>')
 #  @app.route('/user/<regex("[a-z]+"):name>')
 @main.route('/user/<name>')
 def user(name):
@@ -47,17 +53,19 @@ def user(name):
 # ------- 帖子 -------
 
 @main.route('/posts/<int:id>', methods = ['GET','POST'])
-@login_required
+#  @login_required
 def post(id):
     #  detail详情页
     post = Post.query.get_or_404(id)
     form = CommentForm()
+
     #  保存评论
     if form.validate_on_submit():
         comment = Comment( author_id = current_user.id, body = form.body.data, post = post)
         db.session.add(comment)
-        db.session.commit()
-        form.body.data=''
+        return redirect(url_for('.post', id=post.id, page=-1))
+
+    form.body.data=''
     return render_template('posts/detail.html', title=post.title, form=form, post=post)
 
 
@@ -72,8 +80,8 @@ def edit(id=0):
     else:
         post = Post.query.get_or_404(id)
     if form.validate_on_submit():
-        post.body = form.body.data
         post.title = form.title.data
+        post.body = form.body.data
         db.session.add(post)
         db.session.commit()
         return redirect(url_for('.post', id=post.id))
@@ -81,26 +89,24 @@ def edit(id=0):
     form.body.data = post.body
     post.title = ('添加新文章')
     mode='添加' if id>0 else '编辑'
-    return render_template('posts/edit.html',
-            title ='%s - %s' % (mode, post.title), form=form, post=post)
+    return render_template('posts/edit.html', title ='%s - %s' % (mode, post.title), form=form, post=post)
 
 
 @main.route('/category/<name>', methods=['GET', 'POST'])
 def category(name):
     #  点击index的标签后跳到这里,顺便把标签名传了过来,
     #  index视图那里也不需要进行查询,因为做了外键,直接可以有posts知道category
-
-    #  有问题,虽然是查询出来了这个标签下的文章,但是数量不对啊
-    #  posts = db.session.query(Post).join(Category, Post.category_id == Category.id)
-    #  我还想写个多表查询....↑
-#  select categorys.id, categorys.name, posts.id from posts, categorys where(posts.category_id = categorys.id and categorys.id = 2);
-
-    category = Category.query.filter_by(name = name).first()
+    #  categorys = Category.query.order_by(Category.id)[::-1] # 所有标签
+    categorys = Category.query.order_by(Category.id)[::-1] # 所有标签
+    category = Category.query.filter_by(name=name).first() # name对应的标签对象
     posts = category.posts
 
-    # TODO 标签显示出来的文章怎么分页？？？
-    #  return render_template("category.html", pagination=pagination, posts=posts)
-    return render_template("category.html", name=name, posts=posts)
+    # TODO  # TODO 标签显示出来的文章怎么分页？？？
+    page_index = request.args.get('page', 1, type=int)
+    pagination = Post.query.order_by(Post.create_time.desc()).paginate( page_index, per_page = 8, error_out=False)
+
+
+    return render_template("category.html", posts=posts, categorys=categorys, pagination=pagination)
 
 
 '''

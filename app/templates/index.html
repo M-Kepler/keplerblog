@@ -1,105 +1,38 @@
 {% extends "base.html" %}
 <!-- bootstrap支持的分页,只要将sqlalchemy的分页查询到底传入就可以啦 -->
 {% from "bootstrap/pagination.html" import render_pagination %}
+{% from "./includes/_macros.html" import show_posts %}
+{% from "./includes/_macros.html" import show_sidebar%}
 
 {% block title %}{{title}}{% endblock %}
 
 {% block page_content %}
 
-<!-- <div class="page-header"> -->
-  <!-- { % if current_user.name %} -->
-  <!-- <h2>WELCOME { { current_user.name|safe|upper}}</h2> -->
-  <!-- { % else %} -->
-  <!-- <h1>WELCOME STRANGER</h1> -->
-  <!-- { % endif %} -->
-<!-- </div> -->
-  <!-- jinja2是默认转义的,加上safe过滤器表示不转移 -->
-  <!-- { { artical|safe }} -->
-  <!-- 优化结构之后读取文件就一直出错了，晕死 -->
-  <!-- (( read_md('vim_end.md')|md|safe }} -->
+<!-- jinja2是默认转义的,加上safe过滤器表示不转义 -->
+<!-- { { artical|safe }} -->
+<!-- 优化结构之后读取文件就一直出错了，晕死 -->
+<!-- (( read_md('vim_end.md')|md|safe }} safe 不转义-->
 
-<div class="container">
-  {% if current_user.name=='M_Kepler' %}
-    <a href="{{ url_for('main.edit') }}" class ="btn btn-primary">添加新文章</a>
-  {% endif %}
-</div>
+
+
+<!-- <div class="container"> -->
+  <!-- <a href="{{ url_for('main.edit') }}" class ="btn btn-primary">添加新文章</a> -->
+  <!-- </div> -->
 
 <!-- 显示文章 -->
-<div class="container">
-  <div class="row">
-    <div class="col-md-9">
-      {% for post in posts | sort(attribute='create_time', reverse=True) %}
-      <h2><a href="{{ url_for('main.post', id=post.id) }}">{{post.title}}</a></h2>
-      <li class = "post">
-        <div class="profile-thumbnail">
-          <!-- 用户头像 -->
-          <!-- <img class="img-rounded rofile-thumbnail" -->
-          <!-- <src=" { {post.author.gravatar(size=40) }}"> -->
-            <!-- </a> -->
-          <div class = "post-author">
-            <a href="{{url_for('.user', name=post.author.name) }}"> {{ post.author.name }} </a>
-          </div>
-        </div>
 
-				<p><small><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span><span style="color:#8C8C8C;">{{ post.create_time }}</span></small></p>
-        <!-- <div class="post-date">{ {post.create_time}}</div> -->
+{{ show_posts(posts, categorys, pagination) }}
+<!-- sidebar右侧栏 -->
+{{ show_sidebar(posts, categorys) }}
 
-        <!-- 添加了解更多按钮 -->
-        <!-- <div class="post-body" style="border-top:1px solid #EBEBEB;padding:10px 5px;margin-top:20px;"> -->
-        <div style="border-top:1px solid #EBEBEB;padding:10px 5px;margin-top:20px;">
-          <p>{{post.body_html|safe|truncate(700,True)}}</p>
-
-          <!-- 显示标签,点击标签显示该标签下的文章 -->
-          <p><a href="{{ url_for('main.category', name = post.category.name) }}"> <span class="label label-default text-left"><span class="glyphicon glyphicon-tag" aria-hidden="true">
-              </span> {{ post.category.name}}</span>
-             <a href="{{ url_for('main.post', id=post.id) }}" style="float:right"> <button class="btn  btn-primary btn-text-right"> <span class="glyphicon glyphicon-share-alt" aria-hidden="true">
-           </span> read more</button></a>
-         </p>
-        </div>
-
-      </li>
-      {% endfor %}
-    </div>
-
-
-    <!-- 右侧标签栏 -->
-    <div class="col-md-3">
-      <div class="share mrl the-font" style="background-color:#FFF;box-shadow:5px 5px 20px #CCC;width:260px;">
-        <div style="padding:10px;">
-          <div style="border-bottom:1px solid #DAD4D4;;padding:10px 10px;">
-            <h5><span class="glyphicon glyphicon-search" aria-hidden="true"></span>  CATEGORY</h5>
-          </div>
-          <ul>
-
-            {% for category in categorys %}
-
-            <li class="presentation" style="padding-top:0px;">
-              <a href="{{ url_for('main.category', name= category.name ) }}" >
-                <p><span style="font-size:15px;" class="glyphicon glyphicon-tags" aria-hidden="true"> {{ category.name }}</span>
-                  <span class="badge text-right" style="float:right">{{ count}}</span>
-                </p>
-            </a>
-          </li>
-
-          {% endfor %}
-        </ul>
-      </div>
-    </div>
-
-    <div class="tile" style="margin-top:40px;box-shadow:5px 5px 20px #CCC;background-color:#FFF">
-      <div style="border:5px solid #FFF;border-radius:300px;width:128px;height:128px;margin:0px auto;position:relative;bakeground:#88ACDB none repeat scroll 0% 0%;overflow:hidden">
-        <img src="{{ url_for('static',filename='pic/11.jpg') }}" style="width:100%;height:100%">
-      </div>
-    </div>
-
-  </div>
-</div>
 <!-- 分页 -->
-<div class="container-fluid">
-  {% if pagination %}
-  {{ render_pagination(pagination) }}
-  {% endif %}
-</div>
+
+<!-- <div class="container-fluid"> -->
+  <!-- {% if pagination %} -->
+  <!-- {{ render_pagination(pagination) }} -->
+  <!-- {% endif %} -->
+<!-- </div> -->
 
 {% endblock %}
+
 
