@@ -6,9 +6,11 @@ class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'hard to guess string'
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
     SQLALCHEMY_TRACK_MODIFICATIONS = True
-    @staticmethod
-    def init_app(app):
-        pass
+
+    PER_POSTS_PER_PAGE=8
+    #  @staticmethod
+    #  def init_app(app):
+        #  pass
 
 class DevelopmentConfig(Config):
     DEBUG = True
@@ -25,7 +27,8 @@ class DevelopmentConfig(Config):
     MAIL_DEBUG = True
     ENABLE_THREADS=True
 
-    SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://root:159357@localhost:3306/keplerblog"
+    #  SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://root:159357@localhost:3306/keplerblog"
+    SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://root:159357@localhost:3306/keplerblog?charset=utf8"
 
 class TestingConfig(Config):
     TESTING = True

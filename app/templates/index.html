@@ -5,8 +5,10 @@
 {% from "./includes/_macros.html" import show_sidebar%}
 
 {% block title %}{{title}}{% endblock %}
-
 {% block page_content %}
+
+<p>The local date and time is {{ moment(current_time).format('LLL') }}.</p>
+<p>That was {{ moment(current_time).fromNow(refresh=True)}}</p>
 
 <!-- jinja2是默认转义的,加上safe过滤器表示不转义 -->
 <!-- { { artical|safe }} -->
@@ -16,7 +18,7 @@
 
 
 <!-- <div class="container"> -->
-  <!-- <a href="{{ url_for('main.edit') }}" class ="btn btn-primary">添加新文章</a> -->
+  <!-- <a href="{ { url_for('main.edit') }}" class ="btn btn-primary">添加新文章</a> -->
   <!-- </div> -->
 
 <!-- 显示文章 -->
@@ -28,11 +30,14 @@
 <!-- 分页 -->
 
 <!-- <div class="container-fluid"> -->
-  <!-- {% if pagination %} -->
-  <!-- {{ render_pagination(pagination) }} -->
-  <!-- {% endif %} -->
+  <!-- { % if pagination %} -->
+  <!-- { { render_pagination(pagination) }} -->
+  <!-- { % endif %} -->
 <!-- </div> -->
 
 {% endblock %}
 
 
+{% block footer %}
+{{super()}}
+{% endblock %}

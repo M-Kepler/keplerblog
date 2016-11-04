@@ -24,8 +24,18 @@
                 </small>
               </div>
             </div>
-            <!-- tag & readmore -->
             <p>{{post.body_html|safe}}</p>
+            <!-- tag & readmore -->
+            <!-- 显示标签,点击标签显示该标签下的文章 -->
+            <p> <a href="{{ url_for('main.category', name = post.category.name) }}">
+                <span class="label label-info text-left"> <span class="glyphicon glyphicon-tag" aria-hidden="true">
+              </span> {{ post.category.name}}</span></a>
+
+              <a href="{{ url_for('main.post', id=post.id+1) }}" style="float:right">
+                <button class="btn  btn-sm btn-default btn-text-right"> <span class="glyphicon glyphicon-leaf" aria-hidden="true">
+              </span> next </button></a>
+
+            </p>
           </div>
         </div>
       </div>
@@ -50,7 +60,6 @@
 </div>
 
 
-
 <div class="container">
   <div class="row">
     <div class="col-md-9">
@@ -73,6 +82,7 @@
             </div>
           </div>
         </div>
+      </div>
 
 {% endfor %}
 {% endblock	 %}

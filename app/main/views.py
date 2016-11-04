@@ -6,39 +6,37 @@ from .. import db
 from ..models import User, Role, Post, Comment, Category
 from flask_login import login_required, current_user
 from .forms import CommentForm, PostForm
+from ..config import DevelopmentConfig as config
+from sqlalchemy import extract, func
 
+from datetime import datetime
 
 basepath = path.abspath(path.dirname(__file__))
-filename = path.join(basepath,'vim_end.md')
 #  basepath = path.abspath('.')
+filename = path.join(basepath,'vim_end.md')
+
 
 @main.route('/', methods=['GET', 'POST'])
 @main.route('/index', methods=['GET', 'POST'])
 def index():
     posts = Post.query.all()
-    PER_POSTS_PER_PAGE=10
     #  做分页 #  从request（/index?page=1)里获取页数1
     #  sqlalchemy的paginate(分页)方法,page_index被初始化为1了
     #  per_page标识每页显示的数量, error_out=False超出页数范围不报错,显示控列表
     page_index = request.args.get('page', 1, type=int)
     pagination = Post.query.order_by(
             Post.create_time.desc()).paginate(
-                    page_index, per_page = PER_POSTS_PER_PAGE,
+                    page_index, per_page = config.PER_POSTS_PER_PAGE,
                     error_out=False
                     )
     posts=pagination.items
+    categorys = Category.query.order_by(Category.id)[::-1] # 所有标签返回的是一个元组
 
-    #  category = Category.query.filter_by(name = 'others').first() # name对应的标签对象
-    #  count = db.session.query(Post).filter(Post.category_id == category.id).count()
-
-    categorys = Category.query.order_by(Category.id)[::-1] # 所有标签
-
-    #  category = Category.query.filter_by(name = name).first() # name对应的标签对象
-    #  posts = category.posts
     return render_template('index.html', title = 'Kepler',
-            posts = posts, categorys = categorys, pagination = pagination)
+            posts = posts, categorys = categorys, pagination = pagination, current_time = datetime.utcnow())
 
-    #  @app.route('/user/<int: user_id>')
+
+#  @app.route('/user/<int: user_id>')
 #  @app.route('/user/<regex("[a-z]+"):name>')
 @main.route('/user/<name>')
 def user(name):
@@ -74,21 +72,25 @@ def post(id):
 @login_required
 def edit(id=0):
     form = PostForm()
-    # 新增, current_user当前登录用户
     if id == 0:
+        # 新增, current_user当前登录用户
         post = Post(author_id = current_user.id)
     else:
         post = Post.query.get_or_404(id)
+
     if form.validate_on_submit():
         post.title = form.title.data
         post.body = form.body.data
+        post.category_id = form.category.data
         db.session.add(post)
         db.session.commit()
+        db.session.rollback()
         return redirect(url_for('.post', id=post.id))
+
     form.title.data = post.title
     form.body.data = post.body
-    post.title = ('添加新文章')
-    mode='添加' if id>0 else '编辑'
+    form.category.data = post.category_id
+    mode='编辑' if id>0 else '添加'
     return render_template('posts/edit.html', title ='%s - %s' % (mode, post.title), form=form, post=post)
 
 
@@ -96,17 +98,26 @@ def edit(id=0):
 def category(name):
     #  点击index的标签后跳到这里,顺便把标签名传了过来,
     #  index视图那里也不需要进行查询,因为做了外键,直接可以有posts知道category
-    #  categorys = Category.query.order_by(Category.id)[::-1] # 所有标签
-    categorys = Category.query.order_by(Category.id)[::-1] # 所有标签
-    category = Category.query.filter_by(name=name).first() # name对应的标签对象
-    posts = category.posts
 
-    # TODO  # TODO 标签显示出来的文章怎么分页？？？
+    categorys = Category.query.order_by(Category.id)[::-1] # 右侧需要显示的所有标签
+    category = Category.query.filter_by(name = name).first() # name对应的标签对象
+    #  posts = category.posts
+
+    #  对name标签下的文章做分页
     page_index = request.args.get('page', 1, type=int)
-    pagination = Post.query.order_by(Post.create_time.desc()).paginate( page_index, per_page = 8, error_out=False)
+    pagination = Post.query.filter(Post.category_id == category.id).order_by(
+            Post.create_time.desc()).paginate(
+                    page_index, per_page = config.PER_POSTS_PER_PAGE,
+                    error_out=False
+                    )
+    posts=pagination.items
 
+    return render_template("category.html", name=name, posts=posts, categorys=categorys, pagination=pagination)
 
-    return render_template("category.html", posts=posts, categorys=categorys, pagination=pagination)
+@main.route('/archive')
+def archive():
+    posts = db.session.query(Post).filter(extract('year', Post.create_time) < 2016).all()
+    return render_template('archive.html', posts = posts)
 
 
 '''
@@ -138,9 +149,6 @@ def upload():
     return render_template('upload.html')
 
 
-@main.route('/archive')
-def archive():
-    return render_template('archive.html')
 
 
 @main.route('/projects/')

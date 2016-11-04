@@ -27,6 +27,7 @@
 {% include 'includes/_navbar.html' %}
 {% endblock %}
 
+
 {% block content %}
   <div class="container">
     {% block page_content%}{% endblock %}
@@ -34,9 +35,22 @@
 </div>
 {% endblock %}
 
+
+{% block scripts%}
+
+{{ super() }}
+{{ moment.include_moment() }}
+
+{% endblock %}
+
+
+
+
+
+
 {% block footer %}
-  <footer>
-    Copyright@2016-by<a href="www.google.com">Google</a>
-  </footer>
+<footer>
+  Copyright@2016-by<a href="www.google.com">Google</a>
+</footer>
 {% endblock %}
 

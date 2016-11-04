@@ -103,9 +103,10 @@ TODO
 
 
 
+## 5.6
+    http://blog.csdn.net/huoyuan_zh/article/details/7322160
 
-
-## 5.5 密码散列
+## 5.6 密码散列
     werkzeug库的security可以进行散列密码的计算，
     generate_password_hash(passwd, method...)方法计算原始密码的散列值
     check_password_hash(hash,passed)方法检查给出的hash密码与明文密码是否相符

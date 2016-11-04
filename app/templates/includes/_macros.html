@@ -46,7 +46,7 @@
       {% macro show_sidebar(posts, categorys) %}
       <!-- sidebar右侧栏 -->
       <div class="col-md-3">
-        <div class="share mrl the-font" style="background-color:#FFF;box-shadow:5px 5px 20px #CCC;width:260px;">
+        <div class="share mrl the-font" style="margin-top:10px; background-color:#FFF;box-shadow:5px 5px 20px #CCC;width:260px;">
           <div style="padding:10px;">
             <div style="border-bottom:1px solid #DAD4D4;;padding:10px 10px;">
               <h5><span class="glyphicon glyphicon-search" aria-hidden="true">&nbsp</span>CATEGORY</h5>
@@ -64,11 +64,24 @@
             </ul>
           </div>
         </div>
+
         <!-- picture -->
-        <div class="tile" style="margin-top:40px;box-shadow:5px 5px 20px #CCC;background-color:#FFF">
-          <div style="border:5px solid #FFF;border-radius:300px;width:128px;height:128px;margin:0px auto;position:relative;bakeground:#88ACDB none repeat scroll 0% 0%;overflow:hidden">
-            <img src="{{ url_for('static',filename='pic/11.jpg') }}" style="width:100%;height:100%">
-          </div>
-        </div>
+        <!-- <div class="tile" style="margin-top:40px;box-shadow:5px 5px 20px #CCC;background-color:#FFF"> -->
+          <!-- <div style="border:5px solid #FFF;border-radius:300px;width:128px;height:128px;margin:0px auto;position:relative;bakeground:#88ACDB none repeat scroll 0% 0%;overflow:hidden"> -->
+            <!-- <img src="{{ url_for('static',filename='pic/11.jpg') }}" style="width:100%;height:100%"> -->
+          <!-- </div> -->
         <!-- </div> -->
+
+        <!-- [> github page <] https://github.com/lepture/github-cards -->
+        <div class="tile" style="margin-top:40px;box-shadow:5px 5px 20px #CCC; background-color:#FFF">
+          <div class="github-card" data-github="M-Kepler" data-theme="medium"> </div>
+            <script src="//cdn.jsdelivr.net/github-cards/latest/widget.js"></script>
+            <script src="//cdn.jsdelivr.net/github-cards/1.0.2/carts/default/widget.js"></script>
+        </div>
+
+        <!-- <div class="tile" style="margin-top:40px;box-shadow:5px 5px 20px #CCC; background-color:#FFF"> -->
+          <!-- <div class="github-widget" data-username="M-Kepler"></div> -->
+          <!-- <script src="https://unpkg.com/github-card@1.2.1/dist/widget.js"></script> -->
+        <!-- </div> -->
+
       {% endmacro%}

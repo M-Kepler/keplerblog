@@ -23,8 +23,8 @@
             <a href="{{ url_for('main.index') }}" title="{{ ("主页") }}">{{ ("主页") }}</a>
           </li>
           <!-- 根据日期group_by -->
-          <li {% if url_for('main.post',id=103) is current_link %}class="active"{% endif %}>
-            <a href="{{ url_for('main.post', id=103) }}" title="{{ ("主页") }}">{{ ("归档") }}</a>
+          <li {% if url_for('main.archive') is current_link %}class="active"{% endif %}>
+            <a href="{{ url_for('main.archive') }}" title="{{ ("主页") }}">{{ ("归档") }}</a>
           </li>
           <li {% if url_for('main.about') is current_link %}class="active"{% endif %}>
             <a href="{{ url_for('main.about') }}" title="{{ ("关于") }}">{{ ("关于") }}</a>

@@ -4,7 +4,7 @@ from flask_script import Manager, Shell
 from flask_migrate import Migrate, MigrateCommand, upgrade
 from app import create_app, db
 from app.models import User, Role, Category, Post, Comment
-
+from livereload import Server
 
 app = create_app()
 manager = Manager(app)
@@ -15,11 +15,9 @@ manager.add_command('db', MigrateCommand)
 #  也可以写带参数的脚本
 @manager.command
 def dev():
-    from livereload import Server
     live_server = Server(app.wsgi_app)
     live_server.watch('**/*.*')
     live_server.serve(open_url_delay=True)
-
 
 #  进入shell调试的时候每次都要导入db,models太麻烦了,
 #  所以配置一下shell命令的上下文,就可以在shell里用了,不用每次都导入
@@ -84,4 +82,3 @@ if __name__ == '__main__':
     #  app_ctx.push()
     #  print('current_app name :%s' % current_app.name)
     #  app.run(debug=True)
-
