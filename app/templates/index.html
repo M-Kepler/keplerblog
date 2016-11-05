@@ -7,8 +7,6 @@
 {% block title %}{{title}}{% endblock %}
 {% block page_content %}
 
-<p>The local date and time is {{ moment(current_time).format('LLL') }}.</p>
-<p>That was {{ moment(current_time).fromNow(refresh=True)}}</p>
 
 <!-- jinja2是默认转义的,加上safe过滤器表示不转义 -->
 <!-- { { artical|safe }} -->
@@ -23,7 +21,7 @@
 
 <!-- 显示文章 -->
 
-{{ show_posts(posts, categorys, pagination) }}
+{{ show_posts(posts, categorys, pagination, moment) }}
 <!-- sidebar右侧栏 -->
 {{ show_sidebar(posts, categorys) }}
 

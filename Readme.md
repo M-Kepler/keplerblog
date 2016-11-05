@@ -231,3 +231,14 @@ TODO
   左侧9列正文，右侧3列显示个人信息和标签
 
   这阶段是套用了别人的，不过bootstrap始终方便，有空我找找自己喜欢的样式,我现在的导航栏太丑了
+
+
+# [本地化时间](http://www.cnblogs.com/agmcs/p/4446589.html)
+    {{ super() }}
+    {{ moment.include_moment() }}
+    {{ moment.lang("zh-CN") }} //配置显示的是中文
+    {% endblock %}
+    {{ moment(post.create_time).fromNow(refresh=True) }}
+    {{ moment(post.create_time).format('YYYY年M月D日-HH:mm:ss') }}
+
+# 时间轴

@@ -3,8 +3,9 @@
     pagination = Post.query.filter(Post.category_id == category.id).order_by(
 *  编辑页面,新增/编辑文章的时候可以选择标签
 * √ 添加了github名片
+* √ flask-moment本地化时间
 * 归档页面
-    做漂亮的时间线啊
+    做漂亮的时间线
 
 
 

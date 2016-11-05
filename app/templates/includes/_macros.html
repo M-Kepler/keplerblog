@@ -1,4 +1,4 @@
-{% macro show_posts(posts, categorys, pagination) %}
+{% macro show_posts(posts, categorys, pagination, moment) %}
 {% from "bootstrap/pagination.html" import render_pagination %}
 
 <div class="container">
@@ -18,7 +18,8 @@
                   </small>
                   &nbsp &nbsp
                   <small><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
-                    {{ post.create_time }}
+                    <!-- {{ post.create_time }} -->
+                    {{ moment(post.create_time).fromNow(refresh=True) }}
                   </small>
                 </div>
               </div>
@@ -85,3 +86,4 @@
         <!-- </div> -->
 
       {% endmacro%}
+

@@ -20,7 +20,8 @@
                 </small>
                 &nbsp &nbsp
                 <small><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
-                  {{ post.create_time}}
+                  <!-- { { post.create_time }} -->
+                  {{ moment(post.create_time).format('YYYY年M月D日-HH:mm:ss') }}
                 </small>
               </div>
             </div>
