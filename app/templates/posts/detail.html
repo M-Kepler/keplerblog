@@ -31,6 +31,10 @@
                 <span class="label label-info text-left"> <span class="glyphicon glyphicon-tag" aria-hidden="true">
               </span> {{ post.category.name}}</span></a>
 
+              <a href="{{ url_for('main.post', id=post.id-1) }}" style="float:right">
+                <button class="btn  btn-sm btn-default btn-text-right">
+                  <span class="glyphicon glyphicon-leaf" aria-hidden="true"> </span> next </button></a>
+
               {% if current_user.is_administrator() %}
               <a href="{{ url_for('main.deletepost', id=post.id) }}" style="float:right">
                 <button class="btn  btn-sm btn-default btn-text-right">
@@ -40,12 +44,7 @@
                 <button class="btn  btn-sm btn-default btn-text-right">
                   <span class="glyphicon glyphicon-leaf" aria-hidden="true"> </span> edit </button></a>
 
-              <a href="{{ url_for('main.post', id=post.id-1) }}" style="float:right">
-                <button class="btn  btn-sm btn-default btn-text-right">
-                  <span class="glyphicon glyphicon-leaf" aria-hidden="true"> </span> next </button></a>
-
               {% endif %}
-
             </p>
           </div>
         </div>
@@ -68,7 +67,6 @@
     </div>
   </div>
 </div>
-
 
 <div class="container">
   <div class="row">
@@ -93,6 +91,5 @@
           </div>
         </div>
       </div>
-
-{% endfor %}
-{% endblock	 %}
+      {% endfor %}
+      {% endblock	 %}

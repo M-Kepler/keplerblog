@@ -3,9 +3,12 @@
 {% block page_content %}
 
 {% for post in posts %}
-<div style="border-bottom:2px solid #DAD4D4;padding:10px 10px;background-color:#FFF;box-shadow:5px 5px 20px #CCC;width:800px;">
-  {{post.month}}
-  {{post.count}}
+<div style="border-bottom:2px solid #DAD4D4;padding:10px 10px;background-color:#FFF; box-shadow:5px 5px 20px #CCC;width:800px;">
+  <p>月份: {{post[0]}} </p>
+  <p>文章数: {{post[1]|count}}</p>
+  {% for p in post[1]%}
+    <p>{{p.title}}</p>
+  {% endfor %}
 </div>
 {%endfor%}
 

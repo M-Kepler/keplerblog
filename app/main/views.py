@@ -5,7 +5,7 @@ from . import main
 from .. import db
 from ..models import User, Role, Post, Comment, Category
 from flask_login import login_required, current_user
-from .forms import CommentForm, PostForm
+from .forms import CommentForm, PostForm, EditProfileForm
 from ..config import DevelopmentConfig as config
 from sqlalchemy import extract, func
 
@@ -43,7 +43,7 @@ def user(name):
     user = User.query.filter_by(name=name).first()
     if user is None:
         abort(404)
-    return render_template('user.html', name=name)
+    return render_template('user.html', user=user)
 
 
 
@@ -51,12 +51,9 @@ def user(name):
 # ------- 帖子 -------
 
 @main.route('/posts/<int:id>', methods = ['GET','POST'])
-#  @login_required
 def post(id):
-    #  detail详情页
     post = Post.query.get_or_404(id)
     form = CommentForm()
-
     #  保存评论
     if form.validate_on_submit():
         if current_user.is_anonymous:
@@ -68,7 +65,6 @@ def post(id):
             return redirect(url_for('.post', id=post.id, page=-1))
     form.body.data=''
     return render_template('posts/detail.html', title=post.title, form=form, post=post)
-
 
 
 #  TODO
@@ -113,7 +109,8 @@ def deletepost(id):
 def category(name):
     #  点击index的标签后跳到这里,顺便把标签名传了过来,
     #  index视图那里也不需要进行查询,因为做了外键,直接可以有posts知道category
-    categorys = Category.query.order_by(Category.id)[::-1] # 右侧需要显示的所有标签
+    categorys = Category.query.order_by(Category.id)[::-1]
+    # 右侧需要显示的所有标签
     category = Category.query.filter_by(name = name).first() # name对应的标签对象
     page_index = request.args.get('page', 1, type=int)
     pagination = Post.query.filter(Post.category_id == category.id).order_by(
@@ -127,39 +124,21 @@ def category(name):
 @main.route('/archive')
 def archive():
     #  返回一个元素是tuple的列表[(10, 32), (11, 23), (12, 1)] #  tuple第一个关键码标识月份，第二个标识数量 #  我试了试提取year, 会出错
-    posts = db.session.query(extract('month', Post.create_time).label('month'),
+
+    archives = db.session.query(extract('month', Post.create_time).label('month'),
             func.count('*').label('count')).group_by('month').all()
-    #  posts=db.session.query(Post).filter(extract('month', Post.create_time) == archives[2][0]).all()
-    #  把这些提取时间的放到models里，然后调用就可以了
 
-    return render_template('archive.html', posts = posts)
+    posts=[]
+    for archive in archives:
+        posts.append((archive[0], db.session.query(Post).filter(extract('month', Post.create_time) ==archive[0]).all()))
 
+    return render_template('archive.html', posts=posts)
 
-
-
-
-
-
-
+@main.route('/about')
+def about():
+    return render_template('about.html')
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-'''
 @main.route('/edit-profile', methods=['GET','POST'])
 @login_required
 def edit_profile():
@@ -173,9 +152,10 @@ def edit_profile():
     form.name.date = current_user.name
     form.about_me.data = current_user.about_me
     return render_template('edit_profile.html', form = form)
+
+
+
 '''
-
-
 #  上传文件
 @main.route('/upload', methods = ['GET', 'POST'])
 def upload():
@@ -187,23 +167,14 @@ def upload():
         return redirect(url_for('main.upload'))
     return render_template('upload.html')
 
-
-
-
 @main.route('/projects/')
 def projects():
     return render_template('projects.html')
-
-
-@main.route('/about')
-def about():
-    return render_template('about.html')
 
 @main.errorhandler(404)
 def page_not_found(e):
     return render_template('404.html'), 404
 
-'''
 
 #  定义自己的jinja2过滤器
 @app.template_filter('reverse')
@@ -224,21 +195,18 @@ def read_md(filename):
         content = reduce(lambda x, y: x + y, md_file.readlines()) #  读取文件,注意reduce要从functools导入
     return content
 
-
 #  注册方法到程序上下文
 @app.context_processor
 def inject_methods():
     return dict(read_md=read_md)
 
-
 @app.template_test('current_link')
 def is_current_link(link):
     return link[0] is request.url
 
+@app.route('/qsbk')
+def qsbk():
+    lines = f.readlines()
+    return render_template('qsbk.html',lines=lines)
+
 '''
-
-#  @app.route('/qsbk')
-#  def qsbk():
-    #  lines = f.readlines()
-    #  return render_template('qsbk.html',lines=lines)
-

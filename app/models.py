@@ -50,8 +50,10 @@ class Post(db.Model):
                     author = u
                     )
 
-    def getdata(self):
-        return db.session.query(extract('month', Post.create_time).label('month')).all()
+    def getdate(self):
+       data = db.session.query(extract('month', self.create_time).label('month')).first()
+       return data[0]
+       #  return db.func.extract('month', self.create_time)
 
 db.event.listen(Post.body, 'set', Post.on_body_changed)# 当body被修改时触发
 

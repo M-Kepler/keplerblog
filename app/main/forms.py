@@ -23,9 +23,7 @@ class CommentForm(Form):
     body = PageDownField(label=('Comment'), validators=[DataRequired()])
     submit = SubmitField(('提交'))
 
-'''
 class EditProfileForm(Form):
     name = StringField(label=('名字:'), validators=[DataRequired(), length(0,64)])
     about_me = StringField(label=('关于我:'), validators=[DataRequired(), length(0,64)])
     submit = SubmitField(('提交'))
-    '''

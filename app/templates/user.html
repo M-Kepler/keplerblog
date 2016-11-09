@@ -2,17 +2,19 @@
 {% block title %}Profile{% endblock %}
 {% block page_content %}
 <div class="page-header">
-  <h1>{{ current_user.name }}</h1>
+  <h1>{{ user.name }}</h1>
   <p>
     <a href="mail to:{{current_user.email}}">{{ current_user.email }}</a>
   </p>
-  {% if current_user.about_me %}
-  <p>{{ current_user.about_me }}</p>
+  {% if user.about_me %}
+  <p>{{ user.about_me }}</p>
   {% endif %}
   <p>
-    Member since {{ current_user.register_time }}.
+    <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
+    Member since: &nbsp&nbsp {{ moment(user.register_time).format('YYYY-MM-DD HH:mm:ss') }}.
     <br>
-    Last seen {{ current_user.last_seen }}.
+    <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
+    Last seen:&nbsp&nbsp {{ moment(user.last_seen).format('YYYY-MM-DD HH:mm:ss') }}.
   </p>
   <p>
     {% if user == current_user %}
