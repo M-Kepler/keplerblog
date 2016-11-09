@@ -26,7 +26,6 @@ class DevelopmentConfig(Config):
     MAIL_USE_TLS=True
     MAIL_DEBUG = True
     ENABLE_THREADS=True
-
     #  SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://root:159357@localhost:3306/keplerblog"
     SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://root:159357@localhost:3306/keplerblog?charset=utf8"
 

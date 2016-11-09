@@ -60,7 +60,7 @@ def query_all():
 
 #  生成测试数据
 @manager.command
-def allfake():
+def fake():
     User.generate_fake()
     Post.generate_fake()
     Comment.generate_fake()

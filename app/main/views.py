@@ -36,7 +36,7 @@ def index():
             posts = posts, categorys = categorys, pagination = pagination, current_time = datetime.utcnow())
 
 
-#  @app.route('/user/<int: user_id>')
+    #  @app.route('/user/<int: user_id>')
 #  @app.route('/user/<regex("[a-z]+"):name>')
 @main.route('/user/<name>')
 def user(name):
@@ -59,14 +59,19 @@ def post(id):
 
     #  保存评论
     if form.validate_on_submit():
-        comment = Comment( author_id = current_user.id, body = form.body.data, post = post)
-        db.session.add(comment)
-        return redirect(url_for('.post', id=post.id, page=-1))
-
+        if current_user.is_anonymous:
+            flash("评论请先请登录")
+            return redirect(url_for('auth.signin'))
+        else:
+            comment = Comment( author_id = current_user.id, body = form.body.data, post = post)
+            db.session.add(comment)
+            return redirect(url_for('.post', id=post.id, page=-1))
     form.body.data=''
     return render_template('posts/detail.html', title=post.title, form=form, post=post)
 
 
+
+#  TODO
 @main.route('/edit', methods = ['GET', 'POST'])
 @main.route('/edit/<int:id>', methods = ['GET','POST'])
 @login_required
@@ -81,7 +86,7 @@ def edit(id=0):
     if form.validate_on_submit():
         post.title = form.title.data
         post.body = form.body.data
-        post.category_id = form.category.data
+        post.category = Category.query.get(form.category.data)
         db.session.add(post)
         db.session.commit()
         db.session.rollback()
@@ -94,16 +99,22 @@ def edit(id=0):
     return render_template('posts/edit.html', title ='%s - %s' % (mode, post.title), form=form, post=post)
 
 
+@main.route('/posts/delete/<int:id>', methods = ['GET','POST'])
+@login_required
+def deletepost(id):
+    post = Post.query.get_or_404(id)
+    db.session.delete(post)
+    for comment in post.comments:
+        db.session.delete(comment)
+    flash('博文已删除')
+    return redirect(url_for('.index'))
+
 @main.route('/category/<name>', methods=['GET', 'POST'])
 def category(name):
     #  点击index的标签后跳到这里,顺便把标签名传了过来,
     #  index视图那里也不需要进行查询,因为做了外键,直接可以有posts知道category
-
     categorys = Category.query.order_by(Category.id)[::-1] # 右侧需要显示的所有标签
     category = Category.query.filter_by(name = name).first() # name对应的标签对象
-    #  posts = category.posts
-
-    #  对name标签下的文章做分页
     page_index = request.args.get('page', 1, type=int)
     pagination = Post.query.filter(Post.category_id == category.id).order_by(
             Post.create_time.desc()).paginate(
@@ -111,13 +122,41 @@ def category(name):
                     error_out=False
                     )
     posts=pagination.items
-
     return render_template("category.html", name=name, posts=posts, categorys=categorys, pagination=pagination)
 
 @main.route('/archive')
 def archive():
-    posts = db.session.query(Post).filter(extract('year', Post.create_time) < 2016).all()
+    #  返回一个元素是tuple的列表[(10, 32), (11, 23), (12, 1)] #  tuple第一个关键码标识月份，第二个标识数量 #  我试了试提取year, 会出错
+    posts = db.session.query(extract('month', Post.create_time).label('month'),
+            func.count('*').label('count')).group_by('month').all()
+    #  posts=db.session.query(Post).filter(extract('month', Post.create_time) == archives[2][0]).all()
+    #  把这些提取时间的放到models里，然后调用就可以了
+
     return render_template('archive.html', posts = posts)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 '''

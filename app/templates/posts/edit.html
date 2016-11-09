@@ -1,38 +1,62 @@
 {% extends 'base.html' %}
 {% import "bootstrap/wtf.html" as wtf %}
 
-{% block scripts %}
-{{ super() }}
-<!-- 预览markdown -->
-{{ pagedown.include_pagedown() }}
-{% endblock %}
 
 {% block page_content %}
-<div class="container">
-  <form action ="" method="POST" class="form" role="form">
-    <!-- form.csrf_token()也行,否则validation_on_submit会验证失败 -->
-    {{ form.hidden_tag() }}
-    <div class="form-group" required>
-      <div class = "row">
-        <div class="col-md-6">
-          {{ form.title(class="form-control", placeholder=("请输入文章标题")  ) }}
+{{super()}}
+
+<form action ="" method="POST" class="form" role="form">
+  <!-- form.csrf_token()也行,否则validation_on_submit会验证失败 -->
+  {{ form.hidden_tag() }}
+  <div class="form-group" required>
+    <div class = "raw">
+      <div class="col-md-4">
+        <label class="control-label" for="title">{{ form.title.label}}</label>
+        {{ form.title(class="form-control", placeholder=("请输入文章标题")  ) }}
+      </div>
+    </div>
+  </div>
+
+  <form method="post" class="form" role="form">
+    <form action ="" method="POST" class="form" role="form">
+      {{ form.hidden_tag() }}
+      <div class="col-md-2">
+        <div class="form-group ">
+          <div class="raw">
+            <label class="control-label" for="category">{{ form.category.label}}</label>
+            <select class="form-control" id="category" name="category" > 
+              {% for choice in form.category.choices %} 
+              <option value={{choice[0]}}> {{choice[1]}} </option>
+              {% endfor %}
+            </select>
+          </div>
         </div>
       </div>
     </div>
 
-    <div class="form-group">
-      <div class = "row">
-        <div class="col-md-6">
-          {{ form.body(only_input=True,rows=20,class="form-control") }}
-        </div>
-        <div class="col-md-6">
-          {{ form.body(only_preview=True) }}
+
+    <div class="container">
+      <div class="form-group">
+        <div class = "row">
+          <div class="col-md-6">
+            {{ form.body(only_input=True,rows=20,class="form-control") }}
+            <p>
+              <div class="form-group">
+                {{ form.submit(class="btn btn-primary") }}
+              </div>
+            </p>
+          </div>
+          <div class="col-md-6">
+            {{ form.body(only_preview=True) }}
+          </div>
         </div>
       </div>
-    </div>
-    <div class="form-group">
-      {{ form.submit(class="btn btn-primary") }}
-    </div>
-  </form>
-</div>
-{% endblock %}
+    </form>
+  </div>
+  {% endblock %}
+
+  {% block scripts %}
+  {{ super() }}
+  <!-- 预览markdown -->
+  {{ pagedown.include_pagedown() }}
+  {% endblock %}

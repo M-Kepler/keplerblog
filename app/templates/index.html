@@ -7,6 +7,9 @@
 {% block title %}{{title}}{% endblock %}
 {% block page_content %}
 
+{% for message in get_flashed_messages() %}
+<div class="alert-info">{{ message }}</div>
+{% endfor %}
 
 <!-- jinja2是默认转义的,加上safe过滤器表示不转义 -->
 <!-- { { artical|safe }} -->

@@ -1,13 +1,13 @@
 # coding:utf-8
 # import mysql.connector
 from . import db, login_manager
-from flask_login import UserMixin
+from flask_login import UserMixin, AnonymousUserMixin
 from markdown import markdown
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from flask import current_app
-from sqlalchemy import func
+from sqlalchemy import func, extract
 
 
 class Post(db.Model):
@@ -50,6 +50,8 @@ class Post(db.Model):
                     author = u
                     )
 
+    def getdata(self):
+        return db.session.query(extract('month', Post.create_time).label('month')).all()
 
 db.event.listen(Post.body, 'set', Post.on_body_changed)# 当body被修改时触发
 
@@ -109,11 +111,11 @@ class Role(db.Model):
 
     @staticmethod
     def seed(): #  调用这个方法就可以设置Role的默认值了
-        db.session.add_all(map(lambda r:Role(name=r), ['administrators', 'moderators', 'guests']))
+        db.session.add_all(map(lambda r:Role(name=r), ['administrators', 'guests']))
         db.session.commit()
 
 
-class User(db.Model, UserMixin):
+class User(db.Model, UserMixin, AnonymousUserMixin):
     __tablename__='users'
     id = db.Column(db.Integer, primary_key = True)
     name = db.Column(db.String(20), nullable = False)
@@ -131,6 +133,12 @@ class User(db.Model, UserMixin):
     def ping(self):
         self.last_seen = datetime.utcnow()
         db.session.add(self)
+
+    def is_administrator(self):
+        if(self.role.name == 'administrators'):
+            return True
+        else:
+            return False
 
     @staticmethod
     def on_created(target, value, oldvalue, initiator):
@@ -191,6 +199,20 @@ class User(db.Model, UserMixin):
                 db.session.commit()
             except IntegrityError:
                 db.session.rollback()
+
+
+class AnonymousUser(AnonymousUserMixin):
+    @property
+    def locale(self):
+        return 'zh'
+    def is_anonymoususer(self):
+        return True
+    #  如果我使用默认的AnonymousUserMixin的话,
+    #  在判断是不是administrator该不该显示删除修改按钮的时候就会出错
+    #  因为没有is_administrator这个方法
+    def is_administrator(self):
+        return False
+login_manager.anonymous_user = AnonymousUser
 
 
 #用户的回调函数

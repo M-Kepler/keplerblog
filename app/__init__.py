@@ -49,7 +49,6 @@ mail=Mail()
 pagedown = PageDown()
 login_manager = LoginManager()
 login_manager.session_protection='strong'
-#  login_manager.session_protection='basic'
 login_manager.login_view = 'auth.signin'
 
 basedir = path.abspath(path.dirname(__file__))
