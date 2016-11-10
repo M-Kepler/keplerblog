@@ -5,13 +5,13 @@
   {{ super() }}
   <!-- 标签页图标 -->
 
+
   <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
   <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
 
-  <!-- 可以在固定导航栏的时候不会发生内容重叠 -->
-  <!-- <style> body{ padding-top:70px; } </style> -->
-
+  <!-- <style> body{ padding-top:70px; } </style> --> <!-- 可以在固定导航栏的时候不会发生内容重叠 -->
 {% endblock %}
+
 
 {% block title %} {{title}} {% endblock %}
 

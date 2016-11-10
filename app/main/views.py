@@ -49,7 +49,6 @@ def user(name):
 
 
 # ------- 帖子 -------
-
 @main.route('/posts/<int:id>', methods = ['GET','POST'])
 def post(id):
     post = Post.query.get_or_404(id)
@@ -67,10 +66,23 @@ def post(id):
     return render_template('posts/detail.html', title=post.title, form=form, post=post)
 
 
-#  TODO
+
+#  http://www.open-open.com/lib/view/open1454460961573.html
+#  定义一个装饰器, 修饰只有管理员才能访问的路由
+from functools import wraps
+def admin_required(f):
+    @wraps(f)
+    def decorator(*args, **kwargs):
+        if current_user.is_administrator():
+            return f(*args, **kwargs)
+        else:
+            abort(403)
+    return decorator
+
 @main.route('/edit', methods = ['GET', 'POST'])
 @main.route('/edit/<int:id>', methods = ['GET','POST'])
 @login_required
+@admin_required
 def edit(id=0):
     form = PostForm()
     if id == 0:
@@ -124,13 +136,12 @@ def category(name):
 @main.route('/archive')
 def archive():
     #  返回一个元素是tuple的列表[(10, 32), (11, 23), (12, 1)] #  tuple第一个关键码标识月份，第二个标识数量 #  我试了试提取year, 会出错
-
     archives = db.session.query(extract('month', Post.create_time).label('month'),
             func.count('*').label('count')).group_by('month').all()
 
     posts=[]
     for archive in archives:
-        posts.append((archive[0], db.session.query(Post).filter(extract('month', Post.create_time) ==archive[0]).all()))
+        posts.append((archive[0], db.session.query(Post).filter(extract('month', Post.create_time)==archive[0]).all()))
 
     return render_template('archive.html', posts=posts)
 

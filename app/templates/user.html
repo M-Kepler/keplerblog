@@ -4,7 +4,7 @@
 <div class="page-header">
   <h1>{{ user.name }}</h1>
   <p>
-    <a href="mail to:{{current_user.email}}">{{ current_user.email }}</a>
+    <a href="mail to:{{user.email}}">{{ user.email }}</a>
   </p>
   {% if user.about_me %}
   <p>{{ user.about_me }}</p>
