@@ -25,8 +25,7 @@
               </div>
 
               <!-- tag & readmore -->
-              <p>{{post.body_html|safe|truncate(700,True)}}</p>
-              <!-- 显示标签,点击标签显示该标签下的文章 -->
+              <p>{{post.body_html|safe|truncate(700,True)}} </p>
               <p> <a href="{{ url_for('main.category', name = post.category.name) }}">
                   <span class="label label-primary text-left"> <span class="glyphicon glyphicon-tag" aria-hidden="true">
                 </span> {{ post.category.name}}</span></a>

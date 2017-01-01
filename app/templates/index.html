@@ -26,19 +26,20 @@
 
 {{ show_posts(posts, categorys, pagination, moment) }}
 <!-- sidebar右侧栏 -->
-{{ show_sidebar(posts, categorys) }}
+{{ show_sidebar(posts, categorys) }} 
+
+<!-- JiaThis Button Begin-->
+<div class="jiathis_style">
+	<a class="jiathis_like_tsina"></a>
+</div>
+<script type="text/javascript" src="http://v3.jiathis.com/code_mini/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
 
 <!-- 分页 -->
-
 <!-- <div class="container-fluid"> -->
   <!-- { % if pagination %} -->
   <!-- { { render_pagination(pagination) }} -->
   <!-- { % endif %} -->
 <!-- </div> -->
-
 {% endblock %}
 
-
-{% block footer %}
-{{super()}}
-{% endblock %}

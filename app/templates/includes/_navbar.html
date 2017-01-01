@@ -32,7 +32,7 @@
         </ul>
         <ul class="nav navbar-nav navbar-right">
           {% if current_user.is_authenticated %}
-          <li><a href="#">{{ current_user.name }}</a></li>
+          <li><a href="{{url_for('main.user',name=current_user.name)}}">{{ current_user.name }}</a></li>
           <li><a href="{{ url_for('auth.signout') }}">{{ ("退出") }}</a></li>
           {% else %}
           <li><a href="{{ url_for('auth.signin') }}">{{ ("登录") }}</a></li>

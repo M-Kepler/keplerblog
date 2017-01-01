@@ -1,13 +1,13 @@
 """init
 
-Revision ID: 114a85257b5f
+Revision ID: 1953d496ea2f
 Revises: None
-Create Date: 2016-11-09 17:14:51.734264
+Create Date: 2016-12-31 12:39:49.362553
 
 """
 
 # revision identifiers, used by Alembic.
-revision = '114a85257b5f'
+revision = '1953d496ea2f'
 down_revision = None
 
 from alembic import op
@@ -19,7 +19,8 @@ def upgrade():
     op.create_table('categorys',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(length=20), nullable=False),
-    sa.PrimaryKeyConstraint('id')
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('name')
     )
     op.create_table('roles',
     sa.Column('id', sa.Integer(), nullable=False),

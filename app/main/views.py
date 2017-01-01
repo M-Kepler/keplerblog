@@ -1,13 +1,12 @@
-# coding :utf-8
 from flask import flash, session, request, render_template, url_for, redirect, abort, current_app
 from os import path
 from . import main
+from .forms import CommentForm, PostForm, EditProfileForm
 from .. import db
+from ..config import DevelopmentConfig as config
 from ..models import User, Role, Post, Comment, Category
 from flask_login import login_required, current_user
-from .forms import CommentForm, PostForm, EditProfileForm
-from ..config import DevelopmentConfig as config
-from sqlalchemy import extract, func
+from sqlalchemy import extract, func, desc
 
 from datetime import datetime
 
@@ -26,14 +25,14 @@ def index():
     page_index = request.args.get('page', 1, type=int)
     pagination = Post.query.order_by(
             Post.create_time.desc()).paginate(
-                    page_index, per_page = config.PER_POSTS_PER_PAGE,
-                    error_out=False
+                    page_index, per_page = config.PER_POSTS_PER_PAGE, error_out=False
                     )
     posts=pagination.items
     categorys = Category.query.order_by(Category.id)[::-1] # 所有标签返回的是一个元组
 
     return render_template('index.html', title = 'Kepler',
-            posts = posts, categorys = categorys, pagination = pagination, current_time = datetime.utcnow())
+            posts = posts, categorys = categorys, pagination = pagination,
+            current_time = datetime.utcnow())
 
 
     #  @app.route('/user/<int: user_id>')
@@ -46,14 +45,10 @@ def user(name):
     return render_template('user.html', user=user)
 
 
-
-
-# ------- 帖子 -------
 @main.route('/posts/<int:id>', methods = ['GET','POST'])
 def post(id):
     post = Post.query.get_or_404(id)
     form = CommentForm()
-    #  保存评论
     if form.validate_on_submit():
         if current_user.is_anonymous:
             flash("评论请先请登录")
@@ -64,7 +59,6 @@ def post(id):
             return redirect(url_for('.post', id=post.id, page=-1))
     form.body.data=''
     return render_template('posts/detail.html', title=post.title, form=form, post=post)
-
 
 
 #  http://www.open-open.com/lib/view/open1454460961573.html
@@ -79,6 +73,19 @@ def admin_required(f):
             abort(403)
     return decorator
 
+
+'''
+def str_to_obj(new_category):
+    c =[]
+    for category in new_category:
+        category_obj=Category.query.filter_by(name=new_category).first()
+        if category_obj is None:
+            category_obj = Category(name=new_category)
+            c.append(category_obj)
+    return c
+'''
+
+
 @main.route('/edit', methods = ['GET', 'POST'])
 @main.route('/edit/<int:id>', methods = ['GET','POST'])
 @login_required
@@ -86,11 +93,9 @@ def admin_required(f):
 def edit(id=0):
     form = PostForm()
     if id == 0:
-        # 新增, current_user当前登录用户
         post = Post(author_id = current_user.id)
     else:
         post = Post.query.get_or_404(id)
-
     if form.validate_on_submit():
         post.title = form.title.data
         post.body = form.body.data
@@ -99,7 +104,6 @@ def edit(id=0):
         db.session.commit()
         db.session.rollback()
         return redirect(url_for('.post', id=post.id))
-
     form.title.data = post.title
     form.body.data = post.body
     form.category.data = post.category_id
@@ -114,8 +118,9 @@ def deletepost(id):
     db.session.delete(post)
     for comment in post.comments:
         db.session.delete(comment)
-    flash('博文已删除')
+    flash('文章已删除')
     return redirect(url_for('.index'))
+
 
 @main.route('/category/<name>', methods=['GET', 'POST'])
 def category(name):
@@ -136,13 +141,12 @@ def category(name):
 @main.route('/archive')
 def archive():
     #  返回一个元素是tuple的列表[(10, 32), (11, 23), (12, 1)] #  tuple第一个关键码标识月份，第二个标识数量 #  我试了试提取year, 会出错
-    archives = db.session.query(extract('month', Post.create_time).label('month'),
-            func.count('*').label('count')).group_by('month').all()
-
     posts=[]
+    archives = db.session.query(extract('month', Post.create_time).label('month'),
+            func.count('*').label('count')).group_by('month').order_by(desc('month')).all()
     for archive in archives:
-        posts.append((archive[0], db.session.query(Post).filter(extract('month', Post.create_time)==archive[0]).all()))
-
+        posts.append((archive[0], db.session.query(Post).filter(
+            extract('month', Post.create_time)==archive[0]).all()))
     return render_template('archive.html', posts=posts)
 
 @main.route('/about')
@@ -154,39 +158,24 @@ def about():
 @login_required
 def edit_profile():
     form = EditProfileForm()
+    if user is None:
+        abort(404)
     if form.validate_on_submit():
         current_user.name = form.name.data
         current_user.about_me = form.about_me.data
         db.session.add(current_user)
-        flash('You Profile has been updated.')
-        return redirect(url_for('.user', username=current_user.username))
+        flash('您的资料已更新.')
+        return redirect(url_for('.user', name=current_user.name))
     form.name.date = current_user.name
     form.about_me.data = current_user.about_me
-    return render_template('edit_profile.html', form = form)
-
-
-
-'''
-#  上传文件
-@main.route('/upload', methods = ['GET', 'POST'])
-def upload():
-    if request.method=='POST':
-        f = request.files['file']
-        basepath = path.abspath(path.dirname(__file__))
-        upload_path = path.join(basepath,'static/uploads')
-        f.save(upload_path, secure_filename(f.filename))
-        return redirect(url_for('main.upload'))
-    return render_template('upload.html')
-
-@main.route('/projects/')
-def projects():
-    return render_template('projects.html')
+    return render_template('edit_profile.html',user = current_user, form = form)
 
 @main.errorhandler(404)
 def page_not_found(e):
     return render_template('404.html'), 404
 
 
+'''
 #  定义自己的jinja2过滤器
 @app.template_filter('reverse')
 def reverse_filter(s):
@@ -219,5 +208,5 @@ def is_current_link(link):
 def qsbk():
     lines = f.readlines()
     return render_template('qsbk.html',lines=lines)
-
 '''
+

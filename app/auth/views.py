@@ -14,8 +14,7 @@ def signin():
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first_or_404()
         if user is not None and user.verify_password(form.password.data):
-            login_user(user, remember = form.remember_me.data) # 记住我, 一个cookie会存储在计算机中
-            #  login_user(user) # 记住我, 一个cookie会存储在计算机中
+            login_user(user, remember = True) # 记住我, 一个cookie会存储在计算机中
             return redirect(url_for('main.user', name = current_user.name))
         else:
             flash("wrong username or userpassword")

@@ -61,7 +61,7 @@ db.event.listen(Post.body, 'set', Post.on_body_changed)# 当body被修改时触�
 class Category(db.Model):
     __tablename__ = 'categorys'
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(20), nullable=False)
+    name = db.Column(db.String(20), nullable=False, unique=True)
     posts = db.relationship('Post', backref = 'category')
 
     @staticmethod
