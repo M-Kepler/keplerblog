@@ -1,13 +1,13 @@
-from flask import flash, session, request, render_template, url_for, redirect, abort, current_app
+# coding :utf-8
+from flask import flash, session, request, render_template, url_for, redirect, abort, current_app,g
 from os import path
 from . import main
-from .forms import CommentForm, PostForm, EditProfileForm
 from .. import db
-from ..config import DevelopmentConfig as config
 from ..models import User, Role, Post, Comment, Category
 from flask_login import login_required, current_user
-from sqlalchemy import extract, func, desc
-
+from .forms import CommentForm, PostForm, EditProfileForm, EditProfileAdminForm, SearchForm
+from ..config import DevelopmentConfig as config
+from sqlalchemy import extract, func
 from datetime import datetime
 
 basepath = path.abspath(path.dirname(__file__))
@@ -19,20 +19,19 @@ filename = path.join(basepath,'vim_end.md')
 @main.route('/index', methods=['GET', 'POST'])
 def index():
     posts = Post.query.all()
-    #  做分页 #  从request（/index?page=1)里获取页数1
-    #  sqlalchemy的paginate(分页)方法,page_index被初始化为1了
-    #  per_page标识每页显示的数量, error_out=False超出页数范围不报错,显示控列表
     page_index = request.args.get('page', 1, type=int)
     pagination = Post.query.order_by(
             Post.create_time.desc()).paginate(
-                    page_index, per_page = config.PER_POSTS_PER_PAGE, error_out=False
+                    page_index, per_page = config.PER_POSTS_PER_PAGE,
+                    error_out=False
                     )
     posts=pagination.items
+
     categorys = Category.query.order_by(Category.id)[::-1] # 所有标签返回的是一个元组
 
+    # 每个分类下的文章总数, 好像有必要分开分类和标签了
     return render_template('index.html', title = 'Kepler',
-            posts = posts, categorys = categorys, pagination = pagination,
-            current_time = datetime.utcnow())
+            posts = posts, categorys = categorys, pagination = pagination, current_time = datetime.utcnow())
 
 
     #  @app.route('/user/<int: user_id>')
@@ -45,10 +44,12 @@ def user(name):
     return render_template('user.html', user=user)
 
 
+# ------- 帖子 -------
 @main.route('/posts/<int:id>', methods = ['GET','POST'])
 def post(id):
     post = Post.query.get_or_404(id)
     form = CommentForm()
+    #  保存评论
     if form.validate_on_submit():
         if current_user.is_anonymous:
             flash("评论请先请登录")
@@ -58,7 +59,9 @@ def post(id):
             db.session.add(comment)
             return redirect(url_for('.post', id=post.id, page=-1))
     form.body.data=''
-    return render_template('posts/detail.html', title=post.title, form=form, post=post)
+    categorys = Category.query.order_by(Category.id)[::-1] # 所有标签返回的是一个元组
+    return render_template('posts/detail.html', title='Kepler | ' + post.title, form=form, post=post, categorys=categorys)
+
 
 
 #  http://www.open-open.com/lib/view/open1454460961573.html
@@ -73,8 +76,6 @@ def admin_required(f):
             abort(403)
     return decorator
 
-
-'''
 def str_to_obj(new_category):
     c =[]
     for category in new_category:
@@ -82,9 +83,7 @@ def str_to_obj(new_category):
         if category_obj is None:
             category_obj = Category(name=new_category)
             c.append(category_obj)
-    return c
-'''
-
+    return category_obj
 
 @main.route('/edit', methods = ['GET', 'POST'])
 @main.route('/edit/<int:id>', methods = ['GET','POST'])
@@ -92,21 +91,45 @@ def str_to_obj(new_category):
 @admin_required
 def edit(id=0):
     form = PostForm()
-    if id == 0:
+    if id == 0: # 新增, current_user当前登录用户
         post = Post(author_id = current_user.id)
     else:
         post = Post.query.get_or_404(id)
+
     if form.validate_on_submit():
+        #  post.category = Category.query.get(form.category.data)
+        categoryemp = []
+        category_list = form.category.data.split(',')
+
+#  FIXME 问题多多, 我想的是如果能在数据库找到这个分类就不用创建这个对象, 直接append，如果找不到就创建对象
+
+        #FIXME 这里总是在创建category
+        for i in category_list:
+            categoryemp.append(Category(name=i))
+            #  if Category.query.get_or_404(i):
+                #  categoryemp.append(str_to_obj(i))
+            #  elif not Category.query.get(i):
+                #  categoryemp.append(Category(name=i))
+        #  post.category = str_to_obj(form.category.data)
+
+        post.categorys = categoryemp
         post.title = form.title.data
         post.body = form.body.data
-        post.category = Category.query.get(form.category.data)
         db.session.add(post)
         db.session.commit()
         db.session.rollback()
         return redirect(url_for('.post', id=post.id))
+
     form.title.data = post.title
     form.body.data = post.body
-    form.category.data = post.category_id
+    #  FIXME 还不可以进行编辑
+    #  form.category.data = post.category_id
+    #  form.category.data = post.categorys.name
+
+    #  FIXME 添加文章的时候如何从已经存在的分类中选择, 而不是新建重复的分类
+    #  posts= Post.query.filter_by(name='')
+    #  categorys_list = posts.categorys.all()
+
     mode='编辑' if id>0 else '添加'
     return render_template('posts/edit.html', title ='%s - %s' % (mode, post.title), form=form, post=post)
 
@@ -118,7 +141,12 @@ def deletepost(id):
     db.session.delete(post)
     for comment in post.comments:
         db.session.delete(comment)
-    flash('文章已删除')
+
+#  FIXME 如果分类下没有文章了就删掉这个分类
+    for category in post.categorys.all():
+        if category.posts.all() is None:
+            db.session.delete(category)
+    flash('博文已删除')
     return redirect(url_for('.index'))
 
 
@@ -126,56 +154,130 @@ def deletepost(id):
 def category(name):
     #  点击index的标签后跳到这里,顺便把标签名传了过来,
     #  index视图那里也不需要进行查询,因为做了外键,直接可以有posts知道category
-    categorys = Category.query.order_by(Category.id)[::-1]
-    # 右侧需要显示的所有标签
+    categorys = Category.query.order_by(Category.id)[::-1] # 右侧需要显示的所有标签
     category = Category.query.filter_by(name = name).first() # name对应的标签对象
     page_index = request.args.get('page', 1, type=int)
-    pagination = Post.query.filter(Post.category_id == category.id).order_by(
-            Post.create_time.desc()).paginate(
+
+    #  pagination = Post.query.filter(Post.categorys == category).order_by(
+    pagination = category.posts.order_by(Post.create_time.desc()).paginate(
                     page_index, per_page = config.PER_POSTS_PER_PAGE,
-                    error_out=False
-                    )
+                    error_out=False)
     posts=pagination.items
-    return render_template("category.html", name=name, posts=posts, categorys=categorys, pagination=pagination)
+    return render_template("category.html",title='Kepler|分类|' + name, name=name, posts=posts, categorys=categorys, pagination=pagination)
+
+
+# 分类管理
+@main.route('/category_manager', methods=['GET', 'POST'])
+def category_manager():
+    return "category_manager test"
+
+@main.route('/category/delete<int:id>', methods=['GET', 'POST'])
+@admin_required
+@login_required
+def category_delete(id):
+    category = Category.query.get_or_404(id)
+    db.session.delete(category)
+    '''
+    分来下的文章也删除吗?还是自动划分到other分类下?
+    for comment in post.comments:
+        db.session.delete(comment)
+    '''
+    flash('该分类已删除')
+    return redirect(url_for('.index'))
+
+
+@main.route('/category/edit<int:id>', methods=['GET', 'POST'])
+@admin_required
+@login_required
+def category_edit(id=0):
+    pass
+
 
 @main.route('/archive')
 def archive():
     #  返回一个元素是tuple的列表[(10, 32), (11, 23), (12, 1)] #  tuple第一个关键码标识月份，第二个标识数量 #  我试了试提取year, 会出错
-    posts=[]
     archives = db.session.query(extract('month', Post.create_time).label('month'),
-            func.count('*').label('count')).group_by('month').order_by(desc('month')).all()
+            func.count('*').label('count')).group_by('month').all()
+
+    posts=[]
     for archive in archives:
-        posts.append((archive[0], db.session.query(Post).filter(
-            extract('month', Post.create_time)==archive[0]).all()))
-    return render_template('archive.html', posts=posts)
+        posts.append((archive[0], db.session.query(Post).filter(extract('month', Post.create_time)==archive[0]).all()))
+
+    return render_template('archive.html',title='Kepler | 归档', posts=posts)
 
 @main.route('/about')
 def about():
-    return render_template('about.html')
+    return render_template('about.html', title='Kepler | 关于')
 
+@main.route('/search', methods=['GET', 'POST'])
+def search():
+    return 'test'
+
+@main.before_app_request
+def before_request():
+    if current_user.is_authenticated:
+        #  全文搜索
+        g.search_form = SearchForm()
 
 @main.route('/edit-profile', methods=['GET','POST'])
 @login_required
 def edit_profile():
     form = EditProfileForm()
-    if user is None:
-        abort(404)
     if form.validate_on_submit():
         current_user.name = form.name.data
         current_user.about_me = form.about_me.data
         db.session.add(current_user)
-        flash('您的资料已更新.')
+        flash('你的资料已更新.')
         return redirect(url_for('.user', name=current_user.name))
     form.name.date = current_user.name
     form.about_me.data = current_user.about_me
-    return render_template('edit_profile.html',user = current_user, form = form)
+    return render_template('edit_profile.html', form = form)
+
+
+@main.route('/edit-profile/<int:id>', methods=['GET','POST'])
+@login_required
+@admin_required
+def edit_profile_admin(id):
+    user = User.query.get_or_404(id)
+    form = EditProfileAdminForm(user=user)
+    if form.validate_on_submit():
+        user.name = form.name.data
+        user.email = form.email.data
+        user.confirmed = form.confirmed.data
+        user.role = Role.query.get(form.role.data)
+        user.about_me = form.about_me.data
+        db.session.add(user)
+        flash('You Profile has been updated.')
+        return redirect(url_for('.user', name=user.name))
+    form.email.data = user.email
+    form.name.data = user.name
+    form.confirmed.data = user.confirmed
+    form.role.data = user.role.name
+    form.about_me.data = user.about_me
+    return render_template('edit_profile.html', form = form, user=user)
+
+
+'''
+#  上传文件
+@main.route('/upload', methods = ['GET', 'POST'])
+def upload():
+    if request.method=='POST':
+        f = request.files['file']
+        basepath = path.abspath(path.dirname(__file__))
+        upload_path = path.join(basepath,'static/uploads')
+        f.save(upload_path, secure_filename(f.filename))
+        return redirect(url_for('main.upload'))
+    return render_template('upload.html')
+
+@main.route('/projects/')
+def projects():
+    return render_template('projects.html')
 
 @main.errorhandler(404)
 def page_not_found(e):
     return render_template('404.html'), 404
 
 
-'''
 #  定义自己的jinja2过滤器
 @app.template_filter('reverse')
 def reverse_filter(s):
@@ -208,5 +310,5 @@ def is_current_link(link):
 def qsbk():
     lines = f.readlines()
     return render_template('qsbk.html',lines=lines)
-'''
 
+'''

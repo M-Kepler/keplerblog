@@ -10,6 +10,11 @@ from flask import current_app
 from sqlalchemy import func, extract
 
 
+registrations= db.Table('registrations',
+        db.Column('post_id', db.Integer, db.ForeignKey('posts.id')),
+        db.Column('category_id.id', db.Integer, db.ForeignKey('categorys.id'))
+        )
+
 class Post(db.Model):
     __tablename__ = 'posts'
     id = db.Column(db.Integer, primary_key=True)
@@ -17,10 +22,14 @@ class Post(db.Model):
     body = db.Column(db.Text)
     body_html = db.Column(db.Text) #  把markdown原文格式成html存到数据库，而不是访问时在格式
     create_time = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-
     comments = db.relationship('Comment', backref='post')
+#  TODO
+    categorys = db.relationship('Category', secondary = registrations,
+            backref = db.backref('posts', lazy='dynamic'),
+            lazy = 'dynamic')
+
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    category_id = db.Column(db.Integer, db.ForeignKey('categorys.id'))
+    #  category_id = db.Column(db.Integer, db.ForeignKey('categorys.id'))
 
     @staticmethod
     def on_body_changed(target, value, oldvalue, initiator):
@@ -58,11 +67,11 @@ class Post(db.Model):
 db.event.listen(Post.body, 'set', Post.on_body_changed)# 当body被修改时触发
 
 
+
 class Category(db.Model):
     __tablename__ = 'categorys'
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(20), nullable=False, unique=True)
-    posts = db.relationship('Post', backref = 'category')
+    name = db.Column(db.String(50), nullable=False, unique=True)
 
     @staticmethod
     def seed():
@@ -149,6 +158,7 @@ class User(db.Model, UserMixin, AnonymousUserMixin):
     @property
     def password(self):
         raise AttributeError('password is not a readable attribute')
+
     # user.password=''设置存入生成的散列密码 # user.varify_password(passwd)来校验密码
     @password.setter
     def password(self, passwd):

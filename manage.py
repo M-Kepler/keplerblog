@@ -33,7 +33,6 @@ manager.add_command("shell", Shell(make_context=make_shell_context))
 def test():
     pass
 
-
 #  部署
 @manager.command
 def deploy():

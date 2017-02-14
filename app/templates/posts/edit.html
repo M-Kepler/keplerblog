@@ -1,6 +1,12 @@
 {% extends 'base.html' %}
 {% import "bootstrap/wtf.html" as wtf %}
 
+{% block head%}
+{{super()}}
+<!-- bootstrap-tagsinput --> <!-- FIXME -->
+<!-- http://www.jqueryscript.net/demo/Nice-Tags-Manager-Plugin-with-jQuery-Bootstrap-Bootstrap-Tags-Input/examples/ -->
+<!-- http://jquery-plugins.net/tokenfield-jquery-tag-token-plugin-for-bootstrap -->
+{% endblock %}
 
 {% block page_content %}
 {{super()}}
@@ -12,39 +18,49 @@
     <div class = "raw">
       <div class="col-md-4">
         <label class="control-label" for="title">{{ form.title.label}}</label>
-        {{ form.title(class="form-control", placeholder=("请输入文章标题")  ) }}
+        {{ form.title(class="form-control", placeholder=("输入文章标题"))}}
       </div>
     </div>
   </div>
 
 
-	<!-- http://www.bootcdn.cn/bootstrap-tokenfield/ -->
-	<!-- <script src="//cdn.bootcss.com/bootstrap-tokenfield/0.12.0/bootstrap-tokenfield.js"> </script> -->
-
-
-  <form method="post" class="form" role="form">
-    <form action ="" method="POST" class="form" role="form">
-      {{ form.hidden_tag() }}
-      <div class="col-md-2">
-        <div class="form-group ">
-          <div class="raw">
-            <label class="control-label" for="category">{{ form.category.label}}</label>
-            <select class="form-control" id="category" name="category" > 
-              {% for choice in form.category.choices %} 
-              <option value={{choice[0]}}> {{choice[1]}} </option>
-              {% endfor %}
-            </select>
-          </div>
-        </div>
+	<!-- [> 原来 <] -->
+  <div class="form-group" required>
+    <div class = "raw">
+      <div class="col-md-4">
+        <label class="control-label" for="title">{{ form.category.label}}</label>
+        {{form.category(id="category", class="form-control", placeholder="输入分类,用逗号分隔")}}
       </div>
     </div>
+  </div>
+
+
+<!-- 下拉选择,这样就只能选一个标签了 -->
+<!-- FIXME -->
+  <!-- <form method="post" class="form" role="form"> -->
+    <!-- <form action ="" method="POST" class="form" role="form"> -->
+      <!-- {{ form.hidden_tag() }} -->
+      <!-- <div class="col-md-2"> -->
+        <!-- <div class="form-group "> -->
+          <!-- <div class="raw"> -->
+            <!-- <label class="control-label" for="category">{{ form.category.label}}</label> -->
+            <!-- <select class="form-control" id="category" name="category" > -->
+              <!-- {% for choice in form.category.choices %} -->
+                <!-- <option value={{choice[1]}}> {{choice[1]}} </option> -->
+              <!-- {% endfor %} -->
+            <!-- </select> -->
+          <!-- </div> -->
+        <!-- </div> -->
+      <!-- </div> -->
+    <!-- </div> -->
 
 
     <div class="container">
       <div class="form-group">
         <div class = "row">
           <div class="col-md-6">
-            {{ form.body(only_input=True,rows=20,class="form-control") }}
+            <!-- <label class="control-label" for="category">{{ form.body.label}}</label> -->
+            {{ form.body(only_input=True,rows=20,class="form-control",placeholder="输入markdown格式文章") }}
             <p>
               <div class="form-group">
                 {{ form.submit(class="btn btn-primary") }}

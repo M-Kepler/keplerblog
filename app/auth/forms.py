@@ -4,6 +4,7 @@ from flask_wtf import Form
 from wtforms import StringField, BooleanField, PasswordField, TextAreaField, SubmitField, validators, ValidationError
 from wtforms.validators import DataRequired, length, Regexp, EqualTo, Email
 
+
 class LoginForm(Form):
     email = StringField(label='电子邮箱:', validators = [
         DataRequired('此字段不能为空'),
@@ -26,7 +27,7 @@ class LoginForm(Form):
 
 class RegForm(Form):
     username = StringField(label='用户名:', validators = [
-        DataRequired('用户名不能为空'), length(3,18,'长度必须在6-18之间')
+        DataRequired('用户名不能为空'), length(6,18,'长度必须在6-18之间')
         #  Regexp('^[A-Za-z][A-Za-z0-9_.]$', 0, "用户名只允许字母数字下划线")
         ])
     email = StringField(label='电子邮箱:', validators = [

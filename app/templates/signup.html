@@ -2,17 +2,18 @@
 {% import "bootstrap/wtf.html" as wtf %}
 
 {% block content %}
-  <div class="page-header">
-    <div class="container">
-      <h1>{{ title }}</h1>
-    </div>
-  </div>
+<!-- <div class="page-header"> -->
+  <!-- <div class="container"> -->
+      <!-- <h1>{{ title }}</h1> -->
+  <!-- </div> -->
+<!-- </div> -->
 
-  <div class="container">
-    {% for message in get_flashed_messages() %}
-    <div class="alert alert-info">{{ message }}</div>
-    {% endfor %}
-    <!-- 用wtf的宏quick_form来渲染表单 -->
-    {{ wtf.quick_form(form) }}
-  </div>
+<div class="container">
+  {% for message in get_flashed_messages() %}
+  <div class="alert alert-info">{{ message }}</div>
+  {% endfor %}
+</div>
+<div class="col-xs-6 col-md-4 col-center-block">
+  {{ wtf.quick_form(form) }}
+</div>
 {% endblock %}

@@ -1,8 +1,7 @@
 {% extends "base.html" %}
 <!-- bootstrap支持的分页,只要将sqlalchemy的分页查询到底传入就可以啦 -->
 {% from "bootstrap/pagination.html" import render_pagination %}
-{% from "./includes/_macros.html" import show_posts %}
-{% from "./includes/_macros.html" import show_sidebar%}
+{% from "./includes/_macros.html" import show_posts, show_sidebar, carousel %}
 
 {% block title %}{{title}}{% endblock %}
 {% block page_content %}
@@ -11,35 +10,26 @@
 <div class="alert-info">{{ message }}</div>
 {% endfor %}
 
-<!-- jinja2是默认转义的,加上safe过滤器表示不转义 -->
-<!-- { { artical|safe }} -->
 <!-- 优化结构之后读取文件就一直出错了，晕死 -->
 <!-- (( read_md('vim_end.md')|md|safe }} safe 不转义-->
 
 
-
-<!-- <div class="container"> -->
-  <!-- <a href="{ { url_for('main.edit') }}" class ="btn btn-primary">添加新文章</a> -->
-  <!-- </div> -->
-
-<!-- 显示文章 -->
+<!-- { { carousel() }} -->
 
 {{ show_posts(posts, categorys, pagination, moment) }}
-<!-- sidebar右侧栏 -->
-{{ show_sidebar(posts, categorys) }} 
+{{ show_sidebar(posts, categorys) }}
+
 
 <!-- JiaThis Button Begin-->
 <div class="jiathis_style">
-	<a class="jiathis_like_tsina"></a>
+  <a class="jiathis_like_tsina"></a>
 </div>
 <script type="text/javascript" src="http://v3.jiathis.com/code_mini/jia.js" charset="utf-8"></script>
 <!-- JiaThis Button END -->
 
-<!-- 分页 -->
-<!-- <div class="container-fluid"> -->
-  <!-- { % if pagination %} -->
-  <!-- { { render_pagination(pagination) }} -->
-  <!-- { % endif %} -->
-<!-- </div> -->
 {% endblock %}
 
+
+{% block footer %}
+{{super()}}
+{% endblock %}

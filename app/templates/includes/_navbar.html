@@ -1,5 +1,5 @@
-<!-- 固定导航栏 --> <!-- <nav class="navbar navbar-default navbar-fixed-top" role="navigation"> -->
-<nav class="navbar navbar-default navbar-static-top" role="navigation">
+<!-- <nav class="navbar navbar-default navbar-fixed-top" role="navigation"> [> 固定导航栏  <] -->
+  <nav class="navbar navbar-default navbar-static-top" role="navigation">
     <div class="container-fluid">
       <div class="navbar-header">
         <button aria-controls="navbar"
@@ -29,9 +29,30 @@
           <li {% if url_for('main.about') is current_link %}class="active"{% endif %}>
             <a href="{{ url_for('main.about') }}" title="{{ ("关于") }}">{{ ("关于") }}</a>
           </li>
+
+          {% if current_user.is_administrator() %}
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              管理
+              <b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a href="/edit">添加新文章</a></li>
+              <li class="divider"></li>
+              <li><a href="#">文章管理</a></li>
+              <li class="divider"></li>
+              <li><a href="{{url_for('main.category_manager')}}">分类管理</a></li>
+            </ul>
+          </li>
+          {% endif %}
         </ul>
         <ul class="nav navbar-nav navbar-right">
           {% if current_user.is_authenticated %}
+
+          <form style="display:inline;" action="{{ url_for('main.search')}}" method="post" name="search">
+            {{g.search_form.hidden_tag()}}{{g.search_form.search(size=10)}} <input type="submit" value="搜索">
+          </form>
+
           <li><a href="{{url_for('main.user',name=current_user.name)}}">{{ current_user.name }}</a></li>
           <li><a href="{{ url_for('auth.signout') }}">{{ ("退出") }}</a></li>
           {% else %}
@@ -41,4 +62,4 @@
         </ul>
       </div>
     </div>
-</nav>
+  </nav>

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="a.css" type="text/css"/>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>标签</title>
+    <!-- 定义标签的样式 -->
+    <style type="text/css" media="screen">
+      table tr td,th{border:1px solid #000;}
+      span{/*所有用span标签的都加上了这个样式*/
+        color:red;
+      }
+      .setYellow{/*类选择器*/
+        color:yellow;
+      }
+      .setfont{
+        font-size:30px;
+      }
+      #setGreen{
+        color:Green;
+      }
+      .subselector>span{
+        border:1px solid green;
+      }
+      .includeselector li{
+        border:1px solid green;
+      }
+      /* *{ color:black; font-size:30px; } */
+      b:hover{
+        color:red;
+        font-size:30px;
+      }
+      /* 继承性 */
+      aa{color:green;}
+      aa{border:1px solid red;}
+    </style>
+  </head>
+
+  <body>
+    <strong>加粗字体</strong>
+    <em>斜体</em>
+    <q>引用</q>
+    <br />空标签只要开始的br就行了
+    <hr /> 分割线 &nbsp;|&nbsp;空格
+    <address> 桂林电子科技大学 </address>
+    短代码:<code>python</code>
+    多行代码:
+    <pre>
+      for i in range(10):
+        print i
+    </pre>
+    <ul>
+      <li>无序列表:ul </li>
+    </ul>
+    <ol>
+      <li>有序列表:ol </li>
+    </ol>
+    <hr />
+    表格:<br />
+    table:整个表格内容下载多少就显示多少<br />
+    tbody:整个表格内容下载完才显示出来 <br />
+    tr: 一行
+    <br />
+    th: 表头
+    <br />
+    td: 一列
+    <br />
+
+    <table summary = "表格简介">
+      <tbody>
+        <caption>例子</caption>
+        <tr>
+          <th>班级</th>
+          <th>学生</th>
+        </tr>
+        <tr>
+          <td>一班</td>
+          <td>30</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <hr />
+    div分块id为div指定唯一的名称
+    <div id = "test">
+    </div>
+    <blockquote>
+      引用长文本,样式缩进
+      周瑜:聪明秀出为之英，胆略过人为之雄。
+    </blockquote>
+    <a href="http://www.google.com" title="鼠标划过显示" target='_blank' >链接(新窗口打开)</a>
+    <p>1922年的春天,<span>中国</span></p>
+    <a href="mailto:m_kepler@foxmail.com?cc=870131615@qq.com&bcc=870131615@qq.com;jie.1995.cool@163.com&subject=主题&body=内容">发邮件</a>
+
+    <img src="test.jpg" alt="My Image" title="悬停文字"/>
+
+    <form action="post" method="get" accept-charset="utf-8">
+      <label for="username:">用户名:</label>
+      <input type="password" name="pass" id="pass" value=""/>
+      <label for="pass">密码:</label>
+      <input type="password" name="pass" value="" id="pass">
+      <input type="submit" name="submit" value="确定" id="确定">
+      <input type="reset" name="重置" value="reset" id="重置">
+    </form>
+
+    <form action="save.php" method="post" accept-charset="utf-8">
+      <label for="性别:">性别:</label>
+      <label>男</label>
+      <input type="radio" name="gender" value="1" id="">
+      <label>女</label>
+      <input type="radio" name="gender" value="2" id="">
+    </form>
+
+    <form action="save.php" method="post" accept-charset="utf-8">
+      <label >爱好:</label>
+      <select>
+        <option value="看书">看书</option>
+        <option value="运动" selected="selected">运动</option>
+        <option value="旅游">旅游</option>
+      </select>
+    </form>
+
+    CSS
+    <p style = "color:red; font-size:30px">css:红字30px</p>
+    <span class="setYellow">中华人民共和国</span>
+    <span id="setGreen"> 这不是绿色 </span>
+    <span class="setYellow setfont"> 类选择器可以叠加 </span>
+
+    <p class= "subselector"><span>子选择器</span></p>
+    <ul class="includeselector">
+      <li> 包含选择器
+        <ul>
+          <li> test1 </li>
+          <li> test2</li>
+        </ul>
+      </li>
+    </ul>
+
+    <b>鼠标悬停样式</b>
+    <br />
+
+  </body>
+</html>

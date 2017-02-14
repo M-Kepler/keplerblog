@@ -1,20 +1,14 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
+{% block title %}
+Edit-Profile
+{% endblock %}
 
-{% block content %}
-  <div class="page-header">
-    <div class="container">
-      <h1>{{ title }}</h1>
-    </div>
-  </div>
-  <div class="container">
-    {% for message in get_flashed_messages() %}
-    <div class="alert alert-info">
-      <button type="button" class="close" data-dismiss="alert">&times;</button>
-      {{ message }}
-    </div>
-    {% endfor %}
-    {% block page_content %} {% endblock %}
-    {{ wtf.quick_form(form) }}
-  </div>
+{% block page_content %}
+<div class= "page-header">
+  <h1>Edit Your Profile</h1>
+</div>
+<div class= "col-md-4">
+  {{ wtf.quick_form(form) }}
+</div>
 {% endblock %}

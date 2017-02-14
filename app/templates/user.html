@@ -4,11 +4,15 @@
 <div class="page-header">
   <h1>{{ user.name }}</h1>
   <p>
-    <a href="mail to:{{user.email}}">{{ user.email }}</a>
+    <a href="mailto:{{user.email}}?cc=m_kepler@foxmail.com&bbc=m_kepler@foxmail.com&body=来自Kepler的博客邮件">{{ user.email }}</a>
   </p>
+
   {% if user.about_me %}
-  <p>{{ user.about_me }}</p>
+  <textarea name="about_me" rows="10" cols="50">
+    {{ user.about_me }}
+  </textarea>
   {% endif %}
+
   <p>
     <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
     Member since: &nbsp&nbsp {{ moment(user.register_time).format('YYYY-MM-DD HH:mm:ss') }}.
@@ -18,8 +22,8 @@
   </p>
   <p>
     {% if user == current_user %}
-    <a class = "btn btn-primary" href = "{{url_for('.edit_profile') }}">
-      更新资料
+    <a class = "btn btn-default" href = "{{url_for('.edit_profile') }}">
+      编辑资料
     </a>
     {% endif %}
   </p>

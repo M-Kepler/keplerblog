@@ -226,7 +226,6 @@ TODO
       </style>
 
 
-
 # [样式Bootstrap](http://www.runoob.com/bootstrap/bootstrap-glyphicons.html)
   左侧9列正文，右侧3列显示个人信息和标签
 
@@ -242,18 +241,3 @@ TODO
     {{ moment(post.create_time).format('YYYY年M月D日-HH:mm:ss') }}
 
 # 时间轴
-
-
-# 选择已有标签和新添加标签
-[类似这个](https://segmentfault.com/q/1010000004406545)
-[这个](http://www.bootcdn.cn/tagmanager/readme/)
-
-[标签选择用这个](http://www.bootcdn.cn/bootstrap-tokenfield/)
-
-# MD编辑器
-flask-markdown只有简单的渲染功能,而且还那么丑;  
-后期准备上这个[编辑器](https://github.com/pandao/editor.md)
-
-
-
-

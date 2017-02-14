@@ -6,10 +6,10 @@
 
 <div class="container">
   <div class="row">
-    <div class="col-md-9">
+    <div class="col-md-11">
       <div class="share mrl the-font">
         <div style="padding:10px;">
-          <div style="border-bottom:2px solid #DAD4D4;padding:10px 10px;background-color:#FFF;box-shadow:5px 5px 20px #CCC;width:800px;">
+          <div style="border-bottom:0px solid #DAD4D4;padding:10px 10px;background-color:#FFF;box-shadow:5px 5px 20px #CCC;">
             <h2><a href="{{ url_for('main.post', id=post.id) }}">{{post.title}}</a></h2>
             <!-- author.name & post.create_time -->
             <div class="profile-thumbnail">
@@ -26,11 +26,14 @@
             </div>
             <p>{{post.body_html|safe}}</p>
 
+
             <!-- tag & readmore -->
             <!-- 显示标签,点击标签显示该标签下的文章 -->
-            <p> <a href="{{ url_for('main.category', name = post.category.name) }}">
-                <span class="label label-info text-left"> <span class="glyphicon glyphicon-tag" aria-hidden="true">
-              </span> {{ post.category.name}}</span></a>
+              <p> {% for category in post.categorys %}
+               <a href="{{ url_for('main.category', name = category.name) }}">
+                  <span class="label label-primary text-left"> <span class="glyphicon glyphicon-tag" aria-hidden="true">
+                  </span> {{category.name}}</span></a>
+              {% endfor %}
 
               <a href="{{ url_for('main.post', id=post.id-1) }}" style="float:right">
                 <button class="btn  btn-sm btn-default btn-text-right">
@@ -67,10 +70,11 @@
 
 <div class="container">
   <div class="row">
-    <div class="col-md-3">
+    <div class="col-md-11">
       <div class="share mrl the-font">
         <div style="padding:10px;">
-          <div style="border-bottom:2px solid #DAD4D4;padding:10px 10px;background-color:#FFF;box-shadow:5px 5px 20px #CCC;width:800px;">
+          <!-- <div style="border-bottom:2px solid #DAD4D4;padding:10px 10px;background-color:#FFF;box-shadow:5px 5px 20px #CCC;width:830px"> -->
+          <div style="border-bottom:2px solid #DAD4D4;padding:10px 10px;background-color:#FFF;box-shadow:5px 5px 20px #CCC;">
             {{ wtf.quick_form(form)}}
           </div>
         </div>
@@ -82,11 +86,12 @@
 
 <div class="container">
   <div class="row">
-    <div class="col-md-9">
+    <div class="col-md-11">
       {% for comment in post.comments | sort(attribute='create_time', reverse=True) %}
       <div class="share mrl the-font">
         <div style="padding:10px;">
-          <div style="border-bottom:2px solid #DAD4D4;padding:10px 10px;background-color:#FFF;box-shadow:5px 5px 20px #CCC;width:800px;">
+          <!-- <div style="border-bottom:2px solid #DAD4D4;padding:10px 10px;background-color:#FFF;box-shadow:5px 5px 20px #CCC;width:830px;"> -->
+          <div style="border-bottom:2px solid #DAD4D4;padding:10px 10px;background-color:#FFF;box-shadow:5px 5px 20px #CCC;">
             <div class="profile-thumbnail">
               <div class = "post-author">
 
