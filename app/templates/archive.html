@@ -16,12 +16,13 @@
       <div class="page">
         <div class="box">
           <ul class="event_year">
-            {% for post in posts %}
+            <!-- # 一个切片,让序列倒序输出 -->
+            {% for post in posts[::-1] %}
             <li ><label for="{{post[0]}}">{{post[0]}} 月</label></li>
             {% endfor %}
           </ul>
           <ul class="event_list">
-            {% for post in posts %}
+            {% for post in posts[::-1] %}
             <div>
               <h3 id="{{post[0]}}">{{post[0]}} 月 | 共 {{post[1]|count}} 篇</h3>
               {% for p in post[1] |sort(attribute='create_time',reverse=True)%}

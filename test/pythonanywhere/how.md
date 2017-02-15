@@ -5,6 +5,8 @@
     pip install flask
     pip install requestments/requestments.txt
 
+* 激活虚拟环境
+
 * mysql数据库
   修改app/config.py的数据库连接SQLALCHEMY_DATABASE_URI:
     * 原@localhost:3306改为@YOURNAME.mysql.pythonanywhere-services.com:3306

@@ -73,7 +73,11 @@
               </div>
             </div>
             <!-- tag & readmore -->
-            <p>{{post.body_html|safe|truncate(700,True)}}</p>
+            <div>
+              <p>{{post.body_html|safe|truncate(700,True)}}</p>
+            </div>
+            <hr />
+
             <p> {% for category in post.categorys %}
               <!-- <a href="{{ url_for('main.category', name = post.categorys.name) }}"> -->
                 <a href="{{ url_for('main.category', name = category.name) }}">

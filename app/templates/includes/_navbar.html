@@ -49,9 +49,9 @@
         <ul class="nav navbar-nav navbar-right">
           {% if current_user.is_authenticated %}
 
-          <form style="display:inline;" action="{{ url_for('main.search')}}" method="post" name="search">
-            {{g.search_form.hidden_tag()}}{{g.search_form.search(size=10)}} <input type="submit" value="搜索">
-          </form>
+          <!-- <form style="display:inline;" action="{{ url_for('main.search')}}" method="post" name="search"> -->
+            <!-- {{g.search_form.hidden_tag()}}{{g.search_form.search(size=10)}} <input type="submit" value="搜索"> -->
+          <!-- </form> -->
 
           <li><a href="{{url_for('main.user',name=current_user.name)}}">{{ current_user.name }}</a></li>
           <li><a href="{{ url_for('auth.signout') }}">{{ ("退出") }}</a></li>

@@ -28,6 +28,8 @@ class DevelopmentConfig(Config):
     ENABLE_THREADS=True
     #  SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://root:159357@localhost:3306/keplerblog"
     SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://root:159357@localhost:3306/keplerblog?charset=utf8"
+    #  to deploy in pythonanywhere
+    #  SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://Kepler:159357yp@Kepler.mysql.pythonanywhere-services.com:3306/Kepler$keplerblog?charset=utf8"
 
 class TestingConfig(Config):
     TESTING = True
