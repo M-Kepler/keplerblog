@@ -1,38 +1,43 @@
 {% extends "base.html" %}
 {% block page_content %}
-  <!DOCTYPE html>
-  <html>
-    <head>
-      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-      <link rel="stylesheet" href="../static/css/archive.css">
-      <style>
-        .page {
-          width: 100%;
-          background: #F0F0F0 url('../static/images/dian2.png') repeat-x;
-        }
-      </style>
-    </head>
-    <body>
-      <div class="page">
-        <div class="box">
-          <ul class="event_year">
-            <!-- # 一个切片,让序列倒序输出 -->
-            {% for post in posts[::-1] %}
-            <li ><label for="{{post[0]}}">{{post[0]}} 月</label></li>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" href="../static/css/archive.css">
+    <style>
+      .page {
+        width: 100%;
+        background: #F0F0F0 url('../static/img/dian2.png') repeat-x;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <div class="box">
+        <ul class="event_year">
+          <!-- # 一个切片,让序列倒序输出 -->
+          {% for post in posts[::-1] %}
+          <!-- 让最新的那个月作为默认标签 -->
+            {% if post == posts[-1] %} 
+              <li class="current"><label for="{{post[0]}}">{{post[0]}} 月</label></li>
+            {% else %}
+              <li ><label for="{{post[0]}}">{{post[0]}} 月</label></li>
+            {% endif %}
+          {% endfor %}
+        </ul>
+        <ul class="event_list">
+          {% for post in posts[::-1] %}
+          <div>
+            <h3 id="{{post[0]}}">{{post[0]}} 月 | 共 {{post[1]|count}} 篇</h3>
+            {% for p in post[1] |sort(attribute='create_time',reverse=True)%}
+            <li>
+              <span>{{moment(p.create_time).format('YYYY.M.D-HH:mm:ss')}}</span>
+              <p><span><a href="{{ url_for('main.post', id=p.id) }}">{{p.title}}</a></span></p>
+            </li>
             {% endfor %}
-          </ul>
-          <ul class="event_list">
-            {% for post in posts[::-1] %}
-            <div>
-              <h3 id="{{post[0]}}">{{post[0]}} 月 | 共 {{post[1]|count}} 篇</h3>
-              {% for p in post[1] |sort(attribute='create_time',reverse=True)%}
-              <li>
-                <span>{{moment(p.create_time).format('YYYY.M.D-HH:mm:ss')}}</span>
-                <p><span><a href="{{ url_for('main.post', id=p.id) }}">{{p.title}}</a></span></p>
-              </li>
-              {% endfor %}
-            </div>
-            {% endfor %}
+          </div>
+          {% endfor %}
           <div class="clearfix"></div>
         </div>
       </div>
