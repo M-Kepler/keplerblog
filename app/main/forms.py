@@ -9,7 +9,7 @@ from wtforms.validators import DataRequired, length, Regexp, EqualTo, Email
 from flask_pagedown.fields import PageDownField
 
 class SearchForm(Form):
-    search = TextAreaField('search', validators=[DataRequired()])
+    search = StringField('search', validators=[DataRequired()])
 
 class PostForm(Form):
     title = StringField(label=('标题'), validators=[DataRequired()])

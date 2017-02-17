@@ -13,7 +13,7 @@
           <span class="icon-bar"></span>
         </button>
         <span>
-          <a class="navbar-brand" href="{{url_for('main.index')}}">M_Kepler</a>
+          <a class="navbar-brand" href="{{url_for('main.index')}}">M-Kepler</a>
         </span>
       </div>
       <div class="navbar-collapse collapse"
@@ -46,13 +46,21 @@
           </li>
           {% endif %}
         </ul>
+
         <ul class="nav navbar-nav navbar-right">
+
+          <li>
+            <!-- 全文搜索用google/baidu啊 -->
+            <!-- https://github.com/honmaple/maple-blog/blob/ee69c252d1f81ed6ee2c1428329434577d215f2f/static/style/honmaple.js -->
+            <form onsubmit = "return dispatch()"  style="margin-top:10px; ">
+              <div class= "form-group has-feedback">
+                {{g.search_form.search(class="form-control input-sm", placeholder=("全文搜索"))}}
+                <i class="icon-search form-control-feedback"></i>
+              </div>
+            </form>
+          </li>
+
           {% if current_user.is_authenticated %}
-
-          <!-- <form style="display:inline;" action="{{ url_for('main.search')}}" method="post" name="search"> -->
-            <!-- {{g.search_form.hidden_tag()}}{{g.search_form.search(size=10)}} <input type="submit" value="搜索"> -->
-          <!-- </form> -->
-
           <li><a href="{{url_for('main.user',name=current_user.name)}}">{{ current_user.name }}</a></li>
           <li><a href="{{ url_for('auth.signout') }}">{{ ("退出") }}</a></li>
           {% else %}

@@ -32,7 +32,8 @@
             <h3 id="{{post[0]}}">{{post[0]}} 月 | 共 {{post[1]|count}} 篇</h3>
             {% for p in post[1] |sort(attribute='create_time',reverse=True)%}
             <li>
-              <span>{{moment(p.create_time).format('YYYY.M.D-HH:mm:ss')}}</span>
+              <!-- <span>{ {moment(p.create_time).format('YYYY.M.D-HH:mm:ss')}}</span> -->
+              <span>{{moment(p.create_time).format('YYYY.M.D')}}</span>
               <p><span><a href="{{ url_for('main.post', id=p.id) }}">{{p.title}}</a></span></p>
             </li>
             {% endfor %}

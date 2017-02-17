@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 {% from "bootstrap/pagination.html" import render_pagination %}
-{% from "./includes/_macros.html" import show_posts %}
-{% from "./includes/_macros.html" import show_sidebar %}
+{% from "./includes/_macros.html" import show_posts, show_sidebar with context %}
 
 
 {% block page_content %}

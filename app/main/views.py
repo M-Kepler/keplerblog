@@ -15,6 +15,17 @@ basepath = path.abspath(path.dirname(__file__))
 filename = path.join(basepath,'vim_end.md')
 
 
+
+
+
+@main.route('/test', methods=['GET', 'POST'])
+def test():
+    return render_template('test.html')
+
+
+
+
+
 @main.route('/', methods=['GET', 'POST'])
 @main.route('/index', methods=['GET', 'POST'])
 def index():
@@ -28,9 +39,15 @@ def index():
     posts=pagination.items
 
     categorys = Category.query.order_by(Category.id)[::-1] # 所有标签返回的是一个元组
+    # 如果分类下的文章数为0, 就删掉这个分类
+    for c in categorys:
+        p = c.posts.all()
+        if len(p) == 0: # 该分类下的文章数为0
+            db.session.delete(c)
 
-    # 每个分类下的文章总数, 好像有必要分开分类和标签了
-    return render_template('index.html', title = 'Kepler',
+
+    #TODO 每个分类下的文章总数, 好像有必要分开分类和标签了
+    return render_template('index.html', title = 'M-Kepler',
             posts = posts, categorys = categorys, pagination = pagination, current_time = datetime.utcnow())
 
 
@@ -60,7 +77,7 @@ def post(id):
             return redirect(url_for('.post', id=post.id, page=-1))
     form.body.data=''
     categorys = Category.query.order_by(Category.id)[::-1] # 所有标签返回的是一个元组
-    return render_template('posts/detail.html', title='Kepler | ' + post.title, form=form, post=post, categorys=categorys)
+    return render_template('posts/detail.html', title='M-Kepler | ' + post.title, form=form, post=post, categorys=categorys)
 
 
 
@@ -101,16 +118,14 @@ def edit(id=0):
         categoryemp = []
         category_list = form.category.data.split(',')
 
-#  FIXME 问题多多, 我想的是如果能在数据库找到这个分类就不用创建这个对象, 直接append，如果找不到就创建对象
-
-        #FIXME 这里总是在创建category
-        for i in category_list:
-            categoryemp.append(Category(name=i))
-            #  if Category.query.get_or_404(i):
-                #  categoryemp.append(str_to_obj(i))
-            #  elif not Category.query.get(i):
-                #  categoryemp.append(Category(name=i))
-        #  post.category = str_to_obj(form.category.data)
+        # 如果已经有这个分类就不用创建
+        for t in category_list:
+            tag = Category.query.filter_by(name=t).first()
+            if tag is None:
+                tag = Category()
+                tag.name = t
+                #  tag.save()
+            categoryemp.append(tag)
 
         post.categorys = categoryemp
         post.title = form.title.data
@@ -122,13 +137,9 @@ def edit(id=0):
 
     form.title.data = post.title
     form.body.data = post.body
-    #  FIXME 还不可以进行编辑
-    #  form.category.data = post.category_id
-    #  form.category.data = post.categorys.name
 
-    #  FIXME 添加文章的时候如何从已经存在的分类中选择, 而不是新建重复的分类
-    #  posts= Post.query.filter_by(name='')
-    #  categorys_list = posts.categorys.all()
+    #  FIXME 还不可以进行编辑
+    #  编辑的时候怎么把文章标签显示出来
 
     mode='编辑' if id>0 else '添加'
     return render_template('posts/edit.html', title ='%s - %s' % (mode, post.title), form=form, post=post)
@@ -163,7 +174,7 @@ def category(name):
                     page_index, per_page = config.PER_POSTS_PER_PAGE,
                     error_out=False)
     posts=pagination.items
-    return render_template("category.html",title='Kepler|分类|' + name, name=name, posts=posts, categorys=categorys, pagination=pagination)
+    return render_template("category.html",title='M-Kepler|分类|' + name, name=name, posts=posts, categorys=categorys, pagination=pagination)
 
 
 # 分类管理
@@ -203,21 +214,22 @@ def archive():
     for archive in archives:
         posts.append((archive[0], db.session.query(Post).filter(extract('month', Post.create_time)==archive[0]).all()))
 
-    return render_template('archive.html',title='Kepler | 归档', posts=posts)
+    return render_template('archive.html',title='M-Kepler | 归档', posts=posts)
 
 @main.route('/about')
 def about():
-    return render_template('about.html', title='Kepler | 关于')
+    return render_template('about.html', title='M-Kepler | 关于')
 
 @main.route('/search', methods=['GET', 'POST'])
 def search():
     return 'test'
 
+
 @main.before_app_request
 def before_request():
-    if current_user.is_authenticated:
-        #  全文搜索
-        g.search_form = SearchForm()
+    #  if current_user.is_authenticated: #  全文搜索,让这个搜索框
+    g.search_form = SearchForm()
+
 
 @main.route('/edit-profile', methods=['GET','POST'])
 @login_required

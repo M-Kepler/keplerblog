@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block page_content %}
+<input type="text" />
+<script>
+  $('input').tagsinput({
+    itemValue:'value',
+    itemText:'text',
+    typeahead:{
+      source"function(query){
+      return $.getJSON('cities.json');
+    }
+  }
+  });
+$('input').tagsinput('add', { "value": 1 , "text": "Amsterdam"  });
+$('input').tagsinput('add', { "value": 4 , "text": "Washington" });
+$('input').tagsinput('add', { "value": 7 , "text": "Sydney"     });
+$('input').tagsinput('add', { "value": 10, "text": "Beijing"    });
+$('input').tagsinput('add', { "value": 13, "text": "Cairo"      });
+
+<input type="text" value="Amsterdam,Washington,Beijing" data-role="tagsinput"/>
+
+
+</script>
+{% endblock %}

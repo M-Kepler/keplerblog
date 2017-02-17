@@ -38,16 +38,16 @@
 
               <a href="{{ url_for('main.post', id=post.id-1) }}" style="float:right">
                 <button class="btn  btn-sm btn-default btn-text-right">
-                  <span class="glyphicon glyphicon-leaf" aria-hidden="true"> </span> next </button></a>
+                  <span class="glyphicon glyphicon-leaf" aria-hidden="true"> </span> Next </button></a>
 
               {% if current_user.is_administrator() %}
               <a href="{{ url_for('main.deletepost', id=post.id) }}" style="float:right">
                 <button class="btn  btn-sm btn-default btn-text-right">
-                  <span class="glyphicon glyphicon-leaf" aria-hidden="true"> </span> delete </button></a>
+                  <span class="glyphicon glyphicon-leaf" aria-hidden="true"> </span> Delete </button></a>
 
               <a href="{{ url_for('main.edit', id=post.id) }}" style="float:right">
                 <button class="btn  btn-sm btn-default btn-text-right">
-                  <span class="glyphicon glyphicon-leaf" aria-hidden="true"> </span> edit </button></a>
+                  <span class="glyphicon glyphicon-leaf" aria-hidden="true"> </span> Edit </button></a>
               {% endif %}
             </p>
 

@@ -11,26 +11,26 @@
        <div class="carousel-inner" role="listbox">
            <!--图片-->
            <div class="item active">
-               <img src="../../static/images/11.jpg" alt="风景1">
+               <img src="../../static/img/11.jpg" alt="风景1">
                <div class="carousel-caption">
                    <!--h4中的内容显示到图片上面，-->
                    <h4>真正的才智是刚毅的志向。 —— 拿破仑</h4>
                </div>
            </div>
            <div class="item">
-               <img src="../../static/images/111.jpg" alt="风景2">
+               <img src="../../static/img/111.jpg" alt="风景2">
                <div class="carousel-caption">
                    <h4>志向不过是记忆的奴隶，生气勃勃地降生，但却很难成长。 —— 莎士比亚</h4>
                </div>
            </div>
            <div class="item">
-               <img src="../../static/images/1111.jpg" alt="风景3">
+               <img src="../../static/img/1111.jpg" alt="风景3">
                <div class="carousel-caption">
                    <h4>志向和热爱是伟大行为的双翼。 —— 歌德</h4>
                </div>
            </div>
            <div class="item">
-               <img src="../../static/images/11111.jpg" alt="风景4">
+               <img src="../../static/img/11111.jpg" alt="风景4">
                <div class="carousel-caption">
                    <h4>生活有度，人生添寿。 —— 书摘</h4>
                </div>
@@ -74,7 +74,7 @@
             </div>
             <!-- tag & readmore -->
             <div>
-              <p>{{post.body_html|safe|truncate(700,True)}}</p>
+              <p>{{post.body_html|safe|truncate(500,True)}}</p>
             </div>
             <hr />
 
@@ -84,9 +84,21 @@
                   <span class="label label-primary text-left"> <span class="glyphicon glyphicon-tag" aria-hidden="true">
                 </span> {{category.name}}</span></a>
                 {% endfor %}
-                <a href="{{ url_for('main.post', id=post.id) }}" style="float:right">
+
+              {% if current_user.is_administrator() %}
+              <a href="{{ url_for('main.deletepost', id=post.id) }}" style="float:right">
+                <button class="btn  btn-sm btn-default btn-text-right">
+                  <span class="glyphicon glyphicon-leaf" aria-hidden="true"> </span> Delete </button></a>
+
+              <a href="{{ url_for('main.edit', id=post.id) }}" style="float:right">
+                <button class="btn  btn-sm btn-default btn-text-right">
+                  <span class="glyphicon glyphicon-leaf" aria-hidden="true"> </span> Edit </button></a>
+              {% endif %}
+
+              <a href="{{ url_for('main.post', id=post.id) }}" style="float:right">
                   <button class="btn  btn-sm btn-primary btn-text-right"> <span class="glyphicon glyphicon-share-alt" aria-hidden="true">
                 </span> read more</button></a>
+            </p>
               </p>
             </div>
           </div>
