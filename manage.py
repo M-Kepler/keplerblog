@@ -63,12 +63,15 @@ def fake():
     User.generate_fake()
     Post.generate_fake()
     Comment.generate_fake()
+
 @manager.command
 def userfake():
     User.generate_fake()
+
 @manager.command
 def postfake():
     Post.generate_fake()
+
 @manager.command
 def commentfake():
     Comment.generate_fake()

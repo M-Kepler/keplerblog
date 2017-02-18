@@ -3,9 +3,12 @@
 
 {% block head%}
 {{super()}}
-<!-- bootstrap-tagsinput --> <!-- FIXME -->
-<!-- http://www.jqueryscript.net/demo/Nice-Tags-Manager-Plugin-with-jQuery-Bootstrap-Bootstrap-Tags-Input/examples/ -->
-<!-- http://jquery-plugins.net/tokenfield-jquery-tag-token-plugin-for-bootstrap -->
+<!-- <script type="text/javascript"> -->
+  <!-- $(function() { -->
+    <!-- $("#tags").tagsInput(); -->
+  <!-- }); -->
+<!-- </script> -->
+
 {% endblock %}
 
 {% block page_content %}
@@ -23,31 +26,32 @@
     </div>
   </div>
 
-
-	<!-- [> 原来 <] -->
+  <!-- [> 原来 <] -->
   <div class="form-group" required>
     <div class = "raw">
-      <div class="col-md-4">
-        <label class="control-label" for="title">{{ form.category.label}}</label>
-        {{form.category(id="category", class="form-control", placeholder="输入分类,用逗号分隔")}}
+      <div class="col-md-10">
+        <label class="control-label" for="title">{{ form.category.label}}</label><br />
+        <input class= "form-control"id = "category" name = "category" value="{{value}}" type = "text" data-role="tagsinput"/>
+        <!-- { {form.category(class="form-control", placeholder="输入分类,用逗号分隔")}} -->
       </div>
     </div>
   </div>
+  <br />
 
 
 <!-- 下拉选择,这样就只能选一个标签了 -->
 <!-- FIXME -->
   <!-- <form method="post" class="form" role="form"> -->
     <!-- <form action ="" method="POST" class="form" role="form"> -->
-      <!-- {{ form.hidden_tag() }} -->
+      <!-- { { form.hidden_tag() }} -->
       <!-- <div class="col-md-2"> -->
         <!-- <div class="form-group "> -->
           <!-- <div class="raw"> -->
-            <!-- <label class="control-label" for="category">{{ form.category.label}}</label> -->
+            <!-- <label class="control-label" for="category">{ { form.category.label}}</label> -->
             <!-- <select class="form-control" id="category" name="category" > -->
-              <!-- {% for choice in form.category.choices %} -->
-                <!-- <option value={{choice[1]}}> {{choice[1]}} </option> -->
-              <!-- {% endfor %} -->
+              <!-- { % for choice in form.category.choices %} -->
+                <!-- <option value={ {choice[1]}}> { {choice[1]}} </option> -->
+              <!-- { % endfor %} -->
             <!-- </select> -->
           <!-- </div> -->
         <!-- </div> -->
@@ -59,7 +63,7 @@
       <div class="form-group">
         <div class = "row">
           <div class="col-md-6">
-            <!-- <label class="control-label" for="category">{{ form.body.label}}</label> -->
+            <label class="control-label" for="category">{{ form.body.label}}</label>
             {{ form.body(only_input=True,rows=20,class="form-control",placeholder="输入markdown格式文章") }}
             <p>
               <div class="form-group">

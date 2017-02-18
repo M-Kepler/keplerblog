@@ -82,7 +82,7 @@
               <!-- <a href="{{ url_for('main.category', name = post.categorys.name) }}"> -->
                 <a href="{{ url_for('main.category', name = category.name) }}">
                   <span class="label label-primary text-left"> <span class="glyphicon glyphicon-tag" aria-hidden="true">
-                </span> {{category.name}}</span></a>
+                </span> {{category.name|upper}}</span></a>
                 {% endfor %}
 
               {% if current_user.is_administrator() %}

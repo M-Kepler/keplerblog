@@ -93,6 +93,7 @@ def admin_required(f):
             abort(403)
     return decorator
 
+
 def str_to_obj(new_category):
     c =[]
     for category in new_category:
@@ -114,7 +115,6 @@ def edit(id=0):
         post = Post.query.get_or_404(id)
 
     if form.validate_on_submit():
-        #  post.category = Category.query.get(form.category.data)
         categoryemp = []
         category_list = form.category.data.split(',')
 
@@ -137,12 +137,13 @@ def edit(id=0):
 
     form.title.data = post.title
     form.body.data = post.body
-
-    #  FIXME 还不可以进行编辑
-    #  编辑的时候怎么把文章标签显示出来
+    #  form.category.data = [i.name for i in post.categorys]
+    #  value = [i.name for i in post.categorys]
+    # TODO ☆ 为了把值传到input标签,我也没其他方法了, 然后将category的list元素用‘,’分割组成str传给input
+    value = ",".join([i.name for i in post.categorys])
 
     mode='编辑' if id>0 else '添加'
-    return render_template('posts/edit.html', title ='%s - %s' % (mode, post.title), form=form, post=post)
+    return render_template('posts/edit.html', title ='%s - %s' % (mode, post.title), form=form, post=post, value=value)
 
 
 @main.route('/posts/delete/<int:id>', methods = ['GET','POST'])
@@ -269,6 +270,11 @@ def edit_profile_admin(id):
     return render_template('edit_profile.html', form = form, user=user)
 
 
+#  TODO
+@main.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
+
 '''
 #  上传文件
 @main.route('/upload', methods = ['GET', 'POST'])
@@ -285,9 +291,6 @@ def upload():
 def projects():
     return render_template('projects.html')
 
-@main.errorhandler(404)
-def page_not_found(e):
-    return render_template('404.html'), 404
 
 
 #  定义自己的jinja2过滤器
@@ -318,7 +321,6 @@ def inject_methods():
 def is_current_link(link):
     return link[0] is request.url
 
-@app.route('/qsbk')
 def qsbk():
     lines = f.readlines()
     return render_template('qsbk.html',lines=lines)
