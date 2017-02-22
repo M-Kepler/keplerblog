@@ -11,20 +11,6 @@ from sqlalchemy import extract, func
 from datetime import datetime
 
 basepath = path.abspath(path.dirname(__file__))
-#  basepath = path.abspath('.')
-filename = path.join(basepath,'vim_end.md')
-
-
-
-
-
-@main.route('/test', methods=['GET', 'POST'])
-def test():
-    return render_template('test.html')
-
-
-
-
 
 @main.route('/', methods=['GET', 'POST'])
 @main.route('/index', methods=['GET', 'POST'])
@@ -34,8 +20,7 @@ def index():
     pagination = Post.query.order_by(
             Post.create_time.desc()).paginate(
                     page_index, per_page = config.PER_POSTS_PER_PAGE,
-                    error_out=False
-                    )
+                    error_out=False)
     posts=pagination.items
 
     categorys = Category.query.order_by(Category.id)[::-1] # 所有标签返回的是一个元组
@@ -44,7 +29,6 @@ def index():
         p = c.posts.all()
         if len(p) == 0: # 该分类下的文章数为0
             db.session.delete(c)
-
 
     #TODO 每个分类下的文章总数, 好像有必要分开分类和标签了
     return render_template('index.html', title = 'M-Kepler',
@@ -61,7 +45,6 @@ def user(name):
     return render_template('user.html', user=user)
 
 
-# ------- 帖子 -------
 @main.route('/posts/<int:id>', methods = ['GET','POST'])
 def post(id):
     post = Post.query.get_or_404(id)
@@ -69,15 +52,29 @@ def post(id):
     #  保存评论
     if form.validate_on_submit():
         if current_user.is_anonymous:
-            flash("评论请先请登录")
+            flash("SIGNIN BEFORE COMMENT.")
             return redirect(url_for('auth.signin'))
         else:
             comment = Comment( author_id = current_user.id, body = form.body.data, post = post)
             db.session.add(comment)
+            flash('COMMENT PUBLISHED.')
             return redirect(url_for('.post', id=post.id, page=-1))
-    form.body.data=''
+    comment_count = len(post.comments)
+#  TODO
+    #  page_index = request.args.get('page', 1, type=int)
+    #  if page_index == -1:
+        #  page_index = (comment_count-1)//config.PER_POSTS_PER_PAGE + 1
+
+    #  pagination = post.comments.query.order_by(Comment.create_time.desc()).paginate(
+            #  page_index, per_page = config.PER_POSTS_PER_PAGE, error_out = False)
+    #  comments= pagination.items
+    #  return render_template('posts/detail.html', title='M-Kepler | ' + post.title, form=form, post=post, comments=comments, pagination = pagination, comment_count = comment_count)
+
+
+    form.body.data = ''
     categorys = Category.query.order_by(Category.id)[::-1] # 所有标签返回的是一个元组
-    return render_template('posts/detail.html', title='M-Kepler | ' + post.title, form=form, post=post, categorys=categorys)
+    return render_template('posts/detail.html', title='M-Kepler | ' + post.title, form=form, post=post,
+            categorys=categorys, comment_count = comment_count)
 
 
 
@@ -94,6 +91,7 @@ def admin_required(f):
     return decorator
 
 
+#  把输入框的字串用, 分开, 然后转化为category对象，现在已经没用了
 def str_to_obj(new_category):
     c =[]
     for category in new_category:
@@ -153,13 +151,23 @@ def deletepost(id):
     db.session.delete(post)
     for comment in post.comments:
         db.session.delete(comment)
-
-#  FIXME 如果分类下没有文章了就删掉这个分类
+#   如果分类下没有文章了就删掉这个分类
     for category in post.categorys.all():
         if category.posts.all() is None:
             db.session.delete(category)
-    flash('博文已删除')
+    flash('POST DELETED')
     return redirect(url_for('.index'))
+
+
+# FIXME 评论删除后显示的是当前这篇文章啊
+@main.route('/comment_delete/<int:id>', methods=['GET', 'POST'])
+@login_required
+def comment_delete(id):
+    comment = Comment.query.get_or_404(id)
+    post_id = comment.post_id
+    db.session.delete(comment)
+    flash('COMMENT DELETED')
+    return redirect(url_for('.post', id=post_id))
 
 
 @main.route('/category/<name>', methods=['GET', 'POST'])

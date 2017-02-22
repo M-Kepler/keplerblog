@@ -1,7 +1,15 @@
 {% extends "base.html" %}
+{% from "bootstrap/pagination.html" import render_pagination %}
 {% import "bootstrap/wtf.html" as wtf %}
 
 {% block page_content%}
+
+<div class="container" >
+  {% for message in get_flashed_messages() %}
+  <div class="alert-info">{{ message }}</div>
+  {% endfor %}
+</div>
+
 <!-- 显示文章 -->
 
 <div class="container">
@@ -18,63 +26,68 @@
                   <a href="{{url_for('.user', name=post.author.name) }}"> {{ post.author.name }}</a>
                 </small>
                 &nbsp &nbsp
+
+                <span class="glyphicon glyphicon-comment" aria-hidden="true"> </span> {{comment_count}} </button></a>
+                &nbsp &nbsp
+
                 <small><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
                   <!-- { { post.create_time }} -->
                   {{ moment(post.create_time).format('YYYY年M月D日-HH:mm:ss') }}
                 </small>
-              </div>
-            </div>
-            <p>{{post.body_html|safe}}</p>
-
-            <hr />
-
-            <!-- tag & readmore -->
-            <!-- 显示标签,点击标签显示该标签下的文章 -->
-              <p> {% for category in post.categorys %}
-               <a href="{{ url_for('main.category', name = category.name) }}">
-                  <span class="label label-primary text-left"> <span class="glyphicon glyphicon-tag" aria-hidden="true">
-                  </span> {{category.name|upper}}</span></a>
-              {% endfor %}
-
-              <a href="{{ url_for('main.post', id=post.id-1) }}" style="float:right">
-                <button class="btn  btn-sm btn-default btn-text-right">
-                  <span class="glyphicon glyphicon-leaf" aria-hidden="true"> </span> Next </button></a>
-
-              {% if current_user.is_administrator() %}
-              <a href="{{ url_for('main.deletepost', id=post.id) }}" style="float:right">
-                <button class="btn  btn-sm btn-default btn-text-right">
-                  <span class="glyphicon glyphicon-leaf" aria-hidden="true"> </span> Delete </button></a>
-
-              <a href="{{ url_for('main.edit', id=post.id) }}" style="float:right">
-                <button class="btn  btn-sm btn-default btn-text-right">
-                  <span class="glyphicon glyphicon-leaf" aria-hidden="true"> </span> Edit </button></a>
-              {% endif %}
-            </p>
-
-              <!-- JiaThis Button BEGIN -->
-              <script type="text/javascript">
-                var jiathis_config = {data_track_clickback:'true'};
-              </script>
-              <script type="text/javascript" src="http://v3.jiathis.com/code/jiathis_r.js?move=0&amp;btn=r3.gif&amp;uid=2119080" charset="utf-8"></script>
-              <!-- JiaThis Button END -->
-              <!-- UJian Button BEGIN -->
-              <script type="text/javascript" src="http://v1.ujian.cc/code/ujian.js?type=slide"></script>
-              <!-- UJian Button END -->
-
           </div>
         </div>
+        <p>{{post.body_html|safe}}</p>
+
+        <hr />
+
+        <!-- tag & readmore -->
+        <!-- 显示标签,点击标签显示该标签下的文章 -->
+        <p> {% for category in post.categorys %}
+          <a href="{{ url_for('main.category', name = category.name) }}">
+            <span class="label label-primary text-left"> <span class="glyphicon glyphicon-tag" aria-hidden="true">
+          </span> {{category.name|upper}}</span></a>
+          {% endfor %}
+
+          <a href="{{ url_for('main.post', id=post.id-1) }}" style="float:right">
+            <button class="btn  btn-sm btn-default btn-text-right">
+              <span class="glyphicon glyphicon-leaf" aria-hidden="true"> </span> Next </button></a>
+
+
+
+          {% if current_user.is_administrator() %}
+          <a href="{{ url_for('main.deletepost', id=post.id) }}" style="float:right">
+            <button class="btn  btn-sm btn-default btn-text-right">
+              <span class="glyphicon glyphicon-leaf" aria-hidden="true"> </span> Delete </button></a>
+
+          <a href="{{ url_for('main.edit', id=post.id) }}" style="float:right">
+            <button class="btn  btn-sm btn-default btn-text-right">
+              <span class="glyphicon glyphicon-leaf" aria-hidden="true"> </span> Edit </button></a>
+          {% endif %}
+        </p>
+
+        <!-- JiaThis Button BEGIN -->
+        <script type="text/javascript">
+          var jiathis_config = {data_track_clickback:'true'};
+        </script>
+        <script type="text/javascript" src="http://v3.jiathis.com/code/jiathis_r.js?move=0&amp;btn=r3.gif&amp;uid=2119080" charset="utf-8"></script>
+        <!-- JiaThis Button END -->
+
+        <!-- UJian Button BEGIN -->
+        <script type="text/javascript" src="http://v1.ujian.cc/code/ujian.js?type=slide"></script>
+        <!-- UJian Button END -->
+
       </div>
     </div>
   </div>
 </div>
-
+  </div>
+</div>
 
 <div class="container">
   <div class="row">
     <div class="col-md-11">
       <div class="share mrl the-font">
         <div style="padding:10px;">
-          <!-- <div style="border-bottom:2px solid #DAD4D4;padding:10px 10px;background-color:#FFF;box-shadow:5px 5px 20px #CCC;width:830px"> -->
           <div style="border-bottom:2px solid #DAD4D4;padding:10px 10px;background-color:#FFF;box-shadow:5px 5px 20px #CCC;">
             {{ wtf.quick_form(form)}}
           </div>
@@ -92,25 +105,55 @@
       <div class="share mrl the-font">
         <div style="padding:10px;">
           <!-- <div style="border-bottom:2px solid #DAD4D4;padding:10px 10px;background-color:#FFF;box-shadow:5px 5px 20px #CCC;width:830px;"> -->
-          <div style="border-bottom:2px solid #DAD4D4;padding:10px 10px;background-color:#FFF;box-shadow:5px 5px 20px #CCC;">
-            <div class="profile-thumbnail">
-              <div class = "post-author">
+            <div style="border-bottom:2px solid #DAD4D4;padding:10px 10px;background-color:#FFF;box-shadow:5px 5px 20px #CCC;">
+              <div class="profile-thumbnail">
+                <div class = "post-author">
 
-                <small><span class="glyphicon glyphicon-user" aria-hedden="true"></span>
-                  <a href="{{url_for('.user', name=comment.author.name) }}"> {{ comment.author.name }}</a>
-                </small>
-                &nbsp &nbsp
 
-                <small><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span> {{ comment.create_time }} </small>
-                <div style="padding:10px;">
-                  <p>{{ comment.body|safe}}</p>
+                  <small><span class="glyphicon glyphicon-user" aria-hedden="true"></span>
+                    <a href="{{url_for('.user', name=comment.author.name) }}"> {{ comment.author.name }}</a>
+                  </small>
+                  &nbsp &nbsp
+
+                  <small><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span> {{ moment(comment.create_time).format('YYYY年M月D日-HH:mm:ss') }} </small>
+                  &nbsp &nbsp
+
+                  <small><span class="glyphicon glyphicon-comment" aria-hedden="true"></span>
+                    <a href="#reply" name = "reply">Reply comment</a>
+                  </small>
+                  &nbsp &nbsp
+
+                  {% if current_user.is_administrator() %}
+                  <a href="{{ url_for('main.comment_delete', id=comment.id) }}" style="float:right">
+                    <button class="btn  btn-sm btn-default btn-text-right">
+                      <span class="glyphicon glyphicon-leaf" aria-hidden="true"> </span> Delete </button></a>
+                  {% endif %}
+
+                  <div style="padding:10px;">
+                    <!-- <p>{ { comment.body|safe}}</p> -->
+                    <p>{{ comment.body_html|safe}}</p>
+                  </div>
+
 
                 </div>
               </div>
             </div>
           </div>
         </div>
+        {% endfor %}
+
+        <!-- 分页导航栏 -->
+        <div class="container-fluid">
+          {% if pagination %}
+          {{ render_pagination(pagination) }}
+          {% endif %}
+        </div>
       </div>
-      {% endfor %}
+
       {% endblock	 %}
 
+      {% block scripts %}
+      {{ super() }}
+      <!-- 预览markdown -->
+      {{ pagedown.include_pagedown() }}
+      {% endblock %}

@@ -1,13 +1,13 @@
-"""init
+"""init db
 
-Revision ID: 923db8230e54
+Revision ID: 179fdc2b5037
 Revises: None
-Create Date: 2017-01-05 22:40:00.220209
+Create Date: 2017-02-21 11:19:37.314719
 
 """
 
 # revision identifiers, used by Alembic.
-revision = '923db8230e54'
+revision = '179fdc2b5037'
 down_revision = None
 
 from alembic import op
@@ -56,6 +56,7 @@ def upgrade():
     op.create_table('comments',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('body', sa.Text(), nullable=True),
+    sa.Column('body_html', sa.Text(), nullable=True),
     sa.Column('create_time', sa.DateTime(), nullable=True),
     sa.Column('author_id', sa.Integer(), nullable=True),
     sa.Column('post_id', sa.Integer(), nullable=True),

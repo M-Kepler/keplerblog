@@ -50,9 +50,11 @@ class Post(db.Model):
         for i in range(count):
             #  offset查询过滤器会跳过阐述中指定的查询数量,通过设定一个随机的偏移值
             #  调用first()来使得每次获取到一个不同的随机用户
-            category = Category.query.offset(randint(0, category_count-1)).first()
+            category_1 = Category.query.offset(randint(0, category_count-1)).first()
+            category_2 = Category.query.offset(randint(0, category_count-1)).first()
             u = User.query.offset(randint(0, user_count-1)).first()
             p = Post(
+                    categorys=[category_1, category_2],
                     title = forgery_py.lorem_ipsum.title(randint(1,3)),
                     body = forgery_py.lorem_ipsum.sentences(randint(1,3)),
                     create_time=forgery_py.date.date(True),
@@ -78,19 +80,33 @@ class Category(db.Model):
         db.session.add_all(map(lambda r:Category(name=r), ['others', 'python','linux']))
         db.session.commit()
 
-    #  @property
-    #  def count(self):
-        #  count = db.session.query(Post).filter(Post.category_id == Category.id).count()
-        #  return count
+    @staticmethod
+    def generate_fake(count=20):
+        from sqlalchemy.exc import IntegrityError
+        from random import seed
+        import forgery_py
+        seed()
+        for i in range(count):
+            c = Category(name=forgery_py.internet.user_name(True))
+            db.session.add(c)
+
 
 
 class Comment(db.Model):
     __tablename__='comments'
     id = db.Column(db.Integer, primary_key=True)
     body = db.Column(db.Text)
+    body_html = db.Column(db.Text) #  把markdown原文格式成html存到数据库，而不是访问时在格式
     create_time= db.Column(db.DateTime, index=True, default=datetime.utcnow)
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     post_id = db.Column(db.Integer, db.ForeignKey('posts.id'))# 表示该列的值是posts表的id
+
+    @staticmethod
+    def on_body_changed(target, value, oldvalue, initiator):
+        if value is None or (value is ''):
+            target.body_html = ''
+        else:
+            target.body_html= markdown(value)
 
     @staticmethod
     def generate_fake(count=100):
@@ -108,6 +124,10 @@ class Comment(db.Model):
                     author = u,
                     post = p
                     )
+db.event.listen(Comment.body, 'set', Comment.on_body_changed)# 当body被修改时触发
+
+
+
 
 class Role(db.Model):
     __tablename__='roles' # 指定表名
@@ -122,7 +142,7 @@ class Role(db.Model):
 
     @staticmethod
     def seed(): #  调用这个方法就可以设置Role的默认值了
-        db.session.add_all(map(lambda r:Role(name=r), ['administrators', 'guests']))
+        db.session.add_all(map(lambda r:Role(name=r), ['guests', 'administrators']))
         db.session.commit()
 
 

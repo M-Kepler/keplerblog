@@ -5,6 +5,7 @@ from flask_migrate import Migrate, MigrateCommand, upgrade
 from app import create_app, db
 from app.models import User, Role, Category, Post, Comment
 from livereload import Server
+from werkzeug.security import generate_password_hash
 
 app = create_app()
 manager = Manager(app)
@@ -22,7 +23,7 @@ def dev():
 #  进入shell调试的时候每次都要导入db,models太麻烦了,
 #  所以配置一下shell命令的上下文,就可以在shell里用了,不用每次都导入
 def make_shell_context():
-    return dict(app=app, db=db, User=User, Role=Role, Post=Post, Category=Category)
+    return dict(app=app, db=db, User=User, Role=Role, Post=Post,Comment=Comment, Category=Category)
 
 manager.add_command("shell", Shell(make_context=make_shell_context))
 
@@ -33,12 +34,6 @@ manager.add_command("shell", Shell(make_context=make_shell_context))
 def test():
     pass
 
-#  部署
-@manager.command
-def deploy():
-    upgrade()
-    Role.seed()
-    Category.seed()
 
 
 @manager.command
@@ -61,6 +56,7 @@ def query_all():
 @manager.command
 def fake():
     User.generate_fake()
+    Category.generate_fake()
     Post.generate_fake()
     Comment.generate_fake()
 
@@ -75,6 +71,47 @@ def postfake():
 @manager.command
 def commentfake():
     Comment.generate_fake()
+
+@manager.command
+def categoryfake():
+    Category.generate_fake()
+
+# 添加默认管理员
+@ manager.option('-u',  '--name', dest='name')
+@ manager.option('-e', '--email', dest='email')
+@ manager.option('-p', '--password', dest='password')
+def create_user(name, email, password):
+    if name is None:
+        name = input('Username(default admin):') or 'admin'
+    if email is None:
+        email = input('Email:')
+    if password is None:
+        password= input('Password:')
+        #  password = getpassword('Password:')
+    user = User()
+    user.name = name
+    #  这个hash我在models那边算了
+    #  user.password = generate_password_hash(password)
+    user.password = password
+
+    user.email = email
+    user.is_administrator = True
+    user.confirmed = 1
+    role = Role.query.filter_by(name='administrators').first()
+    if role is None:
+        role = Role()
+        role.name = 'administrator'
+    user.role = role
+    db.session.add(user)
+    db.session.commit()
+
+
+#  部署还是能用的
+@manager.command
+def deploy():
+    upgrade()
+    Role.seed()
+    Category.seed()
 
 
 if __name__ == '__main__':

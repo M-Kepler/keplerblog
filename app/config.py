@@ -14,10 +14,12 @@ class Config:
 
 class DevelopmentConfig(Config):
     DEBUG = True
+    #  从系统环境变量引入
     #  MAIL_SERVER = os.environ.get('MAIL_SERVER')
     #  MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
     #  MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
     MAIL_SERVER = 'smtp.qq.com'
+    MAIL_POST = 25
     MAIL_USERNAME = 'm_kepler@foxmail.com'
     MAIL_PASSWORD = 'xvildlkqqkklbbbj'
     FLASK_MAIL_SUBJECT_PREFIX='M_KEPLER'
