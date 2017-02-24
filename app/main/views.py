@@ -52,7 +52,7 @@ def post(id):
     #  保存评论
     if form.validate_on_submit():
         if current_user.is_anonymous:
-            flash("SIGNIN BEFORE COMMENT.")
+            flash("PLEASE SIGNIN BEFORE COMMENT.")
             return redirect(url_for('auth.signin'))
         else:
             comment = Comment( author_id = current_user.id, body = form.body.data, post = post)
