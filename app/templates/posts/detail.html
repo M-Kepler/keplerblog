@@ -39,7 +39,7 @@ function moveEnd(obj){
 </div>
 
 <!-- 显示文章 -->
-<div class="container" style = "padding:0px">
+<div class="container" style = "padding:10px">
   <div class="row">
     <div class="col-md-11">
       <div class="share mrl the-font">
@@ -143,19 +143,19 @@ function moveEnd(obj){
       <!-- <div class="share mrl the-font"> -->
         <!-- <div style="padding:10px;"> -->
           <!-- <div style="border-bottom:2px solid #DAD4D4;padding:10px 10px;background-color:#FFF;box-shadow:5px 5px 20px #CCC;"> -->
-            <!-- {{ wtf.quick_form(form)}} -->
+            <!-- { { wtf.quick_form(form)}} -->
             <!-- </div> -->
           <!-- </div> -->
         <!-- </div> -->
           <!-- <div class="col-md-6"> -->
-            <!-- {{ form.body(only_preview=True) }} -->
+            <!-- { { form.body(only_preview=True) }} -->
           <!-- </div> -->
       <!-- </div> -->
     <!-- </div> -->
   <!-- </div> -->
 
 
-<div class="container" style = "padding:0px">
+<div class="container" style = "padding:10px">
   <div class="row">
     <div class="col-md-11">
       {% for comment in post.comments | sort(attribute='create_time', reverse=True) %}
