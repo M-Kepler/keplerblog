@@ -245,7 +245,8 @@ def before_request():
 def edit_profile():
     form = EditProfileForm()
     if form.validate_on_submit():
-        current_user.name = form.name.data
+        if form.name.data:
+            current_user.name = form.name.data
         current_user.about_me = form.about_me.data
         db.session.add(current_user)
         flash('你的资料已更新.')

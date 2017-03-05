@@ -1,7 +1,6 @@
 {% macro carousel()%} <!-- 轮播 -->
 <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
   <ol class="carousel-indicators">
-    <!-- 指示器 -->
     <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
     <li data-target="#carousel-example-generic" data-slide-to="1"></li>
     <li data-target="#carousel-example-generic" data-slide-to="2"></li>
@@ -56,10 +55,12 @@
     <div class="col-md-9">
       {% for post in posts | sort(attribute='create_time', reverse=True) %}
       <div class="share mrl the-font">
-        <!-- <div style="padding:10px;"> -->
-        <div style="padding:0px;">
+        <div style="padding:10px 0px;"> <!-- <div style="padding:10px ;"> -->
           <div style="border-bottom:0px solid #DAD4D4;padding:10px 10px;background-color:#FFF;box-shadow:5px 5px 20px #CCC;">
+            <div>
             <h2><a href="{{ url_for('main.post', id=post.id) }}">{{post.title}}</a></h2>
+            </div>
+
             <!-- author.name & post.create_time -->
             <div class="profile-thumbnail">
               <div class = "post-author">
@@ -74,7 +75,9 @@
                 &nbsp &nbsp &nbsp
                 <span class="glyphicon glyphicon-comment" aria-hidden="true"> </span> {{post.comments|count}} </button></a>
           </div>
+
         </div>
+        <hr />
         <!-- tag & readmore -->
         <div>
           <p>{{post.body_html|safe|truncate(300,True)}}</p>
@@ -121,7 +124,7 @@
 <!-- sidebar右侧栏 -->
 <div class="col-md-3">
 
-  <!--social picture -->
+  <!-- social && picture -->
   <div class="tile" style="margin-top:10px; box-shadow:5px 5px 20px #CCC;background-color:#FFF">
     <div style="border:5px solid #FFF;border-radius:300px;width:128px;height:128px;margin:0px auto;position:relative;bakeground:#88ACDB none repeat scroll 0% 0%;overflow:hidden">
       <img src="{{ url_for('static',filename='pic/11.jpg') }}" style="width:100%;height:100%">
@@ -159,19 +162,8 @@
       </ul>
     </div>
   </div>
+</div>
 
 
-  <!-- [> github page <] https://github.com/lepture/github-cards -->
-  <!-- <div class="tile" style="margin-top:40px;box-shadow:5px 5px 20px #CCC; background-color:#FFF"> -->
-    <!-- <div class="github-card" data-github="M-Kepler" data-theme="medium"> </div> -->
-    <!-- <script src="//cdn.jsdelivr.net/github-cards/latest/widget.js"></script> -->
-    <!-- <script src="//cdn.jsdelivr.net/github-cards/1.0.2/carts/default/widget.js"></script> -->
-  <!-- </div> -->
-
-  <!-- github widget -->
-  <!-- <div class="tile" style="margin-top:40px;box-shadow:5px 5px 20px #CCC; background-color:#FFF"> -->
-    <!-- <div class="github-widget" data-username="M-Kepler"></div> -->
-    <!-- <script src="https://unpkg.com/github-card@1.2.1/dist/widget.js"></script> -->
-    <!-- </div> -->
-  {% endmacro%}
+{% endmacro%}
 

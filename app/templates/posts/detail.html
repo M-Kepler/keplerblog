@@ -64,6 +64,7 @@ function moveEnd(obj){
               </small>
             </div>
           </div>
+          <hr />
           <p>{{post.body_html|safe}}</p>
 
           <hr />
@@ -109,16 +110,16 @@ function moveEnd(obj){
     </div>
   </div>
 
+
   <form action ="" method="POST" class="form" role="form">
     {{form.hidden_tag()}}
     <div class="form-group" required >
       <div class = "raw">
         <div class="col-md-11">
-          <div style="padding-top:10px;">
+          <div style="padding-top:40px;">
             <div style="border-bottom:2px solid #DAD4D4;padding:10px;background-color:#FFF;box-shadow:5px 5px 20px #CCC;">
               <label class="control-label" for="title">{{ form.body.label}}:</label><br /><!-- 要指定这个name才行 -->
               <textarea only_input=True, rows=8 class= "form-control" placeholder="支持 markdown 格式评论" id="reply_text" name="body" type = "text" name="comment"> </textarea>
-              <!-- { { form.body(only_input=True,rows=20,class="form-control",placeholder="输入markdown格式文章") }} -->
             <p>
               <div class="form-group">
                 {{ form.submit(class="btn btn-primary") }}
@@ -169,10 +170,8 @@ function moveEnd(obj){
                   <a href="{{url_for('.user', name=comment.author.name) }}"> {{ comment.author.name }}</a>
                 </small>
                 &nbsp &nbsp
-
                 <small><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span> {{ moment(comment.create_time).format('YYYY.M.D-HH:mm:ss') }} </small>
                 &nbsp &nbsp
-
                 <small><span class="pointer glyphicon glyphicon-comment" onclick="insert('@{{comment.author.name}}  \n'), moveEnd(reply_text)" aria-hedden="true"> Reply</span></small>
                 &nbsp &nbsp
 
@@ -186,8 +185,6 @@ function moveEnd(obj){
                   <!-- <p>{ { comment.body|safe}}</p> -->
                   <p>{{ comment.body_html|safe}}</p>
                 </div>
-
-
               </div>
             </div>
           </div>

@@ -1,18 +1,20 @@
 {% extends "base.html" %}
 {% block title %}Profile{% endblock %}
 {% block page_content %}
-<div class="page-header">
-  <h1>{{ user.name }}</h1>
-  <p>
-    <a href="mailto:{{user.email}}?cc=m_kepler@foxmail.com&bbc=m_kepler@foxmail.com&body=来自Kepler博客的邮件">{{ user.email }}</a>
-  </p>
 
-  {% if user.about_me %}
-  <textarea name="about_me" rows="10" cols="50">
-    {{ user.about_me }}
-  </textarea>
-  {% endif %}
+<div class="container" >
+  {% for message in get_flashed_messages() %}
+  <div class="alert-info">{{ message }}</div>
+  {% endfor %}
 
+
+<div class="container">
+  <div style="border-bottom:0px solid #DAD4D4;padding:10px 10px;background-color:#FFF;box-shadow:5px 5px 20px #CCC;">
+
+  <h2 style = "text-align:center">{{user.name}}</h2>
+
+  <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>&nbsp
+  <a href="mailto:{{user.email}}?cc=m_kepler@foxmail.com&bbc=m_kepler@foxmail.com&body=来自Kepler博客的邮件">{{ user.email }}</a>
   <p>
     <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
     Member since: &nbsp&nbsp {{ moment(user.register_time).format('YYYY-MM-DD HH:mm:ss') }}.
@@ -20,12 +22,18 @@
     <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
     Last seen:&nbsp&nbsp {{ moment(user.last_seen).format('YYYY-MM-DD HH:mm:ss') }}.
   </p>
+
   <p>
-    {% if user == current_user or user.is_administrator%}
-    <a class = "btn btn-default" href = "{{url_for('.edit_profile') }}">
-     EDIT PROFILE
-    </a>
+    {% if user.about_me %}
+    <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+    {{ user.about_me }}
     {% endif %}
   </p>
+
+  {% if current_user.name  ==  user.name or current_user.is_administrator() %}
+    <a class = "btn btn-default" href = "{{url_for('.edit_profile') }}"> EDIT PROFILE </a>
+  {% endif %}
+
+  </div>
 </div>
 {% endblock %}
