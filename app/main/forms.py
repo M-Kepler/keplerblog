@@ -17,6 +17,7 @@ class PostForm(Form):
     #  category = SelectField(label=('文章分类:'), coerce=int)
     category = StringField("分类", validators=[DataRequired()])
     body = PageDownField(label=('正文'), validators=[DataRequired()])
+    private = BooleanField("私人")
     submit = SubmitField(('提交'))
 
     def __init__(self,  *args, **kwargs):

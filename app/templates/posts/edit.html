@@ -14,7 +14,7 @@
                 previewTheme:"dark",
             });
         })
-    </script>
+</script>
 {% endblock %}
 
 
@@ -48,10 +48,25 @@
       </div>
     </div>
   </div>
-  <hr />
 
+  <!-- 私密文章 -->
+  <div class= "row form-group-sm required">
+    <div class= "col-md-1" <p class= "text-right">{{form.private.label}}</p></div>
+    <div class= "col-md-1"> {{form.private()}}</div>
+  </div>
 
-<!-- 下拉选择,这样就只能选一个标签了 -->
+  <!-- <div class="radio"> -->
+    <!-- <label> -->
+      <!-- <input name="private" type="radio" id="optionsRadios" value="False" checked = "checked">非私密文章 -->
+    <!-- </label> -->
+  <!-- </div> -->
+  <!-- <div class="radio"> -->
+    <!-- <label> -->
+      <!-- <input name="private" type="radio" id="optionsRadios" value="True">私密文章 -->
+    <!-- </label> -->
+  <!-- </div> -->
+
+  <!-- 下拉选择,这样就只能选一个标签了 -->
 <!-- FIXME -->
   <!-- <form method="post" class="form" role="form"> -->
     <!-- <form action ="" method="POST" class="form" role="form"> -->
@@ -115,5 +130,6 @@
 {{ pagedown.include_pagedown() }}
 
 <script src = "{{url_for('static',filename='js/editormd/editormd.min.js')}}"></script>
+
 
 {% endblock %}

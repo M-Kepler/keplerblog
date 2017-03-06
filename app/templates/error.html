@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}M_Kepler-ErrorPage{% endblock %}
+
+{% block page_content %}
+
+{% for message in get_flashed_messages() %}
+<div class="alert-info">{{ message }}</div>
+{% endfor %}
+
+<div class="page-header">
+  {% if code == 404 %}
+    <h1>404 NOT FOUND</h1>
+  {% elif code == 500 %}
+    <h1>500 Internal Server Error</h1>
+  {% endif %}
+</div>
+{% endblock %}

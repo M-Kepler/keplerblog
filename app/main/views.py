@@ -49,8 +49,8 @@ def user(name):
 def post(id):
     post = Post.query.get_or_404(id)
     form = CommentForm()
-    if post.private and not current_user.is_anonymous:
-        flash("Private article")
+    if post.private and not current_user.is_administrator():
+        flash("Sorry This is Personal Article.")
         return page_not_found(Exception("Not allowed to read"))
     post.read_count += 1
 
@@ -118,6 +118,7 @@ def edit(id=0):
     else:
         post = Post.query.get_or_404(id)
 
+
     if form.validate_on_submit():
         categoryemp = []
         category_list = form.category.data.split(',')
@@ -133,7 +134,10 @@ def edit(id=0):
         post.categorys = categoryemp
         post.title = form.title.data
         post.body = form.body.data
+
+        post.private = form.private.data
         post.read_count = 0
+
         db.session.add(post)
         db.session.commit()
         db.session.rollback()
@@ -291,7 +295,10 @@ def edit_profile_admin(id):
 #  TODO
 @main.errorhandler(404)
 def page_not_found(e):
-    return render_template('404.html'), 404
+    return render_template('error.html', code=404, e=e), 404
+@main.errorhandler(500)
+def internal_server_error(e):
+    return render_template('error.html', code=500, e=e), 500
 
 '''
 #  上传文件

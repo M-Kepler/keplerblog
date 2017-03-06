@@ -58,10 +58,13 @@ function moveEnd(obj){
                   <span class="glyphicon glyphicon-comment" aria-hidden="true"> </span> {{comment_count}} </button></a>
                   &nbsp &nbsp
 
+                  <span class="glyphicon glyphicon-eye-open" aria-hidden="true"> </span> {{post.read_count}} </button></a>
+                  &nbsp &nbsp
+
               <small><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
-                <!-- { { post.create_time }} -->
                 {{ moment(post.create_time).format('YYYY.M.D-HH:mm:ss') }}
               </small>
+
             </div>
           </div>
           <hr />

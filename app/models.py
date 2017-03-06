@@ -27,7 +27,7 @@ class Post(db.Model):
     #  尝试添加阅读统计
     read_count = db.Column(db.Integer, default=0)
     #  尝试设置私人文章
-    private = db.Column(db.Boolean)
+    private = db.Column(db.Boolean, default=False)
 
 #  TODO
     categorys = db.relationship('Category', secondary = registrations,

@@ -77,13 +77,25 @@
 
                 &nbsp &nbsp &nbsp
                 <span class="glyphicon glyphicon-eye-open" aria-hidden="true"> </span> &nbsp{{post.read_count}} </button></a>
+
+                {% if post.private%}
+                  &nbsp &nbsp &nbsp
+                  <span class="glyphicon glyphicon-ban-circle" aria-hidden="true"> </span>
+                {% endif %}
+
           </div>
 
         </div>
         <hr />
         <!-- tag & readmore -->
         <div>
-          <p>{{post.body_html|safe|truncate(300,True)}}</p>
+          {% if post.private %}
+          <span class="glyphicon glyphicon-ban-circle" aria-hidden="true"> Personal Article</span>
+          {% elif not post.private %}
+            <p>{{post.body_html|safe|truncate(300,True)}}</p>
+
+          {% endif %}
+
         </div>
         <hr />
 
