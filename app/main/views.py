@@ -31,8 +31,8 @@ def index():
             db.session.delete(c)
 
     #TODO 每个分类下的文章总数, 好像有必要分开分类和标签了
-    return render_template('index.html', title = 'M-Kepler',
-            posts = posts, categorys = categorys, pagination = pagination, current_time = datetime.utcnow())
+    return render_template('index.html', title = 'M-Kepler', posts = posts,
+            categorys = categorys, pagination = pagination, current_time = datetime.utcnow())
 
 
     #  @app.route('/user/<int: user_id>')
@@ -49,6 +49,11 @@ def user(name):
 def post(id):
     post = Post.query.get_or_404(id)
     form = CommentForm()
+    if post.private and not current_user.is_anonymous:
+        flash("Private article")
+        return page_not_found(Exception("Not allowed to read"))
+    post.read_count += 1
+
     #  保存评论
     if form.validate_on_submit():
         if current_user.is_anonymous:
@@ -60,6 +65,7 @@ def post(id):
             flash('COMMENT PUBLISHED.')
             return redirect(url_for('.post', id=post.id, page=-1))
     comment_count = len(post.comments)
+
 #  TODO
     #  page_index = request.args.get('page', 1, type=int)
     #  if page_index == -1:
@@ -127,6 +133,7 @@ def edit(id=0):
         post.categorys = categoryemp
         post.title = form.title.data
         post.body = form.body.data
+        post.read_count = 0
         db.session.add(post)
         db.session.commit()
         db.session.rollback()

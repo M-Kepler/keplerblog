@@ -24,6 +24,11 @@ class Post(db.Model):
     body_html = db.Column(db.Text) #  把markdown原文格式成html存到数据库，而不是访问时在格式
     create_time = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     comments = db.relationship('Comment', backref='post')
+    #  尝试添加阅读统计
+    read_count = db.Column(db.Integer, default=0)
+    #  尝试设置私人文章
+    private = db.Column(db.Boolean)
+
 #  TODO
     categorys = db.relationship('Category', secondary = registrations,
             backref = db.backref('posts', lazy='dynamic'),
@@ -70,7 +75,8 @@ class Post(db.Model):
                     title = forgery_py.lorem_ipsum.title(randint(1,3)),
                     body = forgery_py.lorem_ipsum.sentences(randint(1,3)),
                     create_time=forgery_py.date.date(True),
-                    author = u
+                    author = u,
+                    read_count = randint(1, 10000)
                     )
 
     def getdate(self):

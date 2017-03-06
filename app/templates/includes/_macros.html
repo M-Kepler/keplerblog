@@ -73,7 +73,10 @@
                   {{ moment(post.create_time).fromNow(refresh=True) }}
                 </small>
                 &nbsp &nbsp &nbsp
-                <span class="glyphicon glyphicon-comment" aria-hidden="true"> </span> {{post.comments|count}} </button></a>
+                <span class="glyphicon glyphicon-comment" aria-hidden="true"> </span> &nbsp{{post.comments|count}} </button></a>
+
+                &nbsp &nbsp &nbsp
+                <span class="glyphicon glyphicon-eye-open" aria-hidden="true"> </span> &nbsp{{post.read_count}} </button></a>
           </div>
 
         </div>
@@ -145,7 +148,6 @@
   <div class="share mrl the-font" style="margin-top:10px; background-color:#FFF;box-shadow:5px 5px 20px #CCC;width:260px;">
     <div style="padding:10px;">
       <div style="border-bottom:1px solid #DAD4D4;;padding:10px 10px;">
-        <!-- <h5><span class="glyphicon glyphicon-book" aria-hidden="true">&nbsp</span>CATEGORY</h5> -->
         <h5><span class="glyphicon glyphicon-tags" aria-hidden="true">&nbsp</span>CATEGORY</h5>
       </div>
       <ul>
@@ -162,6 +164,24 @@
       </ul>
     </div>
   </div>
+
+  <div class="share mrl the-font" style="margin-top:10px; background-color:#FFF;box-shadow:5px 5px 20px #CCC;width:260px;">
+    <div style="padding:10px;">
+      <div style="border-bottom:1px solid #DAD4D4;;padding:10px 10px;">
+        <h5><span class="glyphicon glyphicon-fire" aria-hidden="true">&nbsp</span>HOT POSTS</h5>
+      </div>
+      <ul>
+        {% for article in posts | sort(attribute='read_count',reverse=True)%}
+        <li class="presentation" style="padding-top:0px;">
+          <a href="{{ url_for('main.post', id=article.id) }}" >{{ article.title|truncate(20,True)}}</a>
+          <small>({{article.read_count}})</small><br />
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+
+
 </div>
 
 
