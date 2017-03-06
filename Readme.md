@@ -180,6 +180,7 @@ TODO
 ## 9.2 markdown? 左右
     就是那种啊，一边编辑，一般预览啊; 装了markdown插件，我还是不会写页面啊，尴尬，甚至连那些标签都不懂，，，，
     [那怎么做个编辑框啊?](https://segmentfault.com/q/1010000004406545)
+    [editormd](http://blog.csdn.net/hj960511/article/details/53037618)
 
 ## 9.3 页面显示文章摘要啊,readmore？
     https://segmentfault.com/q/1010000003496839

@@ -115,7 +115,6 @@ def edit(id=0):
     if form.validate_on_submit():
         categoryemp = []
         category_list = form.category.data.split(',')
-
         # 如果已经有这个分类就不用创建
         for t in category_list:
             tag = Category.query.filter_by(name=t).first()
@@ -134,14 +133,17 @@ def edit(id=0):
         return redirect(url_for('.post', id=post.id))
 
     form.title.data = post.title
-    form.body.data = post.body
+    #  form.body.data = post.body
+    body_value= post.body
+
     #  form.category.data = [i.name for i in post.categorys]
     #  value = [i.name for i in post.categorys]
     # TODO ☆ 为了把值传到input标签,我也没其他方法了, 然后将category的list元素用‘,’分割组成str传给input
     value = ",".join([i.name for i in post.categorys])
 
     mode='编辑' if id>0 else '添加'
-    return render_template('posts/edit.html', title ='%s - %s' % (mode, post.title), form=form, post=post, value=value)
+    return render_template('posts/edit.html', title ='%s - %s' % (mode, post.title), form=form,
+            post=post, value=value, body_value = body_value)
 
 
 @main.route('/posts/delete/<int:id>', methods = ['GET','POST'])

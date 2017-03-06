@@ -3,12 +3,24 @@
 
 {% block head%}
 {{super()}}
-<!-- <script type="text/javascript"> -->
-  <!-- $(function() { -->
-    <!-- $("#tags").tagsInput(); -->
-  <!-- }); -->
-<!-- </script> -->
+<script>
+        var testEditor;
+        $(function(){
+            testEditor=editormd("test-editormd",{
+                width:'1200px',
+                height:'500px',
+                syncScrolling : "single",
+                path:"{{url_for('static',filename='editormd/lib/')}}",
+                previewTheme:"dark",
+            });
+        })
+    </script>
+{% endblock %}
 
+
+{% block styles %}
+{{super()}}
+  <link rel="stylesheet" href="{{url_for('static',filename='css/editormd/editormd.css')}}">
 {% endblock %}
 
 {% block page_content %}
@@ -19,24 +31,24 @@
   {{ form.hidden_tag() }}
   <div class="form-group" required>
     <div class = "raw">
-      <div class="col-md-4">
+      <div class="col-md-6">
         <label class="control-label" for="title">{{ form.title.label}}</label>
         {{ form.title(class="form-control", placeholder=("输入文章标题"))}}
       </div>
     </div>
-  </div>
+  <!-- </div> -->
 
-  <!-- [> 原来 <] -->
-  <div class="form-group" required>
+<!-- tags -->
+  <!-- <div class="form-group" required> -->
     <div class = "raw">
-      <div class="col-md-10">
+      <div class="col-md-6">
         <label class="control-label" for="title">{{ form.category.label}}</label><br />
-        <input class= "form-control"id = "category" name = "category" value="{{value}}" type = "text" data-role="tagsinput"/>
+        <input class= "form-control" style = "width:120px" placeholder ="输入分类,用英文逗号或回车分割" id = "category" name = "category" value="{{value}}" type = "text" data-role="tagsinput"/>
         <!-- { {form.category(class="form-control", placeholder="输入分类,用逗号分隔")}} -->
       </div>
     </div>
   </div>
-  <br />
+  <hr />
 
 
 <!-- 下拉选择,这样就只能选一个标签了 -->
@@ -59,29 +71,49 @@
     <!-- </div> -->
 
 
-    <div class="container">
-      <div class="form-group">
-        <div class = "row">
-          <div class="col-md-6">
-            <label class="control-label" for="category">{{ form.body.label}}</label>
-            {{ form.body(only_input=True,rows=20,class="form-control",placeholder="输入markdown格式文章") }}
-            <p>
-              <div class="form-group">
-                {{ form.submit(class="btn btn-primary") }}
-              </div>
-            </p>
-          </div>
-          <div class="col-md-6">
-            {{ form.body(only_preview=True) }}
-          </div>
+  <!-- 原来用markdown-preview -->
+
+    <!-- <div class="container"> -->
+      <!-- <div class="form-group"> -->
+        <!-- <div class = "row"> -->
+          <!-- <div class="col-md-6"> -->
+            <!-- <label class="control-label" for="category">{ { form.body.label}}</label> -->
+            <!-- { { form.body(only_input=True,rows=20,class="form-control",placeholder="输入markdown格式文章") }} -->
+            <!-- <p> -->
+              <!-- <div class="form-group"> -->
+                <!-- { { form.submit(class="btn btn-primary") }} -->
+              <!-- </div> -->
+            <!-- </p> -->
+          <!-- </div> -->
+          <!-- <div class="col-md-6"> -->
+            <!-- { { form.body(only_preview=True) }} -->
+          <!-- </div> -->
+        <!-- </div> -->
+      <!-- </div> -->
+
+  <div class="form-group" required>
+    <div class = "raw">
+      <div class="col-md-12">
+        <div class= "form-group">
+          <hr />
+          <div style = "float:left" class="control-label" for="body">{{ form.body.label}} : </label>
+          <div style="float:right "> {{ form.submit(class="btn btn-primary") }} </div>
+        <div class= "editormd" id = "test-editormd">
+          <textarea class= "editormd-markdown-textarea" name = "body">{{body_value}}</textarea>
         </div>
       </div>
-    </form>
-  </div>
-  {% endblock %}
+    </div>
 
-  {% block scripts %}
-  {{ super() }}
-  <!-- 预览markdown -->
-  {{ pagedown.include_pagedown() }}
-  {% endblock %}
+  </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+
+<!-- 预览markdown -->
+{{ pagedown.include_pagedown() }}
+
+<script src = "{{url_for('static',filename='js/editormd/editormd.min.js')}}"></script>
+
+{% endblock %}

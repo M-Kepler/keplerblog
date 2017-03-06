@@ -1,5 +1,6 @@
 # coding:utf-8
 # import mysql.connector
+import bleach
 from . import db, login_manager
 from flask_login import UserMixin, AnonymousUserMixin
 from markdown import markdown
@@ -34,10 +35,21 @@ class Post(db.Model):
     @staticmethod
     def on_body_changed(target, value, oldvalue, initiator):
         target.category= Category.query.filter_by(name='others').first()
+        allow_tags=['a','abbr','acronym','b','blockquote','code', 'em',
+                'i','li','ol','pre','strong','ul', 'h1','h2','h3','p','img']
+        #  转换markdown为html, 并清洗html标签
         if value is None or (value is ''):
             target.body_html = ''
         else:
-            target.body_html= markdown(value)
+            target.body_html=bleach.linkify(bleach.clean(
+                markdown(value,output_form='html'),
+                tags=allow_tags,strip=True,
+                attributes={
+                    '*': ['class'],
+                    'a': ['href', 'rel'],
+                    'img': ['src', 'alt'],#支持<img src …>标签和属性
+                    }
+                ))
 
 #  生成测试数据
     @staticmethod
