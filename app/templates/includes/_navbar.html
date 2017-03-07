@@ -18,14 +18,14 @@
         id="7bc75dbef69e41ff2452de70079c8ece1320ea7c">
         <ul class="nav navbar-nav">
           <li {% if url_for('main.index') is current_link %}class="active"{% endif %}>
-            <a href="{{ url_for('main.index') }}" title="{{ ("主页") }}">{{ ("主页") }}</a>
+            <a href="{{ url_for('main.index') }}" title="{{ ("HOME") }}">{{ ("HOME") }}</a>
           </li>
           <!-- 根据日期group_by -->
           <li {% if url_for('main.archive') is current_link %}class="active"{% endif %}>
-            <a href="{{ url_for('main.archive') }}" title="{{ ("归档") }}">{{ ("归档") }}</a>
+            <a href="{{ url_for('main.archive') }}" title="{{ ("ARCHIVE") }}">{{ ("ARCHIVE") }}</a>
           </li>
           <li {% if url_for('main.about') is current_link %}class="active"{% endif %}>
-            <a href="{{ url_for('main.about') }}" title="{{ ("关于") }}">{{ ("关于") }}</a>
+            <a href="{{ url_for('main.about') }}" title="{{ ("ABOUT") }}">{{ ("ABOUT") }}</a>
           </li>
 
           {% if current_user.is_administrator() %}
@@ -51,7 +51,7 @@
             <!-- 全文搜索用google/baidu啊 -->
             <form onsubmit = "return dispatch()" class="navbar-form"  style="margin-top:10px; ">
               <div class= "form-group has-feedback">
-                {{g.search_form.search(class="form-control input-sm", placeholder=("全文搜索"))}}
+                {{g.search_form.search(class="form-control input-sm", placeholder=("SEARCH HERE"))}}
                 <i class="icon-search form-control-feedback"></i>
               </div>
             </form>

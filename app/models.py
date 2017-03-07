@@ -24,9 +24,7 @@ class Post(db.Model):
     body_html = db.Column(db.Text) #  把markdown原文格式成html存到数据库，而不是访问时在格式
     create_time = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     comments = db.relationship('Comment', backref='post')
-    #  尝试添加阅读统计
     read_count = db.Column(db.Integer, default=0)
-    #  尝试设置私人文章
     private = db.Column(db.Boolean, default=False)
 
 #  TODO
