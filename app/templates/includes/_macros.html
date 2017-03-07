@@ -89,11 +89,10 @@
         <hr />
         <!-- tag & readmore -->
         <div>
-          {% if post.private %}
+          {% if post.private  %}
           <span class="glyphicon glyphicon-ban-circle" aria-hidden="true"> Personal Article</span>
           {% elif not post.private %}
             <p>{{post.body_html|safe|truncate(300,True)}}</p>
-
           {% endif %}
 
         </div>
@@ -142,7 +141,7 @@
   <!-- social && picture -->
   <div class="tile" style="margin-top:10px; box-shadow:5px 5px 20px #CCC;background-color:#FFF">
     <div style="border:5px solid #FFF;border-radius:300px;width:128px;height:128px;margin:0px auto;position:relative;bakeground:#88ACDB none repeat scroll 0% 0%;overflow:hidden">
-      <img src="{{ url_for('static',filename='pic/11.jpg') }}" style="width:100%;height:100%">
+      <img src="{{ url_for('static',filename='img/1.jpg') }}" style="width:100%;height:100%">
     </div>
     <div class= "list-group-item text-center" style = "font-size:23px;">
       <a href = "https://github.com/M-Kepler" target = "_blank" title = "GitHub"><i class= "fa fa-github" aria-hidden = "true"></i></a>
@@ -167,7 +166,6 @@
         <li class="presentation" style="padding-top:0px;">
           <a href="{{ url_for('main.category', name=category.name ) }}" >
             <p><span style="font-size:15px;background-color:#FFF" class="glyphicon glyphicon-tags" aria-hidden="true"> {{ category.name|upper }}</span>
-              <!-- TODO -->
               <span class="badge text-right" style="float:right"> {{ category.posts.all()|count}}</span>
             </p>
           </a>
@@ -180,18 +178,30 @@
   <div class="share mrl the-font" style="margin-top:10px; background-color:#FFF;box-shadow:5px 5px 20px #CCC;width:260px;">
     <div style="padding:10px;">
       <div style="border-bottom:1px solid #DAD4D4;;padding:10px 10px;">
-        <h5><span class="glyphicon glyphicon-fire" aria-hidden="true">&nbsp</span>HOT POSTS</h5>
+        <h5><span class="glyphicon glyphicon-fire" aria-hidden="true">&nbsp</span>HOT</h5>
       </div>
       <ul>
         {% for article in posts | sort(attribute='read_count',reverse=True)%}
         <li class="presentation" style="padding-top:0px;">
-          <a href="{{ url_for('main.post', id=article.id) }}" >{{ article.title|truncate(20,True)}}</a>
-          <small>({{article.read_count}})</small><br />
+          <a href="{{ url_for('main.post', id=article.id) }}" >{{ article.title|upper|truncate(20,True)}}</a>
+          <span class="badge text-right" style="float:right"> {{ article.read_count}}</span>
         </li>
         {% endfor %}
       </ul>
     </div>
   </div>
+
+
+  <div class="share mrl the-font" style="margin-top:10px; background-color:#FFF;box-shadow:5px 5px 20px #CCC;width:260px;">
+    <div style="padding:10px;">
+      <div style="border-bottom:1px solid #DAD4D4;;padding:10px 10px;">
+        <h5><span class="glyphicon glyphicon-picture" aria-hidden="true">&nbsp</span>QR OF THIS PAGE</h5>
+      </div>
+      <img src="{{ url_for('static',filename='img/qr.png') }}" style="width:100%;height:100%">
+    </div>
+  </div>
+
+
 
 
 </div>
