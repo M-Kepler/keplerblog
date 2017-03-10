@@ -1,0 +1,14 @@
+# location: /etc/nginx/sites-avaiable
+# ln -s /etc/nginx/sites-avaiable/blog_nginx /etc/nginx/sites-enable/blog_nginx
+
+server{
+    listen 80;
+    server_name 119.29.165.161;
+    # server_name www.huangjinjie.me;
+    error_log /home/ubuntu/keplerblog/logs/error.log;
+    access_log /home/ubuntu/keplerblog/logs/access.log;
+    location / {
+        include uwsgi_params;
+        uwsgi_pass 127.0.0.1:5000;
+    }
+}

@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block page_content %}
+<div class="container">
+  <div class="col-xs-6 col-md-4 col-center-block">
+    <div class="row">
+      <div class="col-md-11">
+        <div class="share mrl the-font">
+          <div style="padding:10px;">
+            <div style="border-bottom:2px solid #DAD4D4;padding:10px 10px;background-color:#FFF;box-shadow:5px 5px 20px #CCC;">
+              {{ wtf.quick_form(form)}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

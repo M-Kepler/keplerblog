@@ -1,6 +1,6 @@
 # coding:utf-8
 from flask import flash, session, request, render_template, url_for, redirect, abort, current_app, g
-from .forms import LoginForm, RegForm
+from .forms import LoginForm, RegForm, ResetPassword
 from ..models import User
 from .. import db
 from ..emails import send_email
@@ -19,7 +19,7 @@ def signin():
         else:
             flash("用户名或密码错误")
             return redirect(url_for('auth.signin'))
-    return render_template('signin.html', title='登录', form=form)
+    return render_template('auth/signin.html', title='登录', form=form)
 
 
 @auth.route('/signup', methods=['GET','POST'])
@@ -43,7 +43,7 @@ def signup():
         #  flash(' A Confirmation email has been sent to you by email.')
         flash(' 已发送确认邮件.')
         return redirect(url_for('auth.signin'))
-    return render_template('signup.html', title='注册', form=form)
+    return render_template('auth/signup.html', title='注册', form=form)
 
 
 @auth.route('/search', methods=['GET', 'POST'])
@@ -99,3 +99,17 @@ def signout():
     logout_user()
     return redirect(url_for('main.index'))
 
+@auth.route('/resetpasswd', methods=['GET', 'POST'])
+def resetpasswd():
+    form = ResetPassword()
+    if form.validate_on_submit():
+        if current_user.verify_password(form.old_password.data):
+            current_user.password = form.new_password.data
+            #修改密码
+            db.session.add(current_user)
+            #加入数据库的session，这里不需要.commit()，在配置文件中已经配置了自动保存
+            flash('Your password has been updated.')
+            return redirect(url_for('main.index'))
+        else:
+            flash('Invalid password.')
+    return render_template("auth/reset_passwd.html", form=form)
