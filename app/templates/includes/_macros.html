@@ -75,12 +75,12 @@
                 &nbsp &nbsp &nbsp
                 <span class="glyphicon glyphicon-comment" aria-hidden="true"> </span> &nbsp{{post.comments|count}} </button></a>
 
-                &nbsp &nbsp &nbsp
-                <span class="glyphicon glyphicon-eye-open" aria-hidden="true"> </span> &nbsp{{post.read_count}} </button></a>
-
                 {% if post.private%}
                   &nbsp &nbsp &nbsp
-                  <span class="glyphicon glyphicon-ban-circle" aria-hidden="true"> </span>
+                  <span class="glyphicon glyphicon-eye-close" aria-hidden="true"> </span>
+                {% else %}
+                  &nbsp &nbsp &nbsp
+                  <span class="glyphicon glyphicon-eye-open" aria-hidden="true"> </span> &nbsp{{post.read_count}} </button></a>
                 {% endif %}
 
           </div>
@@ -165,7 +165,7 @@
         {% for category in categorys %}
         <li class="presentation" style="padding-top:0px;">
           <a href="{{ url_for('main.category', name=category.name ) }}" >
-            <p><span style="font-size:15px;background-color:#FFF" class="glyphicon glyphicon-tags" aria-hidden="true"> {{ category.name|upper }}</span>
+            <p><span style="font-size:14px;background-color:#FFF" class="glyphicon glyphicon-tags" aria-hidden="true"> {{ category.name|upper }}</span>
               <span class="badge text-right" style="float:right"> {{ category.posts.all()|count}}</span>
             </p>
           </a>
@@ -181,10 +181,14 @@
         <h5><span class="glyphicon glyphicon-fire" aria-hidden="true">&nbsp</span>HOT</h5>
       </div>
       <ul>
-        {% for article in posts | sort(attribute='read_count',reverse=True)%}
+        {% for article in posts[:10] | sort(attribute='read_count',reverse=True)%}
         <li class="presentation" style="padding-top:0px;">
-          <a href="{{ url_for('main.post', id=article.id) }}" >{{ article.title|upper|truncate(20,True)}}</a>
-          <span class="badge text-right" style="float:right"> {{ article.read_count}}</span>
+          <a href="{{ url_for('main.post', id = article.id) }}" >
+            <p><span style="font-size:14px;background-color:#FFF" class="glyphicon glyphicon-#" aria-hidden="true">
+                {{ article.title|upper|truncate(18,True)}}</span>
+              <span class="badge text-right" style="float:right"> {{ article.read_count}}</span>
+            </p>
+          </a>
         </li>
         {% endfor %}
       </ul>
