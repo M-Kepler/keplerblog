@@ -33,21 +33,22 @@
     display:block;
     margin-left:auto;
   margin-right:auto; }
+
   /*----------------------------------------
   页脚
   ------------------------------------*/
-  footer {
-    background: #333;
-    color: #eee;
-    font-size: 11px;
-    padding: 20px;
-  }
-  ul.unstyled {
-    list-style: none;
-    padding: 0;
-  }
-  footer h6 {
-    color: white;
+footer {
+  background: #333;
+  color: #eee;
+  font-size: 11px;
+  padding: 20px;
+}
+ul.unstyled {
+  list-style: none;
+  padding: 0;
+}
+footer h6 {
+  color: white;
 </style>
 
 <!-- <style> body{ padding-top:70px; } </style> [> 可以在固定导航栏的时候不会发生内容重叠 <] -->
@@ -78,38 +79,56 @@ https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/yeti/bootstrap.min.css
 
 {% block content %}
 <div class="container" style = "padding:0px;" >
-  {% block page_content%}
-  {% endblock %}
-</div>
+{% block page_content%}
+{% endblock %}
 </div>
 
-<!-- <body> -->
-  <!-- [> <div style="background:#384452 none repeat scroll 0% 0%;color:#BFC9D3"> <] -->
-    <!-- <div style="border-bottom:0px solid #DAD4D4;padding:10px 10px;color:#BFC9D3;background-color:#384452;box-shadow:5px 5px 20px #CCC;"> -->
-    <!-- <div class="container"> -->
-      <!-- <div class="row" style="padding-top:30px;"> -->
-        <!-- <div class="col-md-7"> -->
-          <!-- <p class="lead"> Designed and built by <a href="/">M-Kepler</a>.</p> -->
-          <!-- <p >@SERVER BY <strong>NGINX</strong> AND POWER BY <strong>FLASK</strong>.</p> -->
-        <!-- </div> -->
-        <!-- <div class="col-md-5"> -->
-          <!-- <div> -->
-            <!-- <h5 style="margin-bottom:15px;margin-left:18px;"><strong>CONTACT ME</strong></h5> -->
-            <!-- <ul> -->
-                <!-- <li><a href = "https://weibo.com/MeKepler/profile" target = "_blank" title = "Weibo"><i class= "fa fa-weibo" aria-hidden = "true"></i>&nbsp WEIBO</a> -->
-                <!-- <li><a href="https://github.com/M-Kepler" target = "_blank" title = "GitHub"><i class= "fa fa-github" aria-hidden = "true"></i>&nbsp GITHUB</a> -->
-                <!-- <li><a href="#"><span class=" glyphicon glyphicon-envelope" aria-hidden="true"></span>&nbsp E-MAIL</a></li> -->
-              <!-- </ul> -->
-            <!-- </div> -->
-          <!-- </div> -->
-          <!-- <div class="col-md-12"> -->
-            <!-- <p> <small>© COPYRIGHT BY GAGASALAMER 2016</small></p> -->
-          <!-- </div> -->
-        <!-- </div> -->
-      <!-- </div> -->
-    <!-- </div> -->
-  <!-- </body> -->
+
+<hr />
+
+<div class="container" style = "padding:0px;" >
+  <footer class= "container-fluid foot-wrap ">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-2">
+          <h6>Copyright &copy;新浪体育</h6>
+        </div>
+
+        <div class="col-sm-4">
+          <h6>关于我们</h6>
+          <p>
+            中国上海/2014年8月14日 — 服务于中国及全球华人社群的领先在线媒体公司新浪公司(NASDAQ GS: SINA)今日公布了截至2014年6月30日的第二季度未经审计的财务报告。
+          </p>
+        </div>
+
+        <div class="col-sm-2">
+          <h6>导航</h6>
+          <ul class="unstyled">
+            <li><a href="#">主页</a></li>
+            <li><a href="">服务</a></li>
+            <li><a href="">链接</a></li>
+            <li><a href="">联系我们</a></li>
+          </ul>
+        </div>
+
+        <div class="col-sm-2">
+          <h6>Follow me</h6>
+          <ul class="unstyled">
+            <li><a href="">微博</a></li>
+            <li><a href="">微信</a></li>
+            <li><a href="">来往</a></li>
+          </ul>
+        </div>
+
+        <div class="col-sm-2">
+          <h6>BY<span class="glyphicon glyphicon-heart"></span>M-Kepler</h6>
+        </div>
+      </div>
+    </div>
+  </footer><!--页脚结束-->
+</div>
 {% endblock %}
+
 
 {% block scripts%}
 {{ super() }}

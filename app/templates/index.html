@@ -15,8 +15,8 @@
 <!-- (( read_md('vim_end.md')|md|safe }} safe 不转义-->
 
 
-<!-- { { carousel() }} -->
 
+<!-- { { carousel() }} -->
 {{ show_posts(posts, categorys, pagination, moment) }}
 {{ show_sidebar(posts, categorys) }}
 
@@ -30,7 +30,3 @@
 
 {% endblock %}
 
-
-{% block footer %}
-{{ super()}}
-{% endblock %}

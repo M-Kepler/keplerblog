@@ -14,6 +14,9 @@ class Config:
 
 class DevelopmentConfig(Config):
     DEBUG = True
+    #  从系统环境变量设置
+    #  export MAIL_SERVER = 'test'
+    #  查看是否设置成功: echo $MAIL_SERVER
     #  从系统环境变量引入
     #  MAIL_SERVER = os.environ.get('MAIL_SERVER')
     #  MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
