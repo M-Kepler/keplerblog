@@ -84,7 +84,6 @@ def post(id):
 
 
 
-#  http://www.open-open.com/lib/view/open1454460961573.html
 #  定义一个装饰器, 修饰只有管理员才能访问的路由
 from functools import wraps
 def admin_required(f):
