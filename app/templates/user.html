@@ -31,8 +31,8 @@
   </p>
 
   {% if current_user.name  ==  user.name or current_user.is_administrator() %}
-    <a class = "btn btn-primary" href = "{{url_for('.edit_profile') }}"> EDIT PROFILE </a>
-    <a class = "btn btn-primary" href = "{{url_for('auth.resetpasswd') }}"> RESET PASSWORD</a>
+    <a class = "btn btn-default" href = "{{url_for('.edit_profile') }}"> EDIT PROFILE </a>
+    <a class = "btn btn-default" href = "{{url_for('auth.resetpasswd') }}"> RESET PASSWORD</a>
   {% endif %}
 
   </div>

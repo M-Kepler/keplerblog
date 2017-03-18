@@ -1,4 +1,5 @@
 alembic==0.8.8
+Babel==2.3.4
 bleach==1.5.0
 blinker==1.4
 click==6.6
@@ -23,7 +24,9 @@ Mako==1.0.4
 Markdown==2.6.7
 MarkupSafe==0.23
 mysql-connector-python-rf==2.2.1
+pkg-resources==0.0.0
 python-editor==1.0.1
+pytz==2016.10
 requests==2.11.1
 six==1.10.0
 SQLAlchemy==1.1.2

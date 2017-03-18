@@ -36,8 +36,8 @@
       <!-- <img src="../../static/img/11111.jpg" alt="风景4"> -->
       <!-- <div class="carousel-caption"> -->
         <!-- <h4>生活有度，人生添寿。 —— 书摘</h4> -->
+        <!-- </div> -->
       <!-- </div> -->
-    <!-- </div> -->
 
   </div>
   <!-- Controls -->
@@ -62,80 +62,80 @@
       {% for post in posts | sort(attribute='create_time', reverse=True) %}
       <div class="share mrl the-font">
         <div style="padding:10px 0px;"> <!-- <div style="padding:10px ;"> -->
-          <div style="border-bottom:0px solid #DAD4D4;padding:10px 10px;background-color:#FFF;box-shadow:5px 5px 20px #CCC;">
-            <div>
-            <h2><a href="{{ url_for('main.post', id=post.id) }}">{{post.title}}</a></h2>
-            </div>
+            <div style="border-bottom:0px solid #DAD4D4;padding:10px 10px;background-color:#FFF;box-shadow:5px 5px 20px #CCC;">
+              <div>
+                <h2><a href="{{ url_for('main.post', id=post.id) }}">{{post.title}}</a></h2>
+              </div>
 
-            <!-- author.name & post.create_time -->
-            <div class="profile-thumbnail">
-              <div class = "post-author">
-                <small><span class="glyphicon glyphicon-user" aria-hedden="true"></span>
-                  <a href="{{url_for('.user', name=post.author.name) }}"> {{ post.author.name }}</a>
-                </small>
-                &nbsp &nbsp
-                <small><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
-                  <!-- {{ post.create_time }} -->
-                  {{ moment(post.create_time).fromNow(refresh=True) }}
-                </small>
-                &nbsp &nbsp &nbsp
-                <span class="glyphicon glyphicon-comment" aria-hidden="true"> </span> &nbsp{{post.comments|count}} </button></a>
-
-                {% if post.private%}
+              <!-- author.name & post.create_time -->
+              <div class="profile-thumbnail">
+                <div class = "post-author">
+                  <small><span class="glyphicon glyphicon-user" aria-hedden="true"></span>
+                    <a href="{{url_for('.user', name=post.author.name) }}"> {{ post.author.name }}</a>
+                  </small>
+                  &nbsp &nbsp
+                  <small><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                    <!-- {{ post.create_time }} -->
+                    {{ moment(post.create_time).fromNow(refresh=True) }}
+                  </small>
                   &nbsp &nbsp &nbsp
-                  <span class="glyphicon glyphicon-eye-close" aria-hidden="true"> </span>
-                {% else %}
-                  &nbsp &nbsp &nbsp
-                  <span class="glyphicon glyphicon-eye-open" aria-hidden="true"> </span> &nbsp{{post.read_count}} </button></a>
-                {% endif %}
+                  <span class="glyphicon glyphicon-comment" aria-hidden="true"> </span> &nbsp{{post.comments|count}} </button></a>
 
-          </div>
-
-        </div>
-        <hr />
-        <!-- tag & readmore -->
-        <div>
-          {% if post.private  %}
-          <span class="glyphicon glyphicon-ban-circle" aria-hidden="true"> Personal Article</span>
-          {% elif not post.private %}
-            <p>{{post.body_html|safe|truncate(300,True)}}</p>
+              {% if post.private%}
+              &nbsp &nbsp &nbsp
+              <span class="glyphicon glyphicon-eye-close" aria-hidden="true"> </span>
+              {% else %}
+              &nbsp &nbsp &nbsp
+              <span class="glyphicon glyphicon-eye-open" aria-hidden="true"> </span> &nbsp{{post.read_count}} </button></a>
           {% endif %}
 
         </div>
-        <hr />
 
-        <p> {% for category in post.categorys %}
-          <!-- <a href="{{ url_for('main.category', name = post.categorys.name) }}"> -->
-            <a href="{{ url_for('main.category', name = category.name) }}">
-              <span class="label label-primary text-left"> <span class="glyphicon glyphicon-tag" aria-hidden="true">
-            </span> {{category.name|upper}}</span></a>
-            {% endfor %}
-
-            {% if current_user.is_administrator() %}
-            <a href="{{ url_for('main.deletepost', id=post.id) }}" style="float:right">
-              <button class="btn  btn-sm btn-default btn-text-right">
-                <span class="glyphicon glyphicon-trash" aria-hidden="true"> </span> Delete </button></a>
-
-            <a href="{{ url_for('main.edit', id=post.id) }}" style="float:right">
-              <button class="btn  btn-sm btn-default btn-text-right">
-                <span class="glyphicon glyphicon-edit" aria-hidden="true"> </span> Edit </button></a>
-            {% endif %}
-
-            <a href="{{ url_for('main.post', id=post.id) }}" style="float:right">
-              <button class="btn  btn-sm btn-primary btn-text-right"> <span class="glyphicon glyphicon-share-alt" aria-hidden="true">
-            </span>Read More</button></a>
-          </p>
-        </p>
       </div>
+      <hr />
+      <!-- tag & readmore -->
+      <div>
+        {% if post.private  %}
+        <span class="glyphicon glyphicon-ban-circle" aria-hidden="true"> Personal Article</span>
+        {% elif not post.private %}
+        <p>{{post.body_html|safe|truncate(300,True)}}</p>
+        {% endif %}
+
+      </div>
+      <hr />
+
+      <p> {% for category in post.categorys %}
+        <!-- <a href="{{ url_for('main.category', name = post.categorys.name) }}"> -->
+          <a href="{{ url_for('main.category', name = category.name) }}">
+            <span class="label label-primary text-left"> <span class="glyphicon glyphicon-tag" aria-hidden="true">
+          </span> {{category.name|upper}}</span></a>
+          {% endfor %}
+
+          {% if current_user.is_administrator() %}
+          <a href="{{ url_for('main.deletepost', id=post.id) }}" style="float:right">
+            <button class="btn  btn-sm btn-default btn-text-right">
+              <span class="glyphicon glyphicon-trash" aria-hidden="true"> </span> Delete </button></a>
+
+          <a href="{{ url_for('main.edit', id=post.id) }}" style="float:right">
+            <button class="btn  btn-sm btn-default btn-text-right">
+              <span class="glyphicon glyphicon-edit" aria-hidden="true"> </span> Edit </button></a>
+          {% endif %}
+
+          <a href="{{ url_for('main.post', id=post.id) }}" style="float:right">
+            <button class="btn  btn-sm btn-primary btn-text-right"> <span class="glyphicon glyphicon-share-alt" aria-hidden="true">
+          </span>Read More</button></a>
+        </p>
+      </p>
     </div>
   </div>
-  {% endfor %}
-  <!-- 分页导航栏 -->
-  <div class="container-fluid">
-    {% if pagination %}
-    {{ render_pagination(pagination) }}
-    {% endif %}
-  </div>
+</div>
+{% endfor %}
+<!-- 分页导航栏 -->
+<div class="container-fluid">
+  {% if pagination %}
+  {{ render_pagination(pagination) }}
+  {% endif %}
+</div>
 </div>
 {% endmacro%}
 
@@ -205,10 +205,15 @@
     <div style="padding:10px;">
       <div style="border-bottom:1px solid #DAD4D4;;padding:10px 10px;">
         <h5><span class="glyphicon glyphicon-picture" aria-hidden="true">&nbsp</span>QR OF THIS PAGE</h5>
-      </div>
-      <img src="{{ url_for('static',filename='img/qr.png') }}" style="width:100%;height:100%">
+        <script>// <![CDATA[
+          thisURL = document.URL;
+          strwrite = "<img src='https://chart.googleapis.com/chart?cht=qr&chs=150x150&choe=UTF-8&chld=L|4&chl="  +
+            thisURL + "' width='100%' height='100%' alt='网址URL 二维码生成' />";
+            document.write( strwrite ); // ]]>
+          </script>
     </div>
   </div>
+</div>
 
 
 
