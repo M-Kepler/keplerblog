@@ -46,18 +46,18 @@ function moveEnd(obj){
         <div style="padding:0px;"> <!-- <div style="padding:10px;"> -->
             <div style="border-bottom:0px solid #DAD4D4;padding:10px 10px;background-color:#FFF;box-shadow:5px 5px 20px #CCC;">
 
-              <div class="col-md-12">
-                <h2 style="float:left"><a href="{{ url_for('main.post', id=post.id) }}">{{post.title}}</a> </h2>
-                <!-- <h5 style = "float:right"><span class="glyphicon glyphicon-picture" aria-hidden="true">&nbsp</span>QR OF THIS PAGE -->
-                <h5 style = "float:right">
-                  <script>// <![CDATA[
-                    thisURL = document.URL;
-strwrite = "<img src='https://chart.googleapis.com/chart?cht=qr&chs=150x150&choe=UTF-8&chld=L|4&chl="  +
-  thisURL + "' width='100' height='100' alt='网址URL 二维码生成' />";
-document.write( strwrite ); // ]]>
-                  </script>
-                </h5>
-              </div>
+              <!-- <div class="col-md-12"> -->
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="share mrl the-font">
+                        <h2 style="float:left"><a href="{{ url_for('main.post', id=post.id) }}">{{post.title}}</a> </h2>
+                        <!-- <h5 style = "float:right"><span class="glyphicon glyphicon-picture" aria-hidden="true">&nbsp</span>QR OF THIS PAGE -->
+                          <h5 style = "float:right">
+<script type="text/javascript">/* 2017/03/18 15:21 */var _qrContent='',_qrLogo='',_qrWidth=100,_qrHeight=100,_qrType = 'auto';if(!_qrContent) var _qrContent =escape(document.location.href);document.write(unescape("%3Cscript src='http://qrcode.leipi.org/js.html?qw="+_qrWidth+"&qh="+_qrHeight+"&qt="+_qrType+"&qc="+escape(_qrContent)+"&ql="+escape(_qrLogo)+"' type='text/javascript'%3E%3C/script%3E"));</script>
+                          </h5>
+                      </div>
+                    </div>
+                  </div>
 
               <div class="col-md-12">
                 <div class="profile-thumbnail">
