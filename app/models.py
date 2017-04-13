@@ -27,7 +27,7 @@ class Post(db.Model):
     read_count = db.Column(db.Integer, default=0)
     private = db.Column(db.Boolean, default=False)
 
-#  TODO
+#  TODO 多对多
     categorys = db.relationship('Category', secondary = registrations,
             backref = db.backref('posts', lazy='dynamic'),
             lazy = 'dynamic')

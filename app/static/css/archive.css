@@ -54,9 +54,15 @@ blockquote{background:#f9f9f9;padding:8px 20px;border:1px solid #ccc;}
 .main { width:940px;margin:40px auto 10px auto;font-size:14px;display:table;padding-bottom:10px; border-bottom:1px solid #EEEEEE}
 .info { width:300px;float:left;margin-right:20px; }
 .info h3 { width:300px;height:26px;background:url('/../img/ictb.png') no-repeat;font-size:0;margin-bottom:8px; }
+
+.info ul{margin-top:-10px;}
+.info ul li{list-style:none;float:left;width:140px;padding-left:0;background:none;margin-top:10px;}
+.info ul{margin-top:-10px;}
+
 .info ul{margin-left:-10px;}
 .info ul li{list-style:none;float:left;width:140px;padding-left:0;background:none;margin-left:10px;}
 .info ul{margin-left:-10px;}
+
 .b2 h3 { background-position:0 -26px; }
 .b3 { margin:0;position:relative; }
 .b3 span{position:absolute;right:10px;top:0;background:url('../img/morelink.gif') no-repeat left center;padding-left:12px;}
@@ -88,6 +94,7 @@ blockquote{background:#f9f9f9;padding:8px 20px;border:1px solid #ccc;}
 .event_year { width:100px;border-bottom:2px solid #DDD;text-align:center;float:left;margin-top:70px;margin-left:-60px; }
 .event_year li { height:40px;line-height:40px;background:#FFF;margin-bottom:1px;font-size:18px;color:#828282;cursor:pointer; }
 .event_year li.current { width:100px;background:#0066ff url('../img/jian.png') 100px 0 no-repeat;color:#FFF;text-align:left;padding-left:9px; }
+
 .event_list { width:850px;float:right;background:url('../img/dian3.png') 139px 0 repeat-y;margin-left:50px;margin-top:70px; }
 .event_list h3 { margin:0 0 10px 132px;font-size:24px;font-family:Georgia;color:#0066ff;padding-left:25px;background:url('../img/jian.png') 0 -45px no-repeat;height:38px;line-height:30px;font-style:italic; }
 .event_list li { background:url('../img/jian.png') 136px -80px no-repeat; }

@@ -235,11 +235,11 @@ def archive():
     for archive in archives:
         posts.append((archive[0], db.session.query(Post).filter(extract('month', Post.create_time)==archive[0]).all()))
 
-    return render_template('archive.html',title='M-Kepler | 归档', posts=posts)
+    return render_template('archive.html',title='M-Kepler | ARCHIVE', posts=posts)
 
 @main.route('/about')
 def about():
-    return render_template('about.html', title='M-Kepler | 关于')
+    return render_template('about.html', title='M-Kepler | ABOUT')
 
 @main.route('/search', methods=['GET', 'POST'])
 def search():
