@@ -1,7 +1,8 @@
 
+
 <!-- TODO -->
 0. 在管理那里加一个一键备份功能吧,考虑下用git
-1. 归档界面没有适应移动端哦
+1. √ 归档界面没有适应移动端哦
 2. √ 首页在移动端显示的时候两边太宽了
 3. √ 修改manager.py设置默认角色和默认管理,也不知道现在那个fake还能不能用
 4. · 文档写两份:本地测试  +  pythonanywhere.com部署
@@ -12,10 +13,12 @@
 9. flask-restful
 10. flask-celery
 11. flask-cache
+12. 要不要结合autocompelte呢?自动补全已有标签
+
 
 <!-- DEPLOY PROBLEM-->
 0. 为什么部署后无法收到邮件?
-1. a
+1. 
 
 <!-- FINISH -->
 
