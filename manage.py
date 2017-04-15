@@ -29,11 +29,12 @@ manager.add_command("shell", Shell(make_context=make_shell_context))
 
 
 
-
+#  进行测试
 @manager.command
 def test():
-    pass
-
+    import unittest
+    tests = unittest.TestLoader().discover('tests')
+    unittest.TextTestRunner(verbosity=2).run(tests)
 
 
 @manager.command

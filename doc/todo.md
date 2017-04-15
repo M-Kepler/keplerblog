@@ -6,7 +6,7 @@
 3. √ 修改manager.py设置默认角色和默认管理,也不知道现在那个fake还能不能用
 4. · 文档写两份:本地测试  +  pythonanywhere.com部署
 5. · 页脚呢?
-6. 接入多说评论
+6. 接入社交化评论
 7. 做测试
 8. flask-admin
 9. flask-restful
