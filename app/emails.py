@@ -5,11 +5,14 @@ from threading import Thread
 from . import create_app, mail
 from .config import DevelopmentConfig as config
 
+
 app = create_app()
+
 
 def send_async_email(app, msg):
     with app.app_context():
         mail.send(msg)
+
 
 def send_email(towho, subject, template, **kwargs):
     msg = Message(config.FLASK_MAIL_SUBJECT_PREFIX+subject,

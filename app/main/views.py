@@ -106,6 +106,7 @@ def str_to_obj(new_category):
             c.append(category_obj)
     return category_obj
 
+
 @main.route('/edit', methods = ['GET', 'POST'])
 @main.route('/edit/<int:id>', methods = ['GET','POST'])
 @login_required
@@ -116,7 +117,6 @@ def edit(id=0):
         post = Post(author_id = current_user.id)
     else:
         post = Post.query.get_or_404(id)
-
 
     if form.validate_on_submit():
         categoryemp = []
@@ -237,13 +237,20 @@ def archive():
 
     return render_template('archive.html',title='M-Kepler | ARCHIVE', posts=posts)
 
+
 @main.route('/about')
 def about():
     return render_template('about.html', title='M-Kepler | ABOUT')
 
+
+#  request可以获取到输入框中的值
 @main.route('/search', methods=['GET', 'POST'])
 def search():
-    return 'test'
+    if 'q' in request.args:
+        ret = '<p>searching for %s ...</p>' % (request.args['q'])
+    else:
+        ret = 'what do you want to searh?'
+    return ret
 
 
 @main.before_app_request

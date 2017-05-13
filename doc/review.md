@@ -65,3 +65,4 @@ render_template('test.html',name=name) # 访问templates/test.html这个文件
 如果name包含 html ,那会被自动转义
 
 # 操作请求数据
+

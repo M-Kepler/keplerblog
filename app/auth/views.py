@@ -67,7 +67,7 @@ def confirm(token):
 
 
 #  --- 在用户确认邮箱之前只显示某些页面 ---
-#  请求钩子,如果已经登录但是还没有确认,或请求auth蓝图以外的视图,都会跳到unconfirmed
+#  请求钩子,如果已经登录但是还没有确认,或请求auth蓝图以外的视图,都会跳到unconfirmed #  每次请求之前运行
 @auth.before_app_request
 def before_request():
     if current_user.is_authenticated:
