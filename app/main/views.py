@@ -5,7 +5,7 @@ from . import main
 from .. import db
 from ..models import User, Role, Post, Comment, Category
 from flask_login import login_required, current_user
-from .forms import CommentForm, PostForm, EditProfileForm, EditProfileAdminForm, SearchForm
+from .forms import CommentForm, PostForm, EditProfileForm, EditProfileAdminForm
 from ..config import DevelopmentConfig as config
 from sqlalchemy import extract, func
 from datetime import datetime
@@ -241,22 +241,6 @@ def archive():
 @main.route('/about')
 def about():
     return render_template('about.html', title='M-Kepler | ABOUT')
-
-
-#  request可以获取到输入框中的值
-@main.route('/search', methods=['GET', 'POST'])
-def search():
-    if 'q' in request.args:
-        ret = '<p>searching for %s ...</p>' % (request.args['q'])
-    else:
-        ret = 'what do you want to searh?'
-    return ret
-
-
-@main.before_app_request
-def before_request():
-    #  if current_user.is_authenticated: #  全文搜索,让这个搜索框
-    g.search_form = SearchForm()
 
 
 @main.route('/edit-profile', methods=['GET','POST'])

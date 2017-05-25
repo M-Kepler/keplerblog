@@ -47,22 +47,6 @@
         </ul>
 
         <ul class="nav navbar-nav navbar-right">
-
-          <li>
-            <form method="GET" action="/search">
-              <input type="text" name="q"> <input type="submit" value = "search">
-            </form>
-
-            <!-- 全文搜索用google/baidu啊 -->
-            <!-- <form onsubmit = "return dispatch()" class="navbar-form"  style="margin-top:10px; "> -->
-              <!-- <div class= "form-group has-feedback"> -->
-                <!-- {{g.search_form.search(class="form-control input-sm", placeholder=("SEARCH HERE"))}} -->
-                <!-- <i class="icon-search form-control-feedback"></i> -->
-              <!-- </div> -->
-            <!-- </form> -->
-
-          </li>
-
           {% if current_user.is_authenticated %}
           <li><a href="{{url_for('main.user',name=current_user.name)}}">{{ current_user.name }}</a></li>
           <li><a href="{{ url_for('auth.signout') }}">{{ ("退出") }}</a></li>
