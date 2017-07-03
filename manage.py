@@ -101,7 +101,7 @@ def create_user(name, email, password):
     role = Role.query.filter_by(name='administrators').first()
     if role is None:
         role = Role()
-        role.name = 'administrator'
+        role.name = 'administrators'
     user.role = role
     db.session.add(user)
     db.session.commit()
