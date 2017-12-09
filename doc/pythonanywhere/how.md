@@ -6,7 +6,7 @@
     source ./virtualenvs/flaskenv/bin/active
 * 安装插件
     pip install flask
-    pip install requestments/requestments.txt
+    pip install -r requestments/requestments.txt
 
 
 * mysql数据库

@@ -32,15 +32,15 @@
           {% if current_user.is_administrator() %}
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              管理
+            MANAGE
               <b class="caret"></b>
             </a>
             <ul class="dropdown-menu">
-              <li><a href="/edit">添加新文章</a></li>
+              <li><a href="/edit">New Article</a></li>
               <li class="divider"></li>
-              <li><a href="#">文章管理</a></li>
+              <li><a href="#">Article Manage</a></li>
               <li class="divider"></li>
-              <li><a href="#">分类管理</a></li>
+              <li><a href="#">Categories Manage</a></li>
             </ul>
           </li>
           {% endif %}
@@ -49,10 +49,10 @@
         <ul class="nav navbar-nav navbar-right">
           {% if current_user.is_authenticated %}
           <li><a href="{{url_for('main.user',name=current_user.name)}}">{{ current_user.name }}</a></li>
-          <li><a href="{{ url_for('auth.signout') }}">{{ ("退出") }}</a></li>
+          <li><a href="{{ url_for('auth.signout') }}">{{ ("Exit") }}</a></li>
           {% else %}
-          <li><a href="{{ url_for('auth.signin') }}">{{ ("登录") }}</a></li>
-          <li><a href="{{ url_for('auth.signup') }}">{{ ("注册") }}</a></li>
+          <li><a href="{{ url_for('auth.signin') }}">{{ ("Sign in") }}</a></li>
+          <li><a href="{{ url_for('auth.signup') }}">{{ ("Sign up") }}</a></li>
           {% endif %}
         </ul>
       </div>
