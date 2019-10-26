@@ -21,10 +21,10 @@ from flask_pagedown import PageDown
 #  from flask.ext.nav import Nav
 #  from flask_nav.elements import *
 
-
 from os import path
 from datetime import datetime
 from .config import config
+
 #  from .views import init_views 以前是通过文件导入，现在选择注册蓝图
 
 
@@ -32,8 +32,7 @@ from .config import config
 class RegexConverter(BaseConverter):
     def __init__(self, url_map, *items):
         super(RegexConverter, self).__init__(url_map)
-        self.regex=items[0]
-
+        self.regex = items[0]
 
 
 #  应用这个导航栏插件就不需要自己写导航栏了,
@@ -44,11 +43,11 @@ class RegexConverter(BaseConverter):
 bootstrap = Bootstrap()
 db = SQLAlchemy()
 #  manager = Manager()
-moment=Moment()
-mail=Mail()
+moment = Moment()
+mail = Mail()
 pagedown = PageDown()
 login_manager = LoginManager()
-login_manager.session_protection='strong'
+login_manager.session_protection = 'strong'
 login_manager.login_view = 'auth.signin'
 
 basedir = path.abspath(path.dirname(__file__))
@@ -60,17 +59,17 @@ def create_app():
     #  初始化
 
     #  nav.register_element('top', Navbar('M_Kepler',
-        #  View('Home', 'main.index'),
-        #  Subgroup(
-            #  'Products',
-            #  View('Projects', 'main.projects'),
-            #  Separator(),
-            #  View('Archive', 'main.archive'),
-            #  ),
-        #  View('Signup', 'auth.signup'),
-        #  View('Signin', 'auth.signin'),
-        #  View('Signout', 'auth.signout'),
-        #  View('About', 'main.about'),
+    #  View('Home', 'main.index'),
+    #  Subgroup(
+    #  'Products',
+    #  View('Projects', 'main.projects'),
+    #  Separator(),
+    #  View('Archive', 'main.archive'),
+    #  ),
+    #  View('Signup', 'auth.signup'),
+    #  View('Signin', 'auth.signin'),
+    #  View('Signout', 'auth.signout'),
+    #  View('About', 'main.about'),
     #  ))
 
     #  app.config.from_pyfile('config.py')
@@ -100,4 +99,3 @@ def create_app():
         return link == request.path
 
     return app
-

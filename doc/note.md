@@ -95,7 +95,6 @@
 
     request: 请求对象，封装在客户端发出的HTTP请求中的内容
     https://my.oschina.net/lionets/blog/410973
-
     session: 用来保存存储请求之间需要记住的值的字典
     current_app: 当前程序的实例
     g:

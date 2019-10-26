@@ -1,4 +1,4 @@
-#coding:utf-8
+# coding:utf-8
 
 #  from flask_wtf import Form
 from flask_wtf import FlaskForm as Form
@@ -18,17 +18,20 @@ class PostForm(Form):
     private = BooleanField("私人")
     submit = SubmitField(('提交'))
 
-    def __init__(self,  *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         super(PostForm, self).__init__(*args, **kwargs)
-        self.category.choices=[(category.id, category.name)
-                for category in Category.query.order_by(Category.name).all()]
-
+        self.category.choices = [
+            (category.id, category.name)
+            for category in Category.query.order_by(Category.name).all()
+        ]
 
 
 class AddCategoryForm(Form):
-    categoryname = StringField('新分类', validators=[
-        DataRequired(), length(1, 64)])
-    submit=SubmitField('添加')
+    categoryname = StringField('新分类',
+                               validators=[DataRequired(),
+                                           length(1, 64)])
+    submit = SubmitField('添加')
+
     def validate_username(self, field):
         if Category.query.filter_by(name=field.data).first():
             raise ValidationError('分类已存在')
@@ -38,19 +41,29 @@ class CommentForm(Form):
     body = PageDownField(label=('Comment'), validators=[DataRequired()])
     submit = SubmitField(('提交'))
 
+
 class EditProfileForm(Form):
-    name = StringField(label=('名字:'), validators=[length(0,64)])
-    about_me = StringField(label=('关于我:'), validators=[DataRequired(), length(0,64)])
+    name = StringField(label=('名字:'), validators=[length(0, 64)])
+    about_me = StringField(label=('关于我:'),
+                           validators=[DataRequired(),
+                                       length(0, 64)])
     submit = SubmitField(('提交'))
 
 
 class EditProfileAdminForm(Form):
-    email = StringField('Email', validators=[DataRequired(), length(1, 64),
-                                             Email()])
-    name = StringField('name', validators=[
-        DataRequired(), length(1, 64), Regexp('^[A-Za-z][A-Za-z0-9_.]*$', 0,
-                                          'Usernames must have only letters, '
-                                          'numbers, dots or underscores')])
+    email = StringField('Email',
+                        validators=[DataRequired(),
+                                    length(1, 64),
+                                    Email()])
+    name = StringField('name',
+                       validators=[
+                           DataRequired(),
+                           length(1, 64),
+                           Regexp(
+                               '^[A-Za-z][A-Za-z0-9_.]*$', 0,
+                               'Usernames must have only letters, '
+                               'numbers, dots or underscores')
+                       ])
     confirmed = BooleanField('Confirmed')
     role = SelectField('Role', coerce=int)
     about_me = TextAreaField('About me')
