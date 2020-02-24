@@ -1,6 +1,6 @@
 alembic==0.8.8
 Babel==2.3.4
-bleach==1.5.0
+bleach==3.1.1
 blinker==1.4
 click==6.6
 dominate==2.2.1
