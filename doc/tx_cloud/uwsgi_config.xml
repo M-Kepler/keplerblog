@@ -2,11 +2,11 @@
 <!-- uwsgi -x uwsgi_config.xml来启动 -->
 
 <uwsgi>
-    <pythonpath>/home/ubuntu/keplerblog/</pythonpath>
+    <pythonpath>/home/m_kepler/keplerblog/</pythonpath>
     <module>run</module>
     <callable>app</callable>
     <socket>127.0.0.1:5000</socket>
-    <venv>/home/ubuntu/flaskenv/</venv>
+    <venv>/home/m_kepler/py3env/</venv>
     <master/>
     <processes>4</processes>
     <memory-report/>
