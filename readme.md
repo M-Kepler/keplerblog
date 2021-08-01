@@ -1,4 +1,4 @@
-- [博客测试地址](https://kepler.pythonanywhere.com)
+- [博客测试地址](https://kepler.pythonanywhere.com)，测试账号: Admin@test.com 密码: 123456
 
 - 文档在 `keplerblog/doc` 下
 
