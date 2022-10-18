@@ -1,8 +1,11 @@
 # coding:utf-8
-from ..models import User
+
 from flask_wtf import FlaskForm as Form
-from wtforms import StringField, BooleanField, PasswordField, TextAreaField, SubmitField, validators, ValidationError
-from wtforms.validators import DataRequired, length, Regexp, EqualTo, Email
+from wtforms import (BooleanField, PasswordField, StringField, SubmitField,
+                     TextAreaField, ValidationError)
+from wtforms.validators import DataRequired, Email, EqualTo, Regexp, length
+
+from ..models import User
 
 
 class LoginForm(Form):
@@ -34,7 +37,7 @@ class RegForm(Form):
         validators=[
             DataRequired('用户名不能为空'),
             length(6, 18, '长度必须在6-18之间')
-            #  Regexp('^[A-Za-z][A-Za-z0-9_.]$', 0, "用户名只允许字母数字下划线")
+            # Regexp('^[A-Za-z][A-Za-z0-9_.]$', 0, "用户名只允许字母数字下划线")
         ])
     email = StringField(label='电子邮箱:',
                         validators=[
@@ -57,16 +60,16 @@ class RegForm(Form):
                                               '密码只包含字母数字下划线'),
                                        EqualTo('password', message='密码不一致')
                                    ])
-    #  verification_code = StringField('验证码', validators=[
-    #  DataRequired('此字段不能为空'),
-    #  length(4,4,'填写4位验证码'),
-    #  ])
+    # verification_code = StringField('验证码', validators=[
+    # DataRequired('此字段不能为空'),
+    # length(4,4,'填写4位验证码'),
+    # ])
     about_me = TextAreaField(label='关于我:')
-    #  about_me= TextAreaField(label='关于我:', validators = [
-    #  length(6,128,'长度必须在6-18之间')])
+    # about_me= TextAreaField(label='关于我:', validators = [
+    # length(6,128,'长度必须在6-18之间')])
     submit = SubmitField("注册")
 
-    #  自己定义校验,validatate_email 会自动被调用的
+    # 自己定义校验,validatate_email 会自动被调用的
     def validate_email(self, field):
         if User.query.filter_by(email=field.data).first():
             raise ValidationError('邮箱地址已注册')

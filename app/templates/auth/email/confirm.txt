@@ -1,6 +1,6 @@
 Dear {{ user.username }}, Thanks for signup M_Kepler's personal blog!
 To Confirm your account please click on the following link:{{
-    url_for('auth.confirm', token = token, _external=True) }}
+    url_for('auth.confirm', token=token, _external=True) }}
 Sincerely,
     M_Kepler
 

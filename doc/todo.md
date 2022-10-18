@@ -1,11 +1,11 @@
-
 - [TODO](#todo)
 - [DEPLOY PROBLEM](#deploy-problem)
 - [FINISH](#finish)
 - [已完成](#已完成)
 - [TIPS](#tips)
 
-- 171209
+- 20171209
+
   这个博客项目最糟糕的一点就是那个编辑器了，
   [这个的编辑器好多了](https://github.com/flyhigher139/OctBlog)
 

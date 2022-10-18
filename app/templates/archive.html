@@ -3,90 +3,125 @@
 <!DOCTYPE html>
 <!-- width:720px; -->
 <html>
-  <head>
-    <style type="text/css">
-      *{margin:0;padding:0;list-style-type:none;}
-      label,img{border:0;}
-      body{font:12px/180% Arial, Helvetica, sans-serif, "微软雅黑";}
-      .demo{margin:10px auto;}
 
-      ul.sidenav{width:170px;padding:10px 0 60px 0;background:url() no-repeat;}
-      ul.sidenav li{margin:0px 0 0 0;}
-      ul.sidenav li label{
-        background:#cbcbcb url() no-repeat;color:#174867;padding:7px 15px 7px 15px;width:100px;display:block;text-decoration:none;
-        -webkit-transition:all 0.3s ease-out;
-        -moz-transition:all 0.3s ease-out;
-        -o-transition:all 0.3s ease-out;
-        -webkit-box-shadow:2px 2px 4px #888;
-        -moz-box-shadow:2px 2px 4px #888;
-        -o-box-shadow:2px 2px 4px #888;
-      }
-      ul.sidenav li label:hover{background:#ebebeb url() no-repeat;color:#67a5cd;padding:7px 0px 7px 10px;}
-    </style>
+<head>
+  <style type="text/css">
+    * {
+      margin: 0;
+      padding: 0;
+      list-style-type: none;
+    }
 
-    <script type="text/javascript">
-      $(function () {
-        $('label').click(function () {
-          $('.event_year>li').removeClass('current');
-          $(this).parent('li').addClass('current');
-          var year = $(this).attr('for');
-          $('#' + year).parent().prevAll('div').slideUp(800);
-          $('#' + year).parent().slideDown(800).nextAll('div').slideDown(800);
-        });
+    label,
+    img {
+      border: 0;
+    }
+
+    body {
+      font: 12px/180% Arial, Helvetica, sans-serif, "微软雅黑";
+    }
+
+    .demo {
+      margin: 10px auto;
+    }
+
+    ul.sidenav {
+      width: 170px;
+      padding: 10px 0 60px 0;
+      background: url() no-repeat;
+    }
+
+    ul.sidenav li {
+      margin: 0px 0 0 0;
+    }
+
+    ul.sidenav li label {
+      background: #cbcbcb url() no-repeat;
+      color: #174867;
+      padding: 7px 15px 7px 15px;
+      width: 100px;
+      display: block;
+      text-decoration: none;
+      -webkit-transition: all 0.3s ease-out;
+      -moz-transition: all 0.3s ease-out;
+      -o-transition: all 0.3s ease-out;
+      -webkit-box-shadow: 2px 2px 4px #888;
+      -moz-box-shadow: 2px 2px 4px #888;
+      -o-box-shadow: 2px 2px 4px #888;
+    }
+
+    ul.sidenav li label:hover {
+      background: #ebebeb url() no-repeat;
+      color: #67a5cd;
+      padding: 7px 0px 7px 10px;
+    }
+  </style>
+
+  <script type="text/javascript">
+    $(function () {
+      $('label').click(function () {
+        $('.event_year>li').removeClass('current');
+        $(this).parent('li').addClass('current');
+        var year = $(this).attr('for');
+        $('#' + year).parent().prevAll('div').slideUp(800);
+        $('#' + year).parent().slideDown(800).nextAll('div').slideDown(800);
       });
-    </script>
-  </head>
+    });
+  </script>
+</head>
 
-  <body>
-    <div class="container">
-      <div class="form-group" required >
-        <div class = "raw">
-          <div class="col-md-2">
-              <div class="demo">
-                <div class="sidenavbox">
-                  <ul class="sidenav">
-                    <!-- <div style="border-bottom:2px solid #DAD4D4;padding:10px;background-color:#FFF;box-shadow:5px 5px 20px #CCC;"> -->
-                      <!-- # 一个切片,让序列倒序输出 -->
-                      {% for post in posts[::-1] %}
-                      <!-- 让最新的那个月作为默认标签 -->
-                      {% if post == posts[-1] %} 
-                      <li class="current"><label for="{{post[0]}}">{{post[0]}} 月</label></li>
-                      {% else %}
-                      <li><label for="{{post[0]}}">{{post[0]}} 月</label></li>
-                      {% endif %}
-                      {% endfor %}
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-md-9">
-              <div style="border-bottom:0px solid #DAD4D4;padding:10px 10px;background-color:#FFF;box-shadow:5px 5px 20px #CCC;">
-                <div class="sidenavbox">
-                  <div class= "sidenav">
-                    <ul >
-                      {% for post in posts[::-1] %}
-                      <div>
-                        <h3 id="{{post[0]}}">{{post[0]}} 月 | 共 {{post[1]|count}} 篇</h3>
-                        {% for p in post[1] |sort(attribute='create_time',reverse=True)%}
-                        <li>
-                          <span>{{moment(p.create_time).format('YYYY.M.D')}}</span>
-                          <h5><span><a href="{{ url_for('main.post', id=p.id) }}">{{p.title}}</a></span></h5>
-                        </li>
-                        {% endfor %}
-                      </div>
-                      {% endfor %}
-                    </ul>
-                  </div>
-                </div>
-              </div>
+<body>
+  <div class="container">
+    <div class="form-group" required>
+      <div class="raw">
+        <div class="col-md-2">
+          <div class="demo">
+            <div class="sidenavbox">
+              <ul class="sidenav">
+                <!-- <div style="border-bottom:2px solid #DAD4D4;padding:10px;background-color:#FFF;box-shadow:5px 5px 20px #CCC;"> -->
+                <!-- # 一个切片,让序列倒序输出 -->
+                {% for post in posts[::-1] %}
+                <!-- 让最新的那个月作为默认标签 -->
+                {% if post == posts[-1] %}
+                <li class="current"><label for="{{post[0]}}">{{post[0]}} 月</label></li>
+                {% else %}
+                <li><label for="{{post[0]}}">{{post[0]}} 月</label></li>
+                {% endif %}
+                {% endfor %}
+              </ul>
             </div>
           </div>
         </div>
-
       </div>
-    </body>
-  </html>
 
-  {% endblock %}
+      <div class="col-md-9">
+        <div
+          style="border-bottom:0px solid #DAD4D4;padding:10px 10px;background-color:#FFF;box-shadow:5px 5px 20px #CCC;">
+          <div class="sidenavbox">
+            <div class="sidenav">
+              <ul>
+                {% for post in posts[::-1] %}
+                <div>
+                  <h3 id="{{post[0]}}">{{post[0]}} 月 | 共 {{post[1]|count}} 篇</h3>
+                  {% for p in post[1] |sort(attribute='create_time',reverse=True)%}
+                  <li>
+                    <span>{{moment(p.create_time).format('YYYY.M.D')}}</span>
+                    <h5><span><a href="{{ url_for('main.post', id=p.id) }}">{{p.title}}</a></span></h5>
+                  </li>
+                  {% endfor %}
+                </div>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  </div>
+</body>
+
+</html>
+
+{% endblock %}

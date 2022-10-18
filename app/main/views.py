@@ -1,16 +1,20 @@
 # coding :utf-8
-from flask import flash, session, request, render_template, url_for, redirect, abort, current_app, g
-#  定义一个装饰器, 修饰只有管理员才能访问的路由
+
+# view.py 中导入对应的蓝图，并将视图函数注册到蓝图中
+
+from datetime import datetime
 from functools import wraps
 from os import path
-from . import main
-from .. import db
-from ..models import User, Role, Post, Comment, Category
-from flask_login import login_required, current_user
-from .forms import CommentForm, PostForm, EditProfileForm, EditProfileAdminForm
-from ..config import DevelopmentConfig as config
+
+from flask import abort, flash, redirect, render_template, request, url_for
+from flask_login import current_user, login_required
 from sqlalchemy import extract, func
-from datetime import datetime
+
+from ..config import DevelopmentConfig as config
+from ..models import Category, Comment, Post, Role, User
+from ..plugins import db, init_nav
+from . import main
+from .forms import CommentForm, EditProfileAdminForm, EditProfileForm, PostForm
 
 basepath = path.abspath(path.dirname(__file__))
 
@@ -18,10 +22,12 @@ basepath = path.abspath(path.dirname(__file__))
 @main.route('/', methods=['GET', 'POST'])
 @main.route('/index', methods=['GET', 'POST'])
 def index():
+    init_nav()
+
     posts = Post.query.all()
     page_index = request.args.get('page', 1, type=int)
     pagination = Post.query.order_by(Post.create_time.desc()).paginate(
-        page_index, per_page=config.PER_POSTS_PER_PAGE, error_out=False)
+        page=page_index, per_page=config.PER_POSTS_PER_PAGE, error_out=False)
     posts = pagination.items
 
     categorys = Category.query.order_by(Category.id)[::-1]  # 所有标签返回的是一个元组
@@ -31,7 +37,7 @@ def index():
         if len(p) == 0:  # 该分类下的文章数为0
             db.session.delete(c)
 
-    #TODO 每个分类下的文章总数, 好像有必要分开分类和标签了
+    # TODO 每个分类下的文章总数, 好像有必要分开分类和标签了
     return render_template('index.html',
                            title='M-Kepler',
                            posts=posts,
@@ -39,10 +45,9 @@ def index():
                            pagination=pagination,
                            current_time=datetime.utcnow())
 
-    #  @app.route('/user/<int: user_id>')
 
-
-#  @app.route('/user/<regex("[a-z]+"):name>')
+# @app.route('/user/<int: user_id>')
+# @app.route('/user/<regex("[a-z]+"):name>')
 @main.route('/user/<name>')
 def user(name):
     user = User.query.filter_by(name=name).first()
@@ -60,7 +65,7 @@ def post(id):
         return page_not_found(Exception("Not allowed to read"))
     post.read_count += 1
 
-    #  保存评论
+    # 保存评论
     if form.validate_on_submit():
         if current_user.is_anonymous:
             flash("PLEASE SIGNIN BEFORE COMMENT.")
@@ -74,15 +79,15 @@ def post(id):
             return redirect(url_for('.post', id=post.id, page=-1))
     comment_count = len(post.comments)
 
-    #  TODO
-    #  page_index = request.args.get('page', 1, type=int)
-    #  if page_index == -1:
-    #  page_index = (comment_count-1)//config.PER_POSTS_PER_PAGE + 1
+    # TODO
+    # page_index = request.args.get('page', 1, type=int)
+    # if page_index == -1:
+    # page_index = (comment_count-1)//config.PER_POSTS_PER_PAGE + 1
 
-    #  pagination = post.comments.query.order_by(Comment.create_time.desc()).paginate(
-    #  page_index, per_page = config.PER_POSTS_PER_PAGE, error_out = False)
-    #  comments= pagination.items
-    #  return render_template('posts/detail.html', title='M-Kepler | ' + post.title, form=form, post=post, comments=comments, pagination = pagination, comment_count = comment_count)
+    # pagination = post.comments.query.order_by(Comment.create_time.desc()).paginate(
+    # page_index, per_page = config.PER_POSTS_PER_PAGE, error_out = False)
+    # comments= pagination.items
+    # return render_template('posts/detail.html', title='M-Kepler | ' + post.title, form=form, post=post, comments=comments, pagination = pagination, comment_count = comment_count)
 
     form.body.data = ''
     categorys = Category.query.order_by(Category.id)[::-1]  # 所有标签返回的是一个元组
@@ -105,7 +110,7 @@ def admin_required(f):
     return decorator
 
 
-#  把输入框的字串用, 分开, 然后转化为category对象，现在已经没用了
+# 把输入框的字串用, 分开, 然后转化为category对象，现在已经没用了
 def str_to_obj(new_category):
     c = []
     for category in new_category:
@@ -136,7 +141,7 @@ def edit(id=0):
             if tag is None:
                 tag = Category()
                 tag.name = t
-                #  tag.save()
+                # tag.save()
             categoryemp.append(tag)
 
         post.categorys = categoryemp
@@ -152,11 +157,11 @@ def edit(id=0):
         return redirect(url_for('.post', id=post.id))
 
     form.title.data = post.title
-    #  form.body.data = post.body
+    # form.body.data = post.body
     body_value = post.body
 
-    #  form.category.data = [i.name for i in post.categorys]
-    #  value = [i.name for i in post.categorys]
+    # form.category.data = [i.name for i in post.categorys]
+    # value = [i.name for i in post.categorys]
     # TODO ☆ 为了把值传到input标签,我也没其他方法了, 然后将category的list元素用‘,’分割组成str传给input
     value = ",".join([i.name for i in post.categorys])
 
@@ -176,7 +181,7 @@ def deletepost(id):
     db.session.delete(post)
     for comment in post.comments:
         db.session.delete(comment)
-#   如果分类下没有文章了就删掉这个分类
+#  如果分类下没有文章了就删掉这个分类
     for category in post.categorys.all():
         if category.posts.all() is None:
             db.session.delete(category)
@@ -197,18 +202,18 @@ def comment_delete(id):
 
 @main.route('/category/<name>', methods=['GET', 'POST'])
 def category(name):
-    #  点击index的标签后跳到这里,顺便把标签名传了过来,
-    #  index视图那里也不需要进行查询,因为做了外键,直接可以有posts知道category
+    # 点击index的标签后跳到这里,顺便把标签名传了过来,
+    # index视图那里也不需要进行查询,因为做了外键,直接可以有posts知道category
     categorys = Category.query.order_by(Category.id)[::-1]  # 右侧需要显示的所有标签
     category = Category.query.filter_by(name=name).first()  # name对应的标签对象
     page_index = request.args.get('page', 1, type=int)
 
-    #  pagination = Post.query.filter(Post.categorys == category).order_by(
+    # pagination = Post.query.filter(Post.categorys == category).order_by(
     pagination = category.posts.order_by(Post.create_time.desc()).paginate(
-        page_index, per_page=config.PER_POSTS_PER_PAGE, error_out=False)
+        page=page_index, per_page=config.PER_POSTS_PER_PAGE, error_out=False)
     posts = pagination.items
     return render_template("category.html",
-                           title='M-Kepler|分类|' + name,
+                           title='M-Kepler|Category|' + name,
                            name=name,
                            posts=posts,
                            categorys=categorys,
@@ -245,7 +250,7 @@ def category_edit(id=0):
 
 @main.route('/archive')
 def archive():
-    #  返回一个元素是tuple的列表[(10, 32), (11, 23), (12, 1)] #  tuple第一个关键码标识月份，第二个标识数量 #  我试了试提取year, 会出错
+    # 返回一个元素是tuple的列表[(10, 32), (11, 23), (12, 1)] # tuple第一个关键码标识月份，第二个标识数量 # 我试了试提取year, 会出错
     archives = db.session.query(
         extract('month', Post.create_time).label('month'),
         func.count('*').label('count')).group_by('month').all()
@@ -304,7 +309,7 @@ def edit_profile_admin(id):
     return render_template('edit_profile.html', form=form, user=user)
 
 
-#  TODO
+# TODO
 @main.errorhandler(404)
 def page_not_found(e):
     return render_template('error.html', code=404, e=e), 404
@@ -316,7 +321,7 @@ def internal_server_error(e):
 
 
 '''
-#  上传文件
+# 上传文件
 @main.route('/upload', methods = ['GET', 'POST'])
 def upload():
     if request.method=='POST':
@@ -333,7 +338,7 @@ def projects():
 
 
 
-#  定义自己的jinja2过滤器
+# 定义自己的jinja2过滤器
 @app.template_filter('reverse')
 def reverse_filter(s):
     return s[::-1]
@@ -343,16 +348,16 @@ def markdown_to_html(txt):
     from markdown import markdown
     return markdown(txt)
 
-#  -------------
-#  通过上下文处理器把方法注册进去,这样所有模板都可以使用这个方法/变量
-#  所以就可以将文件读取到变量然后传递到jinja供模板使用,
-#  读取md文件并显示到模板中
+# -------------
+# 通过上下文处理器把方法注册进去,这样所有模板都可以使用这个方法/变量
+# 所以就可以将文件读取到变量然后传递到jinja供模板使用,
+# 读取md文件并显示到模板中
 def read_md(filename):
     with open(filename) as md_file:
-        content = reduce(lambda x, y: x + y, md_file.readlines()) #  读取文件,注意reduce要从functools导入
+        content = reduce(lambda x, y: x + y, md_file.readlines()) # 读取文件,注意reduce要从functools导入
     return content
 
-#  注册方法到程序上下文
+# 注册方法到程序上下文
 @app.context_processor
 def inject_methods():
     return dict(read_md=read_md)

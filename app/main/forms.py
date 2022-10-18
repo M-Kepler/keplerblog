@@ -1,18 +1,17 @@
 # coding:utf-8
 
-#  from flask_wtf import Form
-from flask_wtf import FlaskForm as Form
-
-from ..models import Category, Role
-from wtforms.ext.sqlalchemy.fields import QuerySelectField
-from wtforms import StringField, SelectField, BooleanField, TextAreaField, SubmitField, validators, ValidationError
-from wtforms.validators import DataRequired, length, Regexp, EqualTo, Email
 from flask_pagedown.fields import PageDownField
+from flask_wtf import FlaskForm as Form
+from wtforms import (BooleanField, SelectField, StringField, SubmitField,
+                     TextAreaField, ValidationError)
+from wtforms.validators import DataRequired, Email, Regexp, length
+
+from ..models import Category, Role, User
 
 
 class PostForm(Form):
     title = StringField(label=('标题'), validators=[DataRequired()])
-    #  category = SelectField(label=('文章分类:'), coerce=int)
+    # category = SelectField(label=('文章分类:'), coerce=int)
     category = StringField("分类", validators=[DataRequired()])
     body = PageDownField(label=('正文'), validators=[DataRequired()])
     private = BooleanField("私人")

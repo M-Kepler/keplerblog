@@ -1,9 +1,13 @@
-#  coding:utf-8
+# coding:utf-8
+
+from threading import Thread
+
 from flask import render_template
 from flask_mail import Message
-from threading import Thread
-from . import create_app, mail
+
+from . import create_app
 from .config import DevelopmentConfig as config
+from .plugins import mail
 
 app = create_app()
 

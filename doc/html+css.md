@@ -1,4 +1,16 @@
-[TOC]
+- [HTML](#html)
+- [CSS](#css)
+  - [字体排版](#字体排版)
+  - [元素分类](#元素分类)
+  - [盒子模型](#盒子模型)
+    - [边框 border](#边框-border)
+    - [宽度和高度](#宽度和高度)
+    - [边界 margin](#边界-margin)
+    - [填充 padding](#填充-padding)
+  - [模型](#模型)
+    - [流动模型](#流动模型)
+    - [浮动模型](#浮动模型)
+    - [层模型](#层模型)
 
 **[慕课网-HTML+CSS 基础课程](http://www.imooc.com/learn/9)**
 
@@ -15,17 +27,21 @@
 - 引用长文本,样式缩进: `<blockquote></blockquote>`
 - 列表
 - 无序列表
+
   ```
   <ul>
      <li></li>
   </ul>
   ```
+
 - 有序列表
+
   ```
   <ol>
      <li></li>
   </ol>
   ```
+
 - 表格
     <table summary = "表格简介"> #table 整个表格内容下载多少就显示多少<br />
       <tbody> # tbody整个表格内容下载完才显示出来 <br />
@@ -40,17 +56,21 @@
         </tr>
 - 链接
 - 超链接
+
   ```
   <a href="http://www.google.com" title="鼠标划过显示" target='_blank' >
   链接(target='_blank'新窗口打开)</a>
   ```
+
 - 邮箱
   第一个参数前要加'?'后面的参数前加'&'
   cc:抄送 bcc:密抄 subject:主题 body:内容 多个邮箱地址用';'分开
+
   ```
   <a href="mailto:m_kepler@foxmail.com?cc=870131615@qq.com
   &bcc=870131615@qq.com;jie.1995.cool@163.com&subject=主题&body=内容">发邮件</a>
   ```
+
 - 图片 img
 
   `<img src="图片地址" alt="下载失败时替换的文本" title="悬停文字">`
@@ -197,10 +217,10 @@ h1,span{color:red;}
 
 ```
     /* 标签权值为1 类选择符权值为10 ID选择符为100
-	p{color:red;} /*权值为1*/
-	p span{color:green;} /*权值为1+1=2*/
-	.warning{color:white;} /*权值为10*/
-	p span.warning{color:purple;} /*权值为1+1+10=12*/
+ p{color:red;} /*权值为1*/
+ p span{color:green;} /*权值为1+1=2*/
+ .warning{color:white;} /*权值为10*/
+ p span.warning{color:purple;} /*权值为1+1+10=12*/
     #footer .note p{color:yellow;} /*权值为100+10+1=111*/
 ```
 

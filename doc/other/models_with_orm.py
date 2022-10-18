@@ -1,14 +1,14 @@
-﻿# coding:utf-8
+# coding:utf-8
 
-#  import mysql.connector
+# import mysql.connector
 
 from app import db
 
 
 class User(db.Model):
     __tablename__ = 'users'
-    user_id = db.Column(db.Integer, primary_key = True)
-    #  ç›¸å½“äºŽvarchar(20)
+    user_id = db.Column(db.Integer, primary_key=True)
+    # 相当于 varchar(20)
     user_name = db.Column(db.String(20))
     user_passwd = db.Column(db.String(20))
 

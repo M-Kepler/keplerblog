@@ -2,7 +2,7 @@
 <!-- bootstrap支持的分页,只要将sqlalchemy的分页查询到底传入就可以啦 -->
 {% from "bootstrap/pagination.html" import render_pagination %}
 <!-- ↓ 这样导入解决了macro不知道什么事current_user的问题 -->
-{% from "./includes/_macros.html" import show_posts, show_sidebar, carousel  with context %}
+{% from "./includes/_macros.html" import show_posts, show_sidebar, carousel with context %}
 
 {% block title %}{{title}}{% endblock %}
 {% block page_content %}
@@ -14,8 +14,6 @@
 <!-- 优化结构之后读取文件就一直出错了，晕死 -->
 <!-- (( read_md('vim_end.md')|md|safe }} safe 不转义-->
 
-
-
 <!-- { { carousel() }} -->
 {{ show_posts(posts, categorys, pagination, moment) }}
 {{ show_sidebar(posts, categorys) }}
@@ -24,10 +22,9 @@
 <!-- JiaThis Button Begin-->
 <!-- 微博赞 -->
 <!-- <div class="jiathis_style"> -->
-  <!-- <a class="jiathis_like_tsina"></a> -->
+<!-- <a class="jiathis_like_tsina"></a> -->
 <!-- </div> -->
 <!-- <script type="text/javascript" src="http://v3.jiathis.com/code_mini/jia.js" charset="utf-8"></script> -->
 <!-- JiaThis Button END -->
 
 {% endblock %}
-
