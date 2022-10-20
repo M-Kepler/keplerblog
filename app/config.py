@@ -12,10 +12,18 @@ class Config:
 
     PER_POSTS_PER_PAGE = 8
 
-    DB_HOST = "127.0.0.1:3306"
-    DB_USER = "root"
-    DB_PWD = "root"
-    DB_NAME = "keplerblog"
+    # pythonanywhere 数据库链接配置
+    # db_user = "nowon" pythonanywhere 的用户名
+    # db_pwd = "123456jj"
+    # db_host = f"{db_user}.mysql.pythonanywhere-services.com:3306"
+    # db_name = f"{db_user}$wechat"
+
+    # 本地数据库链接配置
+    db_user = "root"
+    db_pwd = "root"
+    db_host = "127.0.0.1:3306"
+    db_name = "keplerblog"
+    SQLALCHEMY_DATABASE_URI = f"mysql+mysqlconnector://{db_user}:{db_pwd}@{db_host}/{db_name}?charset=utf8"
 
 
 class DevelopmentConfig(Config):
@@ -37,9 +45,6 @@ class DevelopmentConfig(Config):
     MAIL_USE_TLS = True
     MAIL_DEBUG = True
     ENABLE_THREADS = True
-    SQLALCHEMY_DATABASE_URI = f"mysql+mysqlconnector://{Config.DB_USER}:{Config.DB_PWD}@{Config.DB_HOST}/{Config.DB_NAME}?charset=utf8"
-    # to deploy in pythonanywhere
-    # SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://Kepler:rootyp@Kepler.mysql.pythonanywhere-services.com:3306/Kepler$keplerblog?charset=utf8"
 
 
 class TestingConfig(Config):
