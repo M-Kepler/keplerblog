@@ -58,3 +58,5 @@ pip install -r requirements/dev.txt
 - [ModuleNotFoundError: No module named 'flask._compat'](https://blog.csdn.net/Deng872347348/article/details/126304487)
 
 - [windows 安装 pycrypto](https://blog.csdn.net/hl156/article/details/124537767)
+
+- [Python 踩坑系列之报错无 “winrandom” 模块](https://www.cnblogs.com/deliaries/p/13409571.html)
