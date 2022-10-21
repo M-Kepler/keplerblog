@@ -13,40 +13,29 @@
   ```s
   # 创建数据库
   # create database if not exists keplerblog;
-
   # 部署
   python manage.py deploy
-
   # 添加管理员
   python manage.py create_user
-
   # 生成测试数据
   python manage.py fake
-
   # 也可以单独构造用户、文章、评论测试数据
   # python manage.py userfake
   # python manage.py commonfake
   # python manage.py categoryfake
-
   # 创建账号
   python manage.py create_user
-
   # 查询全部用户
   python manage.py query_all
-
   ```
 
 ## 虚拟环境
 
 ```sh
 # Python 3.9.5
-
 python -m venv venvdir
-
 source venvdir/bin/activate
-
 pip install -r requirements/dev.txt
-
 ```
 
 **版本问题**
@@ -56,3 +45,7 @@ pip install -r requirements/dev.txt
 - [ImportError: cannot import name ‘MigrateCommand‘ from ‘flask_migrate‘](https://blog.csdn.net/YZL40514131/article/details/122954381)
 
 - [ModuleNotFoundError: No module named 'flask._compat'](https://blog.csdn.net/Deng872347348/article/details/126304487)
+
+- [windows 安装 pycrypto](https://blog.csdn.net/hl156/article/details/124537767)
+
+- [Python 踩坑系列之报错无 “winrandom” 模块](https://www.cnblogs.com/deliaries/p/13409571.html)
