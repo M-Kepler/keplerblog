@@ -5,15 +5,13 @@ from threading import Thread
 from flask import render_template
 from flask_mail import Message
 
-from . import create_app
+from flask import current_app
 from .config import DevelopmentConfig as config
 from .plugins import mail
 
-app = create_app()
 
-
-def send_async_email(app, msg):
-    with app.app_context():
+def _send_async_email(msg):
+    with current_app.app_context():
         mail.send(msg)
 
 
@@ -23,6 +21,6 @@ def send_email(towho, subject, template, **kwargs):
                   recipients=[towho])
     msg.body = render_template(template + '.txt', **kwargs)
     msg.html = render_template(template + '.html', **kwargs)
-    thread = Thread(target=send_async_email, args=[app, msg])
+    thread = Thread(target=_send_async_email, args=[app, msg])
     thread.start()
     return thread
