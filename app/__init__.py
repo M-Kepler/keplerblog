@@ -26,7 +26,7 @@ class RegexConverter(BaseConverter):
         self.regex = items[0]
 
 
-def load_plugins(app):
+def _load_plugins(app):
     # 应用这个导航栏插件就不需要自己写导航栏了,
     # 可以用操作对象的形式来设置导航栏 # 注册到导航栏对象top
 
@@ -42,7 +42,7 @@ def load_plugins(app):
     nav.init_app(app)
 
 
-def load_config(app):
+def _load_config(app):
     """
     加载配置
     """
@@ -50,15 +50,15 @@ def load_config(app):
     app.config.from_object(config['default'])
 
 
-def init_blueprint(app):
+def _init_blueprint(app):
     """
     # 注册蓝图
     """
     # from .views import init_views 以前是通过文件导入，现在选择注册蓝图
     # init_views(app)
 
-    from .auth import auth as auth_blueprint
-    from .main import main as main_blueprint
+    from .auth.views import auth as auth_blueprint
+    from .main.views import main as main_blueprint
 
     # url_prefix(url前缀) 加上后就把 auth 目录下的 view 注册到蓝图中，不加的话就使用i app 下的 view
     # static_fold  指定蓝图的静态文件所在文件夹
@@ -70,12 +70,14 @@ def create_app():
     app = Flask(__name__)
     app.url_map.converters['regex'] = RegexConverter
 
-    load_config(app)
+    # 初始化配置
+    _load_config(app)
 
     # 初始化插件
-    load_plugins(app)
+    _load_plugins(app)
 
-    init_blueprint(app)
+    # 初始化蓝图
+    _init_blueprint(app)
 
     @app.template_test('current_link')
     def is_current_link(link):

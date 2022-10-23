@@ -6,17 +6,17 @@ from datetime import datetime
 from functools import wraps
 from os import path
 
-from flask import abort, flash, redirect, render_template, request, url_for
+from flask import (Blueprint, abort, flash, redirect, render_template, request,
+                   url_for)
 from flask_login import current_user, login_required
 from sqlalchemy import extract, func
 
 from ..config import DevelopmentConfig as config
 from ..models import Category, Comment, Post, Role, User
 from ..plugins import db, init_nav
-from . import main
 from .forms import CommentForm, EditProfileAdminForm, EditProfileForm, PostForm
 
-basepath = path.abspath(path.dirname(__file__))
+main = Blueprint("main", __name__)
 
 
 @main.route('/', methods=['GET', 'POST'])

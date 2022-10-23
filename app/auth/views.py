@@ -1,13 +1,14 @@
 # coding:utf-8
 
-from flask import flash, redirect, render_template, request, url_for
+from flask import flash, redirect, render_template, request, url_for, Blueprint
 from flask_login import current_user, login_required, login_user, logout_user
 
-from . import auth
 from ..plugins import db
 from ..emails import send_email
 from ..models import User
 from .forms import LoginForm, RegForm, ResetPassword
+
+auth = Blueprint("auth", __name__)
 
 
 @auth.route('/signin', methods=['GET', 'POST'])
