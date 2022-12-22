@@ -1,0 +1,102 @@
+<!-- sidebar右侧栏 -->
+
+{% macro show_sidebar(posts, categorys) %}
+
+<div class="col-md-3">
+  <!-- 个人简介 -->
+  <div class="tile" style="
+      margin-top: 10px;
+      box-shadow: 5px 5px 20px #ccc;
+      background-color: #fff;
+    ">
+    <div style="
+        border: 5px solid #fff;
+        border-radius: 300px;
+        width: 128px;
+        height: 128px;
+        margin: 0px auto;
+        position: relative;
+        background: #88acdb none repeat scroll 0% 0%;
+        overflow: hidden;
+      ">
+      <img src="{{ url_for('static',filename='img/avatar.png') }}" style="width: 100%; height: 100%" />
+    </div>
+    <div class="list-group-item text-center" style="font-size: 23px">
+      <a href="https://github.com/M-Kepler" target="_blank" title="GitHub"><i class="fa fa-github"
+          aria-hidden="true"></i></a>
+      &nbsp
+      <a href="#" title="Blog">
+        <i class="fa fa-link" aria-hidden="true"></i></a>
+      &nbsp
+      <a href="mailto:m_kepler@foxmail.com?cc=m_kepler@foxmail.com&bbc=m_kepler@foxmail.com&body=来自Kepler博客的邮件"
+        title="mail">
+        <i class="fa fa-envelope" aria-hidden="true"></i></a>
+      &nbsp
+      <a href="https://weibo.com/MeKepler/profile" target="_blank" title="Weibo"><i class="fa fa-weibo"
+          aria-hidden="true"></i></a>
+    </div>
+  </div>
+
+  <!-- 文章分类 -->
+  <div class="share mrl the-font" style="
+      margin-top: 10px;
+      background-color: #fff;
+      box-shadow: 5px 5px 20px #ccc;
+      width: 260px;
+    ">
+    <div style="padding: 10px">
+      <div style="border-bottom: 1px solid #dad4d4; padding: 10px 10px">
+        <h5>
+          <span class="glyphicon glyphicon-tags" aria-hidden="true">&nbsp</span>CATEGORY
+        </h5>
+      </div>
+      <ul>
+        {% for category in categorys %}
+        <li class="presentation" style="padding-top: 0px">
+          <a href="{{ url_for('main.category_view', name=category.name ) }}">
+            <p>
+              <span style="font-size: 14px; background-color: #fff" class="glyphicon glyphicon-tags" aria-hidden="true">
+                {{ category.name|upper }}</span>
+              <span class="badge text-right" style="float: right">
+                {{ category.posts.all()|count}}</span>
+            </p>
+          </a>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+
+  <!-- 热门文章 -->
+  <div class="share mrl the-font" style="
+      margin-top: 10px;
+      background-color: #fff;
+      box-shadow: 5px 5px 20px #ccc;
+      width: 260px;
+    ">
+    <div style="padding: 10px">
+      <div style="border-bottom: 1px solid #dad4d4; padding: 10px 10px">
+        <h5>
+          <span class="glyphicon glyphicon-fire" aria-hidden="true">&nbsp</span>HOT
+        </h5>
+      </div>
+      <ul>
+        {% for article in posts[:10] |
+        sort(attribute='read_count',reverse=True)%}
+        <li class="presentation" style="padding-top: 0px">
+          <a href="{{ url_for('main.post_view', post_id=article.id) }}">
+            <p>
+              <span style="font-size: 14px; background-color: #fff" class="glyphicon glyphicon-#" aria-hidden="true">
+                {{ article.title|upper|truncate(18,True)}}</span>
+              <span class="badge text-right" style="float: right">
+                {{ article.read_count}}</span>
+            </p>
+          </a>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
+
+{% endmacro %}

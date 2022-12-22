@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block head%}
+{{super()}}
+<script>
+  var testEditor;
+  $(function () {
+    testEditor = editormd("test-editormd", {
+      width: '1200px',
+      height: '500px',
+      syncScrolling: "single",
+      path: "{{url_for('static',filename='editormd/lib/')}}",
+      previewTheme: "dark",
+    });
+  })
+</script>
+{% endblock %}
+
+
+{% block styles %}
+{{super()}}
+<link rel="stylesheet" href="{{url_for('static',filename='css/editormd/editormd.css')}}">
+{% endblock %}
+
+{% block page_content %}
+{{super()}}
+
+<form action="" method="POST" class="form" role="form">
+  <!-- form.csrf_token()也行,否则validation_on_submit会验证失败 -->
+  {{ form.hidden_tag() }}
+  <div class="form-group" required>
+    <div class="raw">
+      <div class="col-md-6">
+        <label class="control-label" for="title">{{ form.title.label}}</label>
+        {{ form.title(class="form-control", placeholder=("输入文章标题"))}}
+      </div>
+    </div>
+    <!-- </div> -->
+
+    <!-- tags -->
+    <!-- <div class="form-group" required> -->
+    <div class="raw">
+      <div class="col-md-6">
+        <label class="control-label" for="title">{{ form.category.label}}</label><br />
+        <input class="form-control" style="width:120px" placeholder="输入分类,用英文逗号或回车分割" id="category" name="category"
+          value="{{value}}" type="text" data-role="tagsinput" />
+        <!-- { {form.category(class="form-control", placeholder="输入分类,用逗号分隔")}} -->
+      </div>
+    </div>
+  </div>
+
+  <!-- 私密文章 -->
+  <div class="row form-group-sm required">
+    <div class="col-md-1" <p class="text-right">{{form.private.label}}</p>
+    </div>
+    <div class="col-md-1"> {{form.private()}}</div>
+  </div>
+
+  <div class="form-group" required>
+    <div class="raw">
+      <div class="col-md-12">
+        <div class="form-group">
+          <hr />
+          <div style="float:left" class="control-label" for="body">{{ form.body.label}} : </div>
+          <div style="float:right "> {{ form.submit(class="btn btn-primary") }} </div>
+          <div class="editormd" id="test-editormd">
+            <textarea class="editormd-markdown-textarea" name="body">{{body_value}}</textarea>
+          </div>
+        </div>
+      </div>
+
+</form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+
+<!-- 预览markdown -->
+{{ pagedown.include_pagedown() }}
+
+<script src="{{url_for('static',filename='js/editormd/editormd.min.js')}}"></script>
+
+{% endblock %}

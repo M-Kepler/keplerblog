@@ -1,0 +1,13 @@
+<!-- 显示分类下的文章 -->
+
+{% extends "base.html" %}
+{% from "bootstrap/pagination.html" import render_pagination %}
+{% from "./includes/macros/_posts.html" import show_posts with context %}
+{% from "./includes/macros/_sidebar.html" import show_sidebar with context %}
+
+{% block page_content %}
+
+{{ show_posts (posts, categorys, pagination, moment ) }}
+{{ show_sidebar(posts, categorys) }}
+
+{% endblock %}

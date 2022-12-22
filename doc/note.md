@@ -3,7 +3,7 @@
   - [1.2 requestments](#12-requestments)
   - [1.3 config.py](#13-configpy)
   - [1.4 instance/config.py](#14-instanceconfigpy)
-  - [1.5 app/**init**.py](#15-appinitpy)
+  - [1.5 app/`__init__`.py](#15-app__init__py)
   - [1.6 app/views.app](#16-appviewsapp)
   - [1.7 app/models.py](#17-appmodelspy)
   - [1.8 app/static](#18-appstatic)
@@ -65,7 +65,7 @@
 
     数据库配置等东西全放到里面
 
-## 1.5 app/**init**.py
+## 1.5 app/`__init__`.py
 
     用于初始化应用并把所有其他的组件组合在一起
 
@@ -141,6 +141,7 @@
     正文的话只要显示post.category.name就可以了，然后做个连接url_for到视图
     接下来点击标签就是访问那个视图，然后就。。
     很简单啊，在 index.html 里显示了当前 post 的标签了，所以点击的话就连接到 category/<name>就可以了;
+
 然后这个 category 视图把查到的 posts 返回去显示出来就可以了,这里我又写了个 html，我感觉是不是可以复用一下 index↓
 
     ```select category.id, category.name, posts.title from posts, categorys where(posts.category_id = category.id);```

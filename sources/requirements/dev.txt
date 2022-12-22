@@ -1,0 +1,3 @@
+# 继承另一个 requirement.txt
+-r requirements.txt
+ForgeryPy
