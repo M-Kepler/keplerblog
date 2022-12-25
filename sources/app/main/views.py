@@ -20,7 +20,8 @@ from ..models import Category, Comment, Post, Role, User
 from ..plugins import db
 from .forms import CommentForm, EditProfileAdminForm, EditProfileForm, PostForm
 
-main = Blueprint("main", __name__)
+# main 表示蓝图的名称，一般和 url_prefx 保持一致
+main = Blueprint("main", __name__, url_prefix='/')
 
 
 @main.route("/", methods=["GET", "POST"])
@@ -42,7 +43,6 @@ def home():
         if item.posts.count() == 0:
             db.session.delete(item)
 
-    # TODO 每个分类下的文章总数, 好像有必要分开分类和标签了
     return render_template("index.html",
                            title="M-Kepler",
                            posts=posts,

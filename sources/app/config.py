@@ -13,6 +13,7 @@ class Config:
     """
     通用配置
     """
+    URL_PREFIX = "/kepler"
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'hard to guess string'
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
     SQLALCHEMY_TRACK_MODIFICATIONS = True
@@ -71,7 +72,7 @@ class ProductionConfig(Config):
     pass
 
 
-config = {
+config_map = {
     'development': DevelopmentConfig,
     'testing': TestingConfig,
     'production': ProductionConfig,

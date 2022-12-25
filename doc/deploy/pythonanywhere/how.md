@@ -15,7 +15,6 @@
 - 安装插件
 
   ```s
-  pip install flask
   pip install -r requestments/requestments.txt
   ```
 

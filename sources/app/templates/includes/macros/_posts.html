@@ -14,7 +14,7 @@
               <h2><a href="{{ url_for('main.post_view', post_id=post.id) }}">{{post.title}}</a></h2>
             </div>
 
-            <!-- author.name & post.create_time -->
+            <!-- 作者 & 发布时间 -->
             <div class="profile-thumbnail">
               <div class="post-author">
                 <small><span class="glyphicon glyphicon-user" aria-hedden="true"></span>
@@ -22,7 +22,6 @@
                 </small>
                 &nbsp &nbsp
                 <small><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
-                  <!-- {{ post.create_time }} -->
                   {{ moment(post.create_time).fromNow(refresh=True) }}
                 </small>
                 &nbsp &nbsp &nbsp
@@ -43,7 +42,7 @@
 
             </div>
             <hr />
-            <!-- tag & readmore -->
+            <!-- 标签 & 阅读全文 -->
             <div>
               {% if post.private %}
               <span class="glyphicon glyphicon-ban-circle" aria-hidden="true"> Personal Article</span>
@@ -89,6 +88,7 @@
         {{ render_pagination(pagination) }}
         {% endif %}
       </div>
+
     </div>
   </div>
 </div>

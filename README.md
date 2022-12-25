@@ -1,9 +1,10 @@
-- [博客](#博客)
+- [keplerblog](#keplerblog)
   - [说明](#说明)
   - [虚拟环境](#虚拟环境)
   - [启动](#启动)
+  - [部署](#部署)
 
-# 博客
+# keplerblog
 
 ## 说明
 
@@ -64,6 +65,9 @@ pip install -r sources/requirements/dev.txt
 
 ```sh
 cd sources/
-python manage.py dev
+# python manage.py dev
+python wsgi.py
 
 ```
+
+## 部署

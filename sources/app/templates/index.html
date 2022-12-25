@@ -7,17 +7,17 @@
 {% from "./includes/macros/_sidebar.html" import show_sidebar with context %}
 {% from "./includes/macros/_carousel.html" import carousel with context %}
 
-{% block title %} {{title}}
+{% block title %}
+{{title}}
 {% endblock %}
 
 {% block page_content %}
-
 {% for message in get_flashed_messages() %}
 <div class="alert-info">{{ message }}</div>
 {% endfor %}
 
-{{ show_sidebar(posts, categorys) }}
+{{ carousel() }}
 {{ show_posts(posts, categorys, pagination, moment) }}
-<!-- { { carousel() }} -->
+{{ show_sidebar(posts, categorys) }}
 
 {% endblock %}
