@@ -1,9 +1,13 @@
 {
-    "python.linting.pylintArgs": [
-        // ​R,C,W​​​分别表示警告级别为​​refactor​​​, ​​convention​​​, ​​warning​​
-        "--disable=R,W,C",
-        "--load-plugnis",
-        "pylint-flask",
-        "generated-members=db.session.*"
-    ]
+  "python.linting.pylintArgs": [
+    // ​R,C,W​​​分别表示警告级别为​​refactor​​​, ​​convention​​​, ​​warning​​
+    "--disable=R,W,C",
+    "--load-plugnis",
+    "pylint-flask",
+    "generated-members=db.session.*"
+  ],
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.python"
+  },
+  "python.formatting.provider": "none"
 }

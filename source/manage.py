@@ -11,13 +11,16 @@ python manage.py --help
 
 import unittest
 
+from app import create_app
+from app.models.category import Category
+from app.models.comment import Comment
+from app.models.post import Post
+from app.models.role import Role
+from app.models.user import User
+from app.plugins import db
 from flask_migrate import Migrate, MigrateCommand, upgrade
 from flask_script import Manager, Shell
 from livereload import Server
-
-from app import create_app
-from app.models import Category, Comment, Post, Role, User
-from app.plugins import db
 
 app = create_app()
 manager = Manager(app)
@@ -37,10 +40,6 @@ def make_shell_context():
                 Post=Post,
                 Comment=Comment,
                 Category=Category)
-
-
-# 可以用这种方式添加命令
-manager.add_command("shell", Shell(make_context=make_shell_context))
 
 
 @manager.command
@@ -131,12 +130,8 @@ def create_user(name, email, password):
         email = input('Email:')
     if password is None:
         password = input('Password:')
-        # password = getpassword('Password:')
     user = User()
     user.name = name
-    # 这个hash我在models那边算了
-    # from werkzeug.security import generate_password_hash
-    # user.password = generate_password_hash(password)
     user.password = password
 
     user.email = email
@@ -159,6 +154,23 @@ def deploy():
     upgrade()
     Role.seed()
     Category.seed()
+
+
+@manager.option('-u', '--name', dest='name')
+def reset_pwd(name):
+    """
+    重置密码
+    """
+    user = User.query.filter_by(name=name).first()
+    user.password = "1234567"
+    db.session.add(user)
+    print(f"重置 {name} 密码成功")
+
+
+# 也可以用这种方式添加命令
+manager.add_command(
+    "shell",
+    Shell(make_context=make_shell_context))
 
 
 if __name__ == '__main__':

@@ -1,5 +1,9 @@
 # -*- coding:utf-8 -*-
 
+"""
+中间件
+"""
+
 
 class PrefixMiddleware(object):
     """

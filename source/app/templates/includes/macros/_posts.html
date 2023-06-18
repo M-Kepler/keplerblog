@@ -1,0 +1,91 @@
+{% macro show_posts(posts, categorys, pagination, moment) %}
+{% from "bootstrap/pagination.html" import render_pagination %}
+
+<div class="col-md-9">
+  {% for post in posts | sort(attribute='create_time', reverse=True) %}
+  <div class="share mrl the-font">
+    <div style="padding:10px 0px;">
+      <!-- <div style="padding:10px ;"> -->
+      <div
+        style="border-bottom:0px solid #DAD4D4;padding:10px 10px;background-color:#FFF;box-shadow:5px 5px 20px #CCC;">
+        <div>
+          <h2><a href="{{ url_for('main.post_view', post_id=post.id) }}">{{post.title}}</a></h2>
+        </div>
+
+        <!-- 作者 & 发布时间 -->
+        <div class="profile-thumbnail">
+          <div class="post-author">
+            <small><span class="glyphicon glyphicon-user" aria-hedden="true"></span>
+              <a href="{{url_for('.user_view', name=post.author.name) }}"> {{ post.author.name }}</a>
+            </small>
+            &nbsp &nbsp
+            <small><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
+              {{ moment(post.create_time).fromNow(refresh=True) }}
+            </small>
+            &nbsp &nbsp &nbsp
+            <span class="glyphicon glyphicon-comment" aria-hidden="true"> </span>
+            &nbsp{{post.comments|count}}
+            </button></a>
+
+            {% if post.private%}
+            &nbsp &nbsp &nbsp
+            <span class="glyphicon glyphicon-eye-close" aria-hidden="true"> </span>
+            {% else %}
+            &nbsp &nbsp &nbsp
+            <span class="glyphicon glyphicon-eye-open" aria-hidden="true"> </span>
+            &nbsp{{post.read_count}}
+            </button></a>
+            {% endif %}
+          </div>
+
+        </div>
+        <hr />
+        <!-- 标签 & 阅读全文 -->
+        <div>
+          {% if post.private %}
+          <span class="glyphicon glyphicon-ban-circle" aria-hidden="true"> Personal Article</span>
+          {% elif not post.private %}
+          <p>{{post.body_html|safe|truncate(300,True)}}</p>
+          {% endif %}
+
+        </div>
+        <hr />
+
+        <p> {% for category in post.categorys %}
+          <a href="{{ url_for('main.category_view', name = category.name) }}">
+            <span class="label label-primary text-left"> <span class="glyphicon glyphicon-tag" aria-hidden="true">
+              </span> {{category.name|upper}}</span></a>
+          {% endfor %}
+
+          {% if current_user.is_administrator() %}
+          <a href="{{ url_for('main.delete_post_view', post_id=post.id) }}" style="float:right">
+            <button class="btn  btn-sm btn-default btn-text-right">
+              <span class="glyphicon glyphicon-trash" aria-hidden="true"> </span> Delete
+            </button></a>
+
+          <a href="{{ url_for('main.edit_post_view', post_id=post.id) }}" style="float:right">
+            <button class="btn  btn-sm btn-default btn-text-right">
+              <span class="glyphicon glyphicon-edit" aria-hidden="true"> </span> Edit
+            </button></a>
+          {% endif %}
+
+          <a href="{{ url_for('main.post_view', post_id=post.id) }}" style="float:right">
+            <button class="btn  btn-sm btn-primary btn-text-right"> <span class="glyphicon glyphicon-share-alt"
+                aria-hidden="true">
+              </span>Read More</button></a>
+        </p>
+        </p>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+
+  <!-- 分页导航栏 -->
+  <div class="container-fluid">
+    {% if pagination %}
+    {{ render_pagination(pagination) }}
+    {% endif %}
+  </div>
+
+</div>
+{% endmacro%}

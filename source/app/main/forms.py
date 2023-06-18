@@ -10,7 +10,9 @@ from wtforms import (BooleanField, SelectField, StringField, SubmitField,
                      TextAreaField, ValidationError)
 from wtforms.validators import DataRequired, Email, Regexp, length
 
-from ..models import Category, Role, User
+from ..models.category import Category
+from ..models.role import Role
+from ..models.user import User
 
 
 class PostForm(Form):

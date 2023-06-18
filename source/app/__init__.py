@@ -100,6 +100,6 @@ def create_app():
         return link == request.path
 
     init_hook(app)
-    print(app.url_map)
+    # print(app.url_map)
 
     return app

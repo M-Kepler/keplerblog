@@ -21,8 +21,8 @@ class Config:
     PER_POSTS_PER_PAGE = 8
 
     # pythonanywhere 数据库链接配置
-    # db_user = "nowon" pythonanywhere 的用户名
-    # db_pwd = "123456jj"
+    # db_user = "Kepler" # pythonanywhere 的用户名
+    # db_pwd = "1155993577yypp"
     # db_host = f"{db_user}.mysql.pythonanywhere-services.com:3306"
     # db_name = f"{db_user}$wechat"
 
@@ -31,7 +31,8 @@ class Config:
     db_pwd = "root"
     db_host = "127.0.0.1:3306"
     db_name = "keplerblog"
-    SQLALCHEMY_DATABASE_URI = f"mysql+mysqlconnector://{db_user}:{db_pwd}@{db_host}/{db_name}?charset=utf8"
+    SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://" + \
+        f"{db_user}:{db_pwd}@{db_host}/{db_name}?charset=utf8"
 
 
 class DevelopmentConfig(Config):

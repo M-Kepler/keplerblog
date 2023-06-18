@@ -16,7 +16,11 @@ from flask_login import current_user, login_required
 from sqlalchemy import extract, func
 
 from ..config import DevelopmentConfig as config
-from ..models import Category, Comment, Post, Role, User
+from ..models.category import Category
+from ..models.comment import Comment
+from ..models.post import Post
+from ..models.role import Role
+from ..models.user import User
 from ..plugins import db
 from .forms import CommentForm, EditProfileAdminForm, EditProfileForm, PostForm
 

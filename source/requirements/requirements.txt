@@ -28,7 +28,7 @@ livereload==2.6.3
 Mako==1.2.3
 Markdown==3.4.1
 MarkupSafe==2.1.1
-mysql-connector-python==8.0.31
+mysql-connector-python==8.0.29
 packaging==21.3
 protobuf==3.20.1
 pyparsing==3.0.9
